@@ -1183,18 +1183,356 @@ if (hasChildren(node)) {
 		</ol>
 
 		<p class="needs-example">
-			While summing up arrays is undeniably useful, <code>reduce</code> can be used for a heap of other things too.
+			While summing up arrays is undeniably useful, <code>reduce</code> can be used for other things too.
+			appending nodes to dom via document fragment?
+			However, bear in mind that reduce can be quite tricky to understand, so use it sparingly.
+		</p>
+
+		<h4>Async array functions</h4>
+
+		<p>
+			While these new array functions provide a fantastic way to write cleaner code, there is one small gotcha you should be aware of:
+			using array functions with <code>async/await</code>.
 		</p>
 
 		<p>
-			One small bit of advice - when using <code>reduce</code> I always used to struggle to remember which order the parameters went in.
-			One day, someone pointed out to me that they go in alphabetical order, if you use the standard names of <code>acc</code> and 
-			<code>cum</code>. I generally don't use those names in my own code, as they are incredibly generic, but I find them helpful to think 
-			of when I'm trying to remember which way around they go.
+			When you use <code>async/await</code> in a traditional loop, like this
 		</p>
 
+		<pre><code>
+			async function setPrices(items) {
+				for (let i = 0; i < items.length; i++) {
+					const item = items[i];
+					const price = await getPrice(item.id);
+					item.price = price;
+				}
+			}
+		</code></pre>
+
+		<p>
+			The loop will pause on each iteration, wait for the price to be returned, and then continue.
+		</p>
+
+		<p>
+			If you do the equivalent thing using <code>forEach</code>
+		</p>
+
+		<pre><code>
+			function setPrices(items) {
+				items.forEach(async (item) => {
+					const price = await getPrice(item.id);
+					item.price = price;
+				});
+			}
+		</code></pre>
+
+		<p>
+			You'll notice that it's the callback function that is <code>async</code> in this case. This is because 
+			<code>await</code> can only be used immediately inside an <code>async</code> function. This means that 
+			the callback function will fire off the request to fetch the price, and then immediately continue to the 
+			next item, without waiting for the response to come back.
+		</p>
+
+		<p>
+			Now, in this situation, that's probably the behaviour that you want. This code is going to fetch all the 
+			prices in parallel, which is going to be faster than fetching them one-by-one, as in the traditional loop.
+			However, you've got no way of knowing when all the prices have finished being fetched!
+		</p>
+
+		<p>
+			If we do need to know when the prices have all been fetched, we can take advantage of the fact that an 
+			<code>async</code> function always returns a Promise, which resolves when the function returns.
+		</p>
+
+		<pre><code>
+			async function setPrices(items) {
+				const promises = items.map((item) => {
+					const price = await getPrice(item.id);
+					item.price = price;
+				});
+
+				await Promise.all(promises);
+			}
+		</code></pre>
+
+		<p>
+			This code will 
+		</p>
+		<ol>
+			<li>Generate a promise for each item in the list, and add it to the <code>promises</code> array</li>
+			<li>Wait until all of the promises in the <code>promises</code> array have been resolved before returning</li>			
+		</ol>
+
+		<p>And, at the same time</p>
+		<ol>
+			<li>Fetch all of the prices in parallel</li>
+			<li>Resolve each promise in the <code>promises</code> array, once the price has been set for the related item</li>
+		</ol>
+
+		<p>
+			However, sometimes this parallel behaviour isn't what you want. Instead, you want to wait for each request 
+			to return before making the next request. In these cases, you're better off using a more traditional loop. However,
+			there is a more declarative version of the <code>for</code> loop available in JavaScript.
+		</p>
+
+		<pre><code>
+			for (const item of items) {
+				try {
+					await placeOrder(item);
+				} catch (e) {
+					console.log('Couldn\'t place all orders. Giving up.');
+					break;
+				}
+			}
+		</code></pre>
+
+		<p>
+			This code will wait until each order has been successfully placed before placing the next order. If any order fails, it will 
+			give up. This type of loop still removes some of the boilerplate associated with your basic <code>for</code> loop, and will 
+			work with anything array-like (including our <code>NodeList</code> from above).
+		</p>
+
+		<p>Two things to note, in order of importance</p>
+		<ol>
+			<li>
+				This is a <code>for ... of</code> loop. It is a different beast to a <code>for ... in</code> loop, and should not be confused with
+				it. If you can think of a way to remember which is which, I'd love to hear it.
+			</li>
+			<li>
+				You can declare your <code>item</code> using <code>const</code>, if you want. This is due to the way scope works in <code>for</code>
+				loops in JavaScript. Check out this <a href="https://www.youtube.com/watch?v=Nzokr6Boeaw">HTTP203 video on for loops</a> if you're 
+				interested to understand why.
+			</li>
+		</ol>
 
 		<h3>Other ways to reduce noise</h3>
+
+		<p>
+			Modern JavaScript also has a bunch of "shorthand" features - essentially ways to increase the signal-to-noise ratio of your code 
+			by removing boilerplate and repetition. Some of them can seem a little hard to wrap your head around at first. I strongly encourage 
+			you to learn how they work though, and then decide for yourself whether using them makes your code cleaner or not. If you do decide 
+			you like them, you might also want to consider adding linter rules enforcing their usage.
+		</p>
+
+		<h4>Object property shorthand</h4>
+
+		<p>
+			Probably the simplest to wrap your head around - the object property shorthand can be used when you have an object property whose 
+			name and value are the same. It allows you to omit the value, leading to less repeated code.
+		</p>
+
+		<pre><code>
+			const name = 'Leia Organa';
+
+			// old JavaScript
+			const request = { name: name };
+
+			// with shorthand 
+			const request = { name };
+		</code></pre>
+
+		<p>
+			While this shorthand is usually straightforward to understand, it can get confusing when you're using a mixture of 
+			shorthand and non-shorthand values. In these cases, a bit of formatting can be very helpful.
+		</p>
+
+		<pre><code>
+			// a bit confusing
+			const request = { method: 'GET', name, birthDate, accountNumber: accountId, accountType };
+
+			// better 
+			const request = {
+				method: 'GET',
+				name,
+				birthDate,
+				accountNumber: accountId,
+				accountType
+			};
+		</code></pre>
+
+		<h4>Object and array destructuring</h4>
+
+		<p>
+			While the object property shorthand makes it easier to create objects, object destructuring makes it easier to extract things 
+			out of objects. Imagine that we have an account object like so...
+		</p>
+
+		<pre><code>
+			const account = {
+				name: 'Ellen Ripley',
+				type: 'PHONE',
+				number: '34352';
+			}
+		</code></pre>
+
+		<p>We can extract the properties into variables like </p>
+
+		<pre><code>
+			const name = account.name; // 'Ellen Ripley'
+			const type = account.type; // 'PHONE'
+			const number = account.number; // '34352'
+		</code></pre>
+
+		<p>We can now do this...</p>
+
+		<pre><code>
+			const { name, type, number } = account;
+
+			console.log(name); // 'Ellen Ripley'
+			console.log(type); // 'PHONE'
+			console.log(number); // '34352'
+		</code></pre>
+
+		<p>
+			This code will create three new variables - <code>name</code>, <code>type</code>, and <code>number</code>. It will set the value of these 
+			variables to the values of the properties of <code>account</code> which have the same names. 
+		</p>
+
+		<p>
+			We can also use destructuring when the property name is not the same as the variable name we want to use.
+		</p>
+
+		<pre><code>
+			const { number: id } = account;
+
+			console.log(id); // '34352'
+		</code></pre>
+
+		<p>
+			Note that the property name goes first, the variable being declared second. So here, we declaring a variable named <code>id</code>, which is 
+			taking the value of <code>account.number</code>. I personally find this a little confusing, and would think twice about using it.
+		</p>
+
+		<p>
+			We can also extract properties that are nested inside the target object.
+		</p>
+
+		<pre><code>
+			const user = {
+				name: 'Princess Zelda',
+				contactDetails: {
+					type: 'TWITTER'
+					value: '@zelda'
+				}
+			};
+
+			const { contactDetails: { value }} = user;
+			console.log(value); // '@zelda'
+		</code></pre>
+
+		<p>You can even combine nested values with renaming values.</p>
+
+		<pre><code>
+			const { contactDetails: { value: twitterHandle }} = user;
+
+			console.log(twitterHandle); // '@zelda'
+		</code></pre>
+
+		<p>However, at this point, I would be seriously considering if this is really better than just using </p>
+
+		<pre><code>
+			const twitterHandle = user.contactDetails.value;
+		</code></pre>
+
+		<p>
+			One place, however, where I think object destructuring is particularly useful, is in function parameters.
+			Imagine we have a function that receives a config option like so...
+		</p>
+
+		<pre><code>
+			function makeRequest(config) {
+				const method = config.method;
+				const url = config.url;
+
+				const request = { method, url };
+
+				if (method === 'POST') {
+					request.body = config.body;
+				}
+			}
+		</code></pre>
+
+		<p>We can simplify this using object destructuring!</p>
+
+		<pre><code>
+			function makeRequest({ method, url, body }) {
+				const request = { method, url };
+
+				if (method === 'POST') {
+					request.body = body;
+				}
+			}
+		</code></pre>
+
+		<p>
+			Not only does this save us from assigning the variales manually, it also makes it clear 
+			which properties the config object should have.
+		</p>
+
+		<p>
+			But, wait, there's more! Objects aren't the only thing that can be destructured - we can do the same thing with arrays!
+			For example, the new <code>Object.entries</code> function returns the properties of an object as a array or arrays 
+			containing the property name and value.
+		</p>
+
+		<pre><code>
+			const account = {
+				name: 'Ellen Ripley',
+				type: 'PHONE',
+				number: '34352';
+			}
+
+			const properties = Object.entries(account);
+			console.log(properties); // [['name', 'Ellen Ripley'], ['type', 'PHONE'], ['number', '34352']];
+		</code></pre>
+
+		<p>Array destructuring can make processing these properties simpler.</p>
+		
+		<pre><code>
+			const firstProperty = properties[0];
+			const [name, value] = firstProperty;
+
+			console.log(name); // 'name'
+			console.log(value); // 'Ellen Ripley'
+		</code></pre>
+
+		<p>We can use array destructing on function parameters as well</p>
+
+		<pre><code>
+			const copyOfAccount;
+
+			properties.forEach(([name, value]) => {
+				copyOfAccount[name] = value;
+			});
+		</code></pre>
+
+		<p>Array destructuring can also be used to swap variables without using a temp variable.</p>
+
+		<p>Traditional JavaScript...</p>
+		<pre><code>
+			let leftPane = viewport;
+			let rightPane = devTools;
+
+			// traditional swap 
+			let temp = leftPane;
+			leftPane = rightPane;
+			rightPane = leftPane;
+
+			console.log(leftPane); // devTools
+			console.log(rightPane); // viewport;
+		</code></pre>
+
+		<p>With array destructuring...</p>
+		
+		<pre><code>
+			let leftPane = viewport;
+			let rightPane = devTools;
+
+			[leftPane, rightPane] = [rightPane, leftPane]
+		</code></pre>
+
+		<p>I don't think I've ever run into an actual use case for this, but you can totally do it, if you need to.</p>
+
 		<h3>This binding & how arrow functions can help</h3>
 	</section>
 	
