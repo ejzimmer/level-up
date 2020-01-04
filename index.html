@@ -1,0 +1,343 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>dev tools</title>
+
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/moon.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/monokai.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h1 style="margin: auto">Level up your front end development</h1>
+				</section>
+
+				<section>
+					<h2>who am i?</h2>
+					<ul>
+						<li>Senior engineer @ Shine Solutions</li>
+						<li>&gt;10 years writing software</li>
+						<li>Mozilla tech speaker</li>
+						<li>Google developer expert in web</li>
+					</ul>
+					
+					<div class="notes">
+						- shine sponsoring food
+					</div>
+				</section>
+
+				<section>
+					<div>@ErinJZimmer</div>
+					<a href="https://ez.codes">ez.codes</a>
+
+					<div>level-up.ez.codes</div>						
+				</section>
+
+				<section class="inverse">
+					<div>DISCLAIMER</div>
+				</section>
+
+				<section>
+					how it's going to work
+				</section>
+
+				<section>
+					<h2>Topics</h2>
+
+					<h3>JavaScript</h3>
+					<ul>
+						<li>Clean code</li>
+						<li>Modern JavaScript</li>
+						<li>Front end architecture</li>
+						<li>Testing</li>
+					</ul>
+					
+					<h3>CSS & HTML</h3>
+					<ul>
+						<li>Semantic HTML</li>
+						<li>CSS models</li>
+						<li>CSS layouts</li>
+					</ul>
+
+					<h3>Miscellaneous</h3>
+					<ul>
+						<li>Code reviews</li>
+						<li>Performance?</li>
+						<li>Anything else?</li>
+					</ul>
+				</section>	
+
+				<section class="inverse">
+					<h2>Clean code</h2>
+				</section>
+
+				<section>
+					<div>Code needs to</div>
+					<ul>
+						<li>Do the right thing</li>
+						<li>Run on available resources</li>
+						<li>Be maintainable</li>
+					</ul>
+					<div class="notes">
+						everything is tradeoffs
+						clean code is about code that is maintainable
+						if you're never going to change it, it doesn't need to be clean
+						also, sometimes, the need for performance is going to override the 
+						need for maintainability
+						most code is read far more often that it is written though, and in these 
+						cases, it's worth taking the extra time to make it maintainable 
+						also, it's easier to take care of the first two if you've taken care of the third one
+					</div>
+				</section>
+
+				<section>
+					Uncle Bob's clean code 
+					Code complete
+					Pragmatic programmer
+				</section>
+
+				<section>
+					<ul>
+						<li>Consistency & automation</li>
+						<li>Variables</li>
+						<li>Functions</li>
+						<li>Classes/modules</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Consistency & automation</h2>
+				</section>
+
+				<section class="inverse">
+					Consistency increases the signal to noise ratio
+				</section>
+
+				<section>
+					<pre><code>
+some code with lots of inconsistend bits in it
+					</code></pre>
+					<div class="notes">
+						brains are good at patterns and noticing differences
+						consistency makes it easier to concentrate on the important parts
+					</div>
+				</section>
+
+				<section class="inverse">
+					Automation makes consistency easier
+				</section>
+
+				<section>
+					- code formatters
+					- linters
+					- static analysis tools
+					<div class="notes">
+						format doesn't matter, consistency does 
+						(if you really hate it, use your own format and reformat before push)
+						linting is a mixture of formatting and actual coding practices - find a a base 
+						set of rules and extend them
+						run the linter with autofix on!
+						static analysis is a lot more complicated & expensive - work out if its good for you
+						& your team (also isn't strictly automation cos it won't fix things for you)
+					</div>
+				</section>
+
+				<section class="inverse">
+					<div>Activity: set up a linter</div>
+				</section>
+
+				<section>
+					<h2>Naming things</h2>
+				</section>
+
+				<section class="inverse">
+					<div>be consistent with names</div>
+				</section>
+
+				<section>
+					Don't use
+					- synonyms
+					- alternate spellings
+					- alternate punctuations
+				</section>
+
+				<section>
+					folder/directory, notification/message/alert
+					colour/color, authorise/authorize
+					variableNames, ClassNames, file-names, CONSTANT_NAMES
+					(or whatever schema you prefer, just pick one)
+				</section>
+
+				<section class="inverse">
+					<div>be descriptive...</div>
+				</section>
+
+				<section>
+					- don't use acronyms or abbreviations
+					auth -> authn or authz? (although i'll use it to mean both)
+					an ambigious abbreviation...
+					- do use more words
+					logoutButton is better than logout
+					something where adding an adjective is helpful
+				</section>
+
+				<section class="inverse">
+					<div>...but not redundant</div>
+				</section>
+
+				<section>
+					doLogin -> login
+					theUser -> user, currentUser
+					accountsObservable -> accounts/accounts$
+					login(loginEmail, loginPassword) -> login(email, password)
+				</section>
+
+				<section>activity about variables</section>
+
+				<section>
+					<h2>functions</h2>
+				</section>
+
+				<section>
+					- do one thing - no side-effects, no flags (don't do unexpected things!)
+					- not have a tonne of parameters
+					- not be too complex: nesting, complex ternaries
+					- consist of a single level of abstraction
+					- should be short
+					- language idioms, but not clever code
+				</section>
+
+				<section>
+					<h2>Classes/modules</h2>
+				</section>
+
+				<section>
+					- should have a single concern
+					- changes in a single location
+				</section>
+
+				<section>
+					<h2>modern javascript</h2>
+				</section>
+
+				<section>
+					why should you care?
+					- code is easier to understand (easier to read, but also acts more expectedly)
+					- less bugs
+					- better performance
+				</section>
+
+				<section>
+					- variables declarations
+					- destructuring & default parameters
+					- array functions & functional programming 
+					- arrow functions & this binding
+				</section>
+	
+				<section class="inverse">
+					let, const & var
+				</section>
+
+				<section>
+					<ol>
+						<li>Don't use var</li>
+						<li>Use const if you can</li>
+						<li>Use let if you must</li>
+					</ol>
+				</section>
+
+				<section>
+					What have I got against var?
+					<pre><code>
+if (temperature < desiredTemperature) {
+	turnOnHeater();
+	var message = 'Warming up!';
+} else {
+	var message = 'Everything is awesome';
+}
+
+console.log(message);
+					</code></pre>
+				</section>
+
+				<section>
+					var is _function scoped_
+					let & const are _block scoped_
+				</section>
+
+				<section class="inverse">
+					ok, but why prefer const over let?
+				</section>
+
+				<section>
+					Functional programming paradigm
+					It's easier to understand the code if the variable references don't change 
+					If it changes, it's a new thing - store it in a new variable
+				</section>
+
+				<section>
+					Gotcha: const only fixes the reference - you can still change the properties
+				</section>
+
+				<section>
+					this is something you can fix with a linter
+				</section>
+
+				<section>
+					<h2>destructuring & default parameters</h2>
+				</section>
+
+				<section>
+					<h1 style="margin: auto">Thanks!</h1>
+					<div>https://level-up.ez.codes</div>
+				</section>
+			</div>
+		</div>
+
+		<div style="position: fixed; z-index: 2; bottom: 40px; right: 40px; font-family: Futurama; font-size: 36px; color: var(--lighter); opacity: .6">
+			@ErinJZimmer
+		</div>
+
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				controls: false,
+				history: true,
+				display: 'grid',
+				progress: false,
+				transition: 'fade',
+				center: false,
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true }
+				]
+			});
+		</script>
+		<script src="./scripts.js"></script>
+
+	</body>
+</html>

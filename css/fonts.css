@@ -1,0 +1,18 @@
+@font-face {
+	font-family: 'Futurama';
+	font-style: normal;
+	font-weight: 400;
+	src: url('./fr-bold.woff') format('woff');
+}
+@font-face {
+	font-family: 'Kalam';
+	font-style: normal;
+	font-weight: 400;
+	src: url('./kalam-v10-latin-regular.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'Kalam';
+	font-style: normal;
+	font-weight: 700;
+	src: url('./kalam-v10-latin-700.woff2') format('woff2');
+}

@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Level up your front end development</title>
+
+	<style>
+		.incomplete {
+			background: red;
+			color: white;
+		}
+
+		.needs-example {
+			background: blue;
+			color: white;
+		}
+
+		.in-draft {
+			background: #74f7f0e3;
+			color: #666;
+		}
+
+		.needs-review {
+			background: #aaf3aa;
+		}
+	</style>
+</head>
+<body>
+	<h1>Level up your front end development</h1>
+
+	<div>Contents</div>
+	<ul>
+		<li><a href="#disclaimer">Disclaimer</a></li>
+		<li><a href="#clean-code">Clean code</a></li>
+		<li><a href="#modern-javascript">Modern JavaScript</a></li>
+		<li><a href="#architecting-applications">Architecting applications</a></li>
+		<li><a href="#testing">Testing</a></li>
+		<li><a href="#semantic-html">Semantic HTML & accessibility</a></li>
+		<li><a href="#understanding-css">Understanding CSS</a></li>
+		<li><a href="#css-layouts">CSS layouts</a></li>
+		<li><a href="#conclusion">Wrap up</a></li>
+	</ul>
+
+	<section class="needs-review">
+		<h2 id="disclaimer">Disclaimer</h2>
+
+		<p>
+			This workshop contains a bunch of stuff that I think is important to understand to become a 
+			good front end developer. Some of it - like how <code>Array.prototype.reduce</code> works - is 
+			fact. However, some of it - like when you should create a function - is my opinion, based on 
+			experience. And some of it - like <span class="needs-example">rule of thumb</span> is a good rule of 
+			thumb, but doesn't apply in all situations.
+		</p>
+
+		<p>
+			The point isn't to memorise everything here and apply it exactly as described. The point is that these 
+			are things that you should think about, and work out the best approach for your situation. Code written 
+			for production in an enterprise organisation demands much different standards than code written at home 
+			to try and learn a new topic. You need to work out what's going to be most helpful for you and your team.
+		</p>
+
+		<p>
+			That said, the opinions given here should give you a decent starting point. If you don't currently have 
+			an opinion on one of the topics we discuss here, feel free to just take mine and use it, while you work 
+			out your own. And if you do already have an opinion, I'd encourage you to think about <i>why</i> you have 
+			that opinion, and if there's anything else you might want to consider. (Even if your opinion agrees with 
+			mine!)
+		</p>
+	</section>
+
+	<section class="needs-review">
+		<h2 id="clean-code">Clean code</h2>
+
+		<p>
+			Clean code is code that is easy to understand and maintain. The term comes from the book 
+			<i>Clean Code</i> by Robert Martin. Writing clean code is about going beyond writing code that 
+  		<i>works</i>, to writing coding that is great for the next person to work on. As Martin Fowler says
+		</p>
+
+		<blockquote>
+			Any fool can write code that a computer can understand. 
+			Good programmers write code that humans can understand.
+		</blockquote>
+
+		<p>
+			Clean code
+		</p>
+		<ul>
+			<li>makes its intent clear</li>
+			<li>doesn't do unexpected things</li>
+			<li>is broken up logically</li>
+		</ul>
+
+		<h3>Signalling intent & self-documenting code</h3>
+
+		<p>
+			According to a 1979 study (quoted in Steve McConnell's <i>Code Complete</i>)
+			<q>understanding the original programmer's intent was the most difficult problem</q>.
+			Working out what the previous dev was trying to do is usually key to understanding bugs, 
+			and is also important when adding new features, or updating existing ones. Fortunately, there 
+			are a bunch of different options available to us to try and express our intent. 
+		</p>
+
+		<p>Here's a couple of options, ranked by some important factors</p>
+
+		<table>
+			<th>
+				<td></td><td>low</td><td>medium</td><td>high</td>
+			</th>
+			<tr>
+				<td>discoverability</td>
+				<td>
+					<div class="doc external" aria-label="external docs"></div>
+				</td>
+				<td>
+					<div class="doc readme" aria-label="readme"></div>
+				</td>
+				<td>
+					<div class="doc comments" aria-label="code comments"></div>
+					<div class="doc code" aria-label="code itself"></div>
+				</td>
+			</tr>
+			<tr>
+				<td>finding the relevant information</td>
+				<td></td>
+				<td>
+					<div class="doc external" aria-label="external docs"></div>
+					<div class="doc readme" aria-label="readme"></div>
+				</td>
+				<td>
+					<div class="doc comments" aria-label="code comments"></div>
+					<div class="doc code" aria-label="code itself"></div>	
+				</td>
+			</tr>
+			<tr>
+				<td>confidence it's up-to-date</td>
+				<td><div class="doc external" aria-label="external docs"></div></td>
+				<td>
+					<div class="doc readme" aria-label="readme"></div>
+					<div class="doc comments" aria-label="code comments"></div>
+				</td>
+				<td>
+					<div class="doc code" aria-label="code itself"></div>
+				</td>
+			</tr>
+		</table>
+		<table>
+			<thead>Key</thead>
+			<tr><th>External documentation</th><td><div class="doc external"></div></td></tr>
+			<tr><th>README</th><td><div class="doc readme"></div></td></tr>
+			<tr><th>Code comments</th><td><div class="doc comments"></div></td></tr>
+			<tr><th>Code itself</th><td><div class="doc code"></div></td></tr>
+		</table>
+
+		<p>
+			As you can see from the table above, the closer to the code your documentation is,
+			the easier it is to discover, the easier it is to find the relevant information, and 
+			the easier it is to trust that it's been kept up-to-date and relevant. The logical 
+			conclusion of this is that the code itself is the best way to signal your intent.
+		</p>
+
+		<p>
+			Of course, not all code is actually good at signalling intent, so we're going to look
+			at some things you can do to help with this.
+		</p>
+
+		<h4>Use names that are descriptive, concise and unambiguous</h4>
+
+		<ul>
+			<li>
+				<strong>Don't use acronyms or abbreviations.</strong> It might be obvious to you what you
+				mean, but will it be obvious to the next developer? What if they're a junior? Or someone who
+				is new to the domain? I've been working at my current employer for over a year now, and I still 
+				have no idea what MIRN stands for. Even in cases where someone could work out what the abbreviation 
+				stood for, you're making them use extra brain-power, and they might need that brain-power for 
+				something that's legitimately difficult. Just use the whole word - your IDE can autocomplete it for 
+				you if the typing gets too much.
+			</li>
+			<li>
+				<strong>Don't add superfluous junk to your names.</strong> Don't add type suffixes, like Obj, 
+				Str, or Arr. For a start, they're abbreviations, and we already agreed not to use abbreviations.
+				But also, your IDE knows the type. It can tell you everything you need to know.
+			</li>
+			<li>
+				<strong>Avoid generic names</strong>. Names like <code>data</code>, <code>items</code>, 
+				<code>x</code> don't convey any meaning. Pick something descriptive. (I usually make an 
+				exception to this rule for loop indices - I think <code>i</code> is commonly-enough understood 
+				as a loop index to cause no confusion. That said, I rarely use loop indices, as we'll see later on.)
+			</li>
+			<li>
+				<strong>Name things consistently.</strong> A <code>message</code> and a <code>notification</code> should 
+				be different things. Using synonyms to refer to the same object just adds ambiguity to your code. It's 
+				not clear to a new developer whether those things refer to the same thing, or which name they should use 
+				for the new thing that they're creating.
+			</li>
+		</ul>
+
+		<h4>Don't be surprising</h4>
+
+		<ul>
+			<li>
+				<strong>Functions should do what they say they do.</strong> I shouldn't need to read through your 
+				function to work out what it does. As we already discussed, it should have a descriptive, concise, 
+				and unambiguous name. But you also need to make sure it doesn't do anything <i>else</i>. <div class="needs-example">
+					an example of a function with an unintended side-effect
+				</div>
+			</li>
+			<li>
+				<strong>Don't reuse variables</strong>, even if the two uses seem similar. Discovering that a variable 
+				suddenly refers to something else is surprising, and not the good kind. <div class="needs-example">
+					example of reusing variables that we should avoid
+				</div>
+			</li>
+			<li>
+				<strong>Follow established patterns.</strong> Human brains are good at optimising for patterns. Ensuring
+				your code follows established patterns makes it easier to process. This could mean project-specific things,
+				like following established punctation and indenting rules, or maintaing the existing file structure.
+				But it can also mean following more generic patterns. If you have a status called <code>ENABLED</code>,
+				then the opposite is <code>DISABLED</code>, not <code>OFF</code>, or <code>OUT</code> or anthing else. 
+				Similarly, if you have function called <code>login()</code>, then its partner should be <code>logout()</code>,
+				not <code>logOut()</code>, or <code>signout()</code>, or anything else.
+			</li>
+		</ul>
+
+		<h3>Increase your signal-to-noise ratio</h3>
+
+		<p>
+			The signal-to-noise ratio refers to how much of your code conveys actual meaning to the reader, compared
+			to the amount that is just boilerplate, or repeating something that's been conveyed elsewhere. 
+			Meaningless code is all that stuff that you just skip over when you're reading the code, because it's
+			not helpful.
+		</p>
+
+		<p>
+			We can improve the signal-to-noise ratio by either increasing the signal (adding meaning), or reducing
+			the noise (removing the useless stuff). (Or, ideally, both!)
+		</p>
+
+		<p>
+			Often, you can increase the signal-to-noise ratio by reducing the amount of code that you write.
+			Code like
+		</p>
+
+		<pre><code>
+let isParentNode;
+if (hasChildren(node)) {
+	isParentNode = true;
+} else {
+	isParentNode = false;
+}
+		</code></pre>
+
+		<p>can be greatly simplified down to</p>
+
+		<pre><code>const isParentNode = hasChildren(node)</code></pre>
+
+		<p>
+			It's not always quite as obvious as this, but it's worth keeping an eye out for this pattern. 
+			Often, your IDE or linter can spot (and autofix) things like this for you.
+		</p>
+
+		<p>
+			Another way you can increase the signal to noise ratio, is by moving the "noise" away from the signal.
+			For example, imagine we had a function like the following, which checks if a file is valid, and 
+			then posts it to the server if it is:
+		</p>
+
+		<pre><code>
+				const match = file.name.match(/\.[a-z]+$/);
+				let extension;
+				if (match && match.length > 0) {
+					extension = match[0];
+				} 
+				let valid;
+				if (extension === 'jpg' || extension === 'jpeg' || extension === 'png' || extension === 'svg') {
+					valid = true;
+				}
+				if (file.size > MAX_SIZE) {
+					valid = false;
+				}
+				if (valid) {
+					const formData = new FormData();
+					formData.append('files[]', file);
+					fetch(URL, {
+						method: 'POST',
+						body: formData,
+					})
+				}
+		</code></pre>
+
+		<p>
+			You can probably make out what's going on, but it's not... great. We can improve it by moving the "noise"
+			of the implementation details away from the main decision flow.
+		</p>
+
+
+		<pre><code>
+			...
+			
+			if (isFileValid(file.name, file.size)) {
+				sendFile(file);
+			}
+
+			...
+
+			function isFileValid(name, size) {
+				const match = filename.match(/\.[a-z]+$/);
+				let extension;
+				if (match && match.length > 0) {
+					extension = match[0];
+				} 
+
+				const validFileTypes = ['jpg', 'jpeg', 'png', 'svg'];
+				let valid = validFileTypes.includes(extension);
+
+				if (fileSize > MAX_SIZE) {
+					valid = false;
+				}
+			}
+
+			function sendFile(file) {
+				const formData = new FormData();
+				formData.append('files[]', file);
+				fetch(URL, {
+					method: 'POST',
+					body: formData,
+				})
+			}
+		</code></pre>
+
+		<p>
+			Here, the function names act like a kind of outline of what's going on: if the file is valid, 
+			then send it. If we need to know the details about how we determine if a file is valid, or how 
+			we send a file, then we can look inside the functions. But generally, when you're reading code, 
+			you're looking for a high level overview, then dipping into a deeper level when you get to the bit 
+			that interests you. Structuring your code with functions that hide implementation details like this 
+			makes that easier to do.
+		</p>
+
+		<p>
+			We've also added meaning in the file validation code by replacing the lengthy if statement with 
+		</p>
+
+		<pre><code>
+			const validFileTypes = ['jpg', 'jpeg', 'png', 'svg'];
+			let valid = validFileTypes.includes(extension);
+		</code></pre>
+
+		<p>
+			Adding the <code>validFileTypes</code> variable adds extra meaning to our code, and the list check is 
+			much shorter, and easier to read, than the if statement. Plus, it's now easier to add or remove valid
+			file types.
+		</p>
+
+		<p class="needs-example">
+			There are also a few techniques we can use to reduce the noise in our code. For example, heavy 
+			indenting adds a lot of noise and makes your code harder to understand. Reducing indenting by 
+			factoring out to functions and returning early can make it much eaiser to follow.
+		</p>
+
+		<pre><code>
+			deeply nested code
+		</code></pre>
+
+		<p class="needs-example">Instead, we can just do all our validity checks up front...</p>
+
+		<pre><code>
+			returning early
+		</code></pre>
+
+		<p>
+			Using JavaScript idioms is another way to potentially reduce noise in code. For example, something 
+			like 
+		</p>
+
+		<pre><code>
+			let name = user.getName();
+			if (name === undefined) {
+				name = 'hey you';
+			}
+		</code></pre>
+
+		<p>
+			can be simplified to
+		</p>
+
+		<pre><code>
+				const name = user.getName() || 'hey you';
+		</code></pre>
+
+		<p>
+			(If you're not familiar with the <code>||</code> shortcut, in JavaScript <code>||</code> returns the first truthy value,
+			or the last value, if none of them are truthy. In this case, if <code>user.getName()</code> returns a value, then we'll get that 
+			value. Otherwise, we'll get 'hey you'.)
+		</p>
+
+		<p>
+			A couple of things to keep in mind when using idioms like this though:
+		</p>
+		<ul>
+			<li>
+				The two code snippets aren't exactly equivalent. The second version will replace any falsey value with 'you' - including null, or 
+				empty string. In this case, this is probably the behaviour that you want, and the second version is actually more robust. This 
+				won't always be the case though.
+			</li>
+			<li>
+				You're aiming to make the code easier to understand. Sometimes there is a fine line between idiomatic code and "clever" code, which 
+				is short, but difficult to understand. For example, nested ternary operators might make your code shorter than using if statements, 
+				but they're almost certainly more difficult to understand. If you're not sure - ask someone else to have a look!
+			</li>
+		</ul>
+
+		<p>
+			Here are a few more JavaScript idioms you should be familiar with:
+		</p>
+
+		<ul>
+			<li>Using <code>||</code> to set defaults (like we did above)</li>
+			<li>
+				Using <code>&&</code> for null-checking. <code>&&</code> will return the first falsey value, or the last value if all values are truthy.
+				So, we can do null-checking like
+				<pre><code>const name = user && user.name && user.name.firstName;</code></pre>
+				If either <code>user</code> or <code>user.name</code> are null or undefined, then <code>name</code> will be null or undefined. Otherwise, 
+				it will have the value of <code>user.name.firstName</code>
+			</li>
+			<li>
+				Convert to boolean via <code>!!</code>. The negation operator (<code>!</code>) converts a value to boolean. So 
+				<code>!someTruthyValue</code> equals <code>false</code>. <code>!!</code> sets it back to the boolean equivalent of its initial value.
+				So <code>!!someTruthyValue</code> equals <code>true</code>.
+			</li>
+			<li>
+				You can convert a string to a number using unary <code>+</code>.
+				<pre><code>const age = +document.getElementById('age').value;</code></pre>
+				Converting a non-numeric value will result in <code>NaN</code>, so make sure your code includes the appropriate checks.
+			</li>
+			<li>
+				Creating a copy via JSON. Generally speaking, the fastest way to make a copy of an object in JavaScript is to use
+				<pre><code>const copy = JSON.parse(JSON.stringify(myObjectToCopy))</code></pre>
+				Yes, it looks like a hack, but it's such a common use case that browsers have actually optimised it to be faster.
+				Just bear in mind that if your object has any function properties, those won't be stringified, so they won't appear in the copy. If you 
+				want to make a copy of an object with function properties, you can use object destructuring
+				<pre><code>const copy = {...myObjectToCopy}</code></pre>. However, this will only create a shallow copy! (We'll look into object 
+				destructuring a bit more later).
+			</li>
+		</ul>
+
+		<h3>Don't repeat yourself</h3>
+
+		<p>
+			Perhaps the most effective way you can reduce noise in your code, though, is by DRYing out your code. If you've not heard of DRY before, it stands 
+			for "Don't Repeat Yourself". At its most fundamental, this means that you shouldn't implement the same logic twice in your code. Instead, factor 
+			the repeated logic out into a function, class, or module.
+		</p>
+
+		<p>
+			There are several reasons why you want to avoid repeated logic in your code.
+		</p>
+
+		<ul>
+			<li>More code means more things that can go wrong</li>
+			<li>Having logic implemented in multiple places means it's more work to update it when things change</li>
+			<li>Similarly, it's more work to fix bugs, as they will need to be fixed multiple times</li>
+			<li>
+				There is a high risk that your implementations will get out of sync. This is particularly problematic as there is 
+				no way for future devs to know which implementation is correct, or why they're different.
+			</li>
+		</ul>
+
+		<pre class="needs-example"><code>
+			an example where DRYing code makes it better
+		</code></pre>
+
+		<p>
+			Be careful when you're DRYing out your code that the logic you're coalescing really is the same logic. If the new function takes in a 
+			lot of parameters, which then get used in a lot of conditionals, there's a good chance the logic is actually different.
+		</p>
+
+		<pre class="needs-example"><code>
+			an example of logic that wasn't really the same so DRYing it didn't help
+		</code></pre>
+
+		<p>
+			And it's not just code you should be thinking about. Comments which repeat the same information as the code gives us suffer from the 
+			same problems as repeated logic. They don't add any real value, and they run the risk of getting out of sync and actually providing 
+			negative value.
+		</p>
+
+		<pre class="needs-example"><code>good comments and bad comments</code></pre>
+
+		<aside>
+			<h3>Other types of documentation</h3>
+
+			<p>
+				None of this is to say that other types of documentation aren't useful. Code comments are often 
+				useful for explaining <i>why</i> you did something, or adding some extra clarity.
+			</p>
+
+			<div class="needs-example">Doing something weird in CSS so it works in IE</div>
+
+			<p>
+				JSDoc-type comments are valuable, if you're buildiing a library and want to expose the API to
+				your users. READMEs are essential for describing how the app works in generic terms, how to get 
+				it up and running, and any guides for contributing. When creating these guides, don't just describe 
+				how to get the system up and running - include information like the URL to go to, and any login 
+				information required.
+			</p>
+				
+			<p>
+				Finally, external documentation can be helpful if you need to provide documentation to people who 
+				don't have access to your source control for some reason, or if your documentation relates to 
+				multiple apps in different repositories - like a collection of micro-frontends or micro-services.
+				However, I would strongly recommend storing the documentation in source control (where it's easy for 
+				devs to update) and linking to it from your README. Otherwise, in a month's time, it's going to be 
+				out of date, and in two months' time, nobody is even going to know it exists.
+			</p>
+
+			<p>
+				The exception to this, of course, is the kind of pointless documentation you're required to produce so 
+				somebody can tick a box. Nobody's going to read it, so put in the minimum effort you can, and immediately 
+				forget about it.
+			</p>
+		</aside>
+
+		<h3>Design your code with humans in mind</h3>
+
+		<p>
+			Most studies show that humans can really only hold 4-5 things in our working memory at a time.
+			<span class="needs-example">[citation needed]</span>
+			This means that we can really only keep track of that many things easily. However, we also have the ability to "chunk" data - that is to 
+			group a number of pieces of data together, and think of them as a single piece. For example, most people would struggle a bi 
+			remembering a list of eight single-digit numbers. But remembering two 4-digit years is fairly trivial.
+		</p>
+
+		<p>
+			How can this help us write code? We can break our code up into logical units that only deal with 4-5 variables.
+		</p>
+
+		<p class="needs-example">
+			One way to do this is to keep variables as local as possible. If you've got a function that deals with 10 variables, then don't 
+			declare them until you actually need to use them. 
+		</p>
+
+		<p>
+			Better than this though, is not to have functions with ten variables in them. As we talked about earlier, we can factor out 
+			functionality into other functions - essentially using chunking to turn a lot of information into a manageable amount. We can also 
+			do this on multiple levels. We could factor out the functionality of a group of related functions into a class, or a component. And we can 
+			factor out multiple classes and components into a module.
+		</p>
+
+		<p>
+			The important principle here is that each unit (function, component, class, or module) should only do one thing. In object-oriented programming,
+			this is knows as the Single Responsibility Principle, which states that a class should only have one reason to change. Now, JavaScript isn't 
+			an object-oriented language, and I don't actually think that description is that helpful, but I do think that following the Single 
+			Responsibility Principle does make your code easier to understand and reason about.
+		</p>
+
+		<p>
+			So, how do we decide what "one thing" is? Unfortunately, I can't give you a hard and fast rule, here - it's a bit of a judgement call.
+			There are a few things that can hint that your unit of code could benefit from being split up though.
+		</p>
+
+		<ul>
+			<li>
+				It's hard to name. Are you having trouble coming up with a name that describes all the functionality of your component?
+				Does your class have a very generic name <span class="needs-example">like ...</span>. Does your function have a name with a conjunction in 
+				it (like 'and', 'or', 'if', or 'when')?
+			</li>
+			<li>
+				Does your function or class have a heap of variables? <span class="needs-example">Sometimes</span>, this is inevitable, but it's always 
+				a sign you should at least think about whether it needs splitting.
+			</li>
+			<li class="needs-example">
+				Are you covering multiple levels of abstraction? 
+			</li>
+			<li>
+				Is your code deeply nested? As we discussed earlier, more than one or two levels of nesting is a good sign you should consider factoring 
+				some functionality out into another function, which a nice, descriptive name.
+			</li>
+			<li class="needs-example">
+				Does your function have a flag parameter? A flag parameter is usually a boolean value that is used to change the behaviour of a function.
+				Flag parameters make your code harder to understand, because it's not really clear what the function is doing from the name alone. And 
+				they're a pretty good indicator that the function is doing two things.
+			</li>
+		</ul>
+
+		<p>
+			A corollary of the idea that we only want 4-5 variables in scope at once is that we want our functions to take as few parameters as possible. 
+			It's very easy to understand what a function with no parameters is doing. But it's a bit impractical to only use functions with no parameters.
+			So functions with one or two parameters are ok too. Using three or more parameters greatly increases the cognitive load of using your function. 
+			It's harder to understand what's going on, because there's more in scope, and it's harder to use your function, as we've got to remember what 
+			more parameters do. The smart context in your IDE can help mitigate this a little, but it's still not ideal.
+		</p>
+
+		<p class="needs-example">
+			However, if you do need to pass a lot of stuff into a function, don't forget that we can rely on our old friend chunking!
+		</p>
+
+		<p class="needs-example">
+			One final thing to remember, when factoring out into new classes, is that we want to favour composition over inheritance. We prefer to share 
+			functionality by composing classes from a number of lower-level classes, rather than using inheritance. Using composition makes our objects more 
+			flexible, as things don't need to be in the same family tree to share stuff. It also makes them easier to understand as everything at a given 
+			level of abstraction is in the same place, instead of being spread across a parent class and child class.
+		</p>
+
+		<h3>Refactoring code & testing</h3>
+
+		<p>
+			One last note on the topic of clean code: keeping your code base clean is going to require refactoring your code, a lot.
+			In order to do this reliably, you're going to need good tests, which test the intent of your code, not your implementation. One way to 
+			achieve this is to use Test Driven Development (TDD). I highly recommend that you at least give TDD a shot, even if you don't end up 
+			using it all the time. I find it particularly helpful when fixing bugs, and writing new utility code. I find it less helpful when I'm 
+			writing new components, or anything that involves a lot of HTML & CSS.
+		</p>
+
+		<p>
+			If you're working with legacy code which doesn't have good test coverage, things are a bit trickier. Often, it's incredibly difficult to work 
+			out what the original author's intent was. In these cases, I recommend writing tests that test the current behaviour (whether it's correct or 
+			not), and working against those. Make sure you clearly communicate that this is what you're doing.
+		</p>
+
+		<p>
+			When it comes time to actually do the refactoring, smaller is better. Refactor a small piece of code, and check that it still works. Then do 
+			another small piece. Once you've done a few small pieces you can combine them into a larger refactor. Ideally though, you should be able to 
+			drop your refactoring work at just about any point, and still have functioning code.
+		</p>
+
+		<p>
+		 And finally, make deliberate decisions about what code you're going to refactor. Generally speaking, only refactor code that you're actually 
+		 touching. It might be tempting to re-write that 1000-line component written in archaic JavaScript with inconsistent naming everywhere, but if 
+		 it's actually working ok, then you're more likely to just introduce bugs. If you find yourself needing to make changes to it, then feel free to 
+		 factor out parts of it, but don't try and do the whole thing. Our goal is to create code that is easy to reason about and change, but not at the 
+		 cost of breaking existing functionality.
+		</p>
+	</section>
+	
+	<section class="in-draft">
+		<h2 class="incomplete" id="modern-javascript">Modern JavaScript</h2>
+
+		<p>
+			JavaScript underwent a fairly serious update in 2015, which introduced a lot of new features into the language. Since then, it has 
+			had incremental additions every year, to ensure the language continues to update and evolve without the significant overhead of 
+			the ES6 update. Some of these new features add brand new functionality to the language, but many of them are actually intended to 
+			make it easier to follow the clean code principles we just discussed - making our code easier to reason about by making it less 
+			surprising, and increasing the signal-to-noise ratio by removing boilerplate and introducing standard methods to do things.
+		</p>
+
+		<p>Today, we're going to have a look at a few of these new features, and how how they can help us write cleaner code.</p>
+
+		<h3>Declaring variables</h3>
+
+		<p>
+			ES6 introduced two new ways to declare variables in JavaScript - <code>let</code> and <code>const</code>. So, how do we know which 
+			one to use?
+		</p>
+
+		<p>
+			Well, there's one simple rule: <strong>don't use <code>var</code></strong>. Like, ever.
+		</p>
+
+		<p>
+			The reason for this has to do with the way that variables are scoped - that is the part of your code that a particular variable is 
+			accessible in. No matter whether you use <code>var</code>, <code>let</code>, <code>const</code>, your variable will be available in the 
+			current scope, and any child scopes, unless they are shadowed.
+		</p>
+
+		<p class="needs-example">What does that mean?</p>
+		<ul>
+			<li>
+				Code that is outside of any function or module is considered the global scope. All other scopes are children of the global scope.
+				This means that if you declare a variable in the global scope, it will be available in all other scopes.
+			</li>
+			<li>
+				Code that is inside a module (<code>&lt;script type="module"&gt;</code>), but not inside any function, is module scoped. Any function 
+				declared inside a module is a child scope of that module. So a module-scoped variable would be available anywhere in that module, including
+				inside any functions.
+			</li>
+			<li>
+				Code that is declared inside a function is scoped to that function. Other functions declared inside the original function are child 
+				scopes of that function. A function-scoped variable is available inside the top-level function, as well as any child functions. In fact,
+				this is what closures are - using a variable scoped to the parent function from inside a child function.
+			</li>
+		</ul>
+
+		<p>
+			What about shadowing? Shadowing occurs when a child scope contains a variable with the same name as a variable in the parent scope.
+			In this case, the parent-scoped variable is no longer available in the child scope. Generally speaking, this is something you want to
+			avoid, as it means you have one name referring to two different things.
+		</p>
+
+		<p>
+			So how do <code>let</code> and <code>const</code> differ from <code>var</code>? <code>let</code> and <code>const</code> introduce a new 
+			level of scoping - the block scope. A block scope is anything in curly brackets - like a function body, an if statement, or a loop body.
+			Variables declared with <code>let</code> or <code>const</code> are block-scoped. They are accessible inside the current block, and any 
+			child block scopes - such as nested conditionals, or functions declared within this block.
+		</p>
+
+		<p>What does this mean in practice? With <code>var</code> it is possible to do the following:</p>
+
+		<pre><code>
+			for (var i = 0; i < 10; i++) {
+				try {
+					processItem(items[i]);
+				} catch (e) {
+					break;
+				}
+			}
+			console.log(`Successfully processed ${i} items`);
+		</code></pre>
+
+		<p>or</p>
+
+		<pre><code>
+			var hour = (new Date()).getHours();
+			if (hour < 13) {
+				var greeting = 'Good morning!';
+			} else {
+				var greeting = 'Good afternoon!';
+			}
+			console.log(greeting);
+		</code></pre>
+
+		<p>
+			In the first example, we're declaring the variable <code>i</code> inside the <code>for</code> loop, then accessing it outside 
+			the loop. In the second example, we're declaring the variable <code>greeting</code> in two different places.
+		</p>
+
+		<p>
+			This might seem like a handy feature. (I know I find the second one tempting when I'm building strings conditionally!) However, this isn't how 
+			variables work in most languages, so it makes our code a little more suprising. More importantly though, it's confusing because variables appear 
+			to be being used in higher scopes than the one they were declared in. Especially in the second example, you have to read what's going on 
+			inside the conditional blocks to be able to understand what's going on outside, which is the inverse of how code normally works.
+		</p>
+
+		<p>
+			<code>let</code> and <code>const</code> remove the possibility of doing this.
+		</p>
+
+		<pre><code>
+			for (let i = 0; i < 10; i++) {
+				try {
+					processItem(items[i]);
+				} catch (e) {
+					break;
+				}
+			}
+			console.log(`Successfully processed ${i} items`);
+		</code></pre>
+
+		<p>
+			will result in Uncaught ReferenceError: i is not defined. You'll get a similar error if you try to declare <code>message</code> with 
+			either <code>let</code> or <code>const</code> in the second example. (You'll get a different error if you try to use <code>const</code>
+			as a counter in a standard for loop).
+		</p>
+
+		<p>
+			Ok, so we should never use <code>var</code>. But should we use <code>let</code>, or <code>const</code>? This one is actually the subject of 
+			a bit of debate. To understand the debate though, we need to understand the difference between the two.
+		</p>
+
+		<p>
+			If you're not familiar with <code>let</code> and <code>const</code>, <code>let</code> works basically the same as <code>var</code>, except 
+			with block scoping. <code>const</code>, on the other hand, creates a "constant" - a variable that can't be reassigned to new value. This 
+			makes <code>const</code> ideal for things like defining magic numbers, and you should definitely use it for that.
+		</p>
+
+		<pre><code>const GST = 0.1;</code></pre>
+
+		<p>
+			However, this doesn't mean that any variable declared with <code>const</code> is immutable. If you declare an object with <code>const</code>,
+			you can't reassign it to another object, but you can change the properties of that object.
+		</p>
+
+		<pre><code>
+			const person; // Uncaught SyntaxError: Missing initializer in const declaration
+
+			const person = { name: 'Amy Pond' };
+			person = { name: 'River Song' }; // Uncaught TypeError: Assignment to constant variable
+
+			person.name = 'Rose Tyler'; // perfectly fine
+		</code></pre>
+
+		<p>
+			So, given this difference, the JavaScript community is basically split into two camps: prefer <code>let</code>, or prefer <code>const</code>.
+		</p>
+
+		<p>
+			The prefer <code>let</code> camp use <code>let</code>, unless they specifically want to convey that something is constant, in which case 
+			they use <code>const</code>. This essentially makes the <code>const</code> declaration more meaningful.
+		</p>
+
+		<p>
+			The prefer <code>const</code> camp, on the other hand, use <code>const</code> unless the variable specifically needs to be re-assigned. 
+			The argument for this comes from functional programming. Reassigning variables to new values adds "surprise" to your code, makes it harder 
+			to reason about, and can introduce subtle bugs. Instead of changing existing variables, we should just create new ones, with new, descriptive
+			names. In this camp, <code>let</code> is really only used in situations like assigning things conditionally, or building strings.
+		</p>
+
+		<pre><code>
+			const hours = (new Date()).getHours();
+			let greeting;
+			if (hours < 13) {
+				greeting = 'Good morning!';
+			} else {
+				greeting = 'Good afternoon!';
+			}
+		</code></pre>
+
+		<p>
+			In an ideal world, we'd probably even get rid of this one <code>let</code>, like so:
+		</p>
+
+		<pre><code>
+			const hours = (new Date()).getHours();
+			const isMorning = hours < 13;
+			const greeting = isMorning ? 'Good morning!' : 'Good afternoon!';
+		</code></pre>
+
+		<p>
+			I personally prefer <code>const</code>. I think it encourages a cleaner style of coding, as shown above. Additionally, if you prefer 
+			<code>const</code>, you're never going to accidentally going to declare a constant using <code>let</code>. If you prefer <code>let</code>,
+			you're relying on humans to know when something must be constant.
+		</p>
+
+		<p>
+			That said, it's really not a big deal. There are plenty of smart people on both sides of the debate, and the difference isn't a going to
+			matter in most cases. Just pick one and run with it.
+		</p>
+
+		<p>
+			One final word on refactoring code that uses <code>var</code>: While I definitely recommend converting your <code>vars</code> to <code>let</code>
+			or <code>const</code>, be careful about it. The kinds of bugs you can introduce by changing the scope of a variable are quite subtle. I 
+			recommend using an automated tool like a linter.
+		</p>
+
+		<h3>Array functions</h3>
+
+		<p>
+			ES6 also added a bunch of new functions to <code>Array.prototype</code>, for looping through and manipulating data. These functions 
+			let us write cleaner code by allowing us to write more declarative code. Declarative code describes <i>what</i> the code should do,
+			rather than <i>how</i> to do it. CSS and SQL are both declarative languages.
+		</p>
+
+		<p>
+			The advantage of declarative code, is that it hides the implementation details that we're not interested in. For example, 
+			<code>Array.protoype.forEach</code> allows us to do something for each item in an array, without worrying about the details of how
+			the loop actually works. Or, to put it another way, it increases the signal-to-noise ratio.
+		</p>
+			
+		<p>
+			Of course, there is also a downside to declarative programming - you have less control. In the case of <code>forEach</code>, you 
+			can't have a loop counter that is incremented by 2 each time, for example. 
+		</p>
+
+		<p>
+			Let's have a look at some examples of declarative coding using JavaScript's array functions, and why they're nicer than the traditional 
+			way of doing things. We'll start with <code>Array.prototype.forEach</code>, as it's conceptually the simplest.
+		</p>
+
+		<h4><code>Array.prototype.forEach</code></h4>
+		
+		<pre><code>myList.forEach((item, index, list) => ...do something... )</code></pre>
+
+		<p>
+			<code>Array.prototype.forEach</code> is a generic loop that will call your callback function on each item in the given list.
+			The callback function will be passed the current item, the index of the current item, and the list itself. You <i>can</i> change 
+			the list from within the loop, but I strongly recommend against it, as it makes your code weird and hard to understand.
+		</p>
+		 
+		<p>
+			So, how does it work? Imagine we want to log a list of results to the console. In traditional JavaScript, we might do that something like 
+			this...
+		</p>
+
+		<pre><code>
+			const results = ['pass', 'pass', 'fail', 'pass'];
+			for (let i = 0; i < results.length; i++) {
+				const result = results[i];
+				console.log(result);
+			}
+		</code></pre>
+
+		<p>Using <code>forEach</code>, that would look like...</p>
+
+		<pre><code>
+			const results = ['pass', 'pass', 'fail', 'pass'];
+			results.forEach(result => console.log(result));
+		</code></pre>
+
+		<p>
+			You can see we get as much signal as the first example, but with much less noise. 
+		</p>
+
+		<p>
+			Now, this is a super-contrived example. The reason for this is that <code>forEach</code> is a very generic function, which returns nothing.
+			The only thing it can do is produce side-effects. While this might be useful for something like logging, in most cases you're going to want 
+			to use one of the other functions.
+		</p>
+
+		<h4><code>Array.prototype.map</code></h4>
+
+		<pre><code>myList.map((item, index, list) => ... return a boolean ...)</code></pre>
+
+		<p>
+			<code>Array.prototype.map</code> gives us the ability to convert each item in an array into a new item, while leaving the original 
+			array untouched. React apps use <code>map</code> extensively to convert objects into HTML elements. You can also use it to extract 
+			specific properties from objects in an array.
+		</p>
+
+		<p>Converting between different objects, in traditional JavaScript</p>
+		<pre><code>
+			const animals = ['bear', 'cat', 'giraffe'];
+			const elements = [];
+
+			for (let i = 0; i < animals.length; i++) {
+				const animal = animals[i];
+				const div = createDiv(animal);
+				elements.push(div);
+			}
+
+			function createDiv(animal) {
+				const element = document.createElement('div');
+				element.innerText = animal;
+				return element;
+			}
+		</code></pre>
+
+		<p>Converting between different objects, using <code>map</code></p>
+		<pre><code>
+			const animals = ['bear', 'cat', 'giraffe'];
+			const elements = animals.map(animal => createDiv(animal));
+
+			function createDiv(animal) {
+				const element = document.createElement('div');
+				element.innerText = animal;
+				return element;
+			}
+		</code></pre>
+
+		<p>Extracting properties, in traditional JavaScript</p>
+		<pre><code>
+			const users = [
+				{ givenName: 'Phillip', familyName: 'Fry', occupation: 'delivery boy' },
+				{ givenName: 'Turunga', familyName: 'Leela', occupation: 'captain' },
+				{ givenName: 'Bender', familyName: 'Rodrigues', occupation: 'bending robot' }
+			];
+			const names = [];
+
+			for (let i = 0; i < users.length; i++) {
+				const user = users[i];
+				const name = `${user.givenName} ${user.familyName}`;
+				names.push(name);
+			}
+		</code></pre>
+
+		<p>Extracting properties, using <code>map</code></p>
+		<pre><code>
+			const users = [
+				{ givenName: 'Phillip', familyName: 'Fry', occupation: 'delivery boy' },
+				{ givenName: 'Turunga', familyName: 'Leela', occupation: 'captain' },
+				{ givenName: 'Bender', familyName: 'Rodrigues', occupation: 'bending robot' }
+			];
+			const names = users.map(user => `${user.firstName} ${user.lastName}`);
+		</code></pre>
+
+		<p>We can actually simplify this even more, using object destructuring (which we'll go into shortly)</p>
+		<pre><code>const names = users.map(({firstName, lastName}) => `${firstName} ${lastName}`)</code></pre>
+
+		<h4><code>Array.prototype.find/findIndex & Array.prototype.filter</code></h4>
+
+		<pre><code>myList.find((item, index, list) => ... return a boolean ...)</code></pre>
+		<pre><code>myList.findIndex((item, index, list) => ... return a boolean ...)</code></pre>
+		<pre><code>myList.filter((item, index, list) => ... return a boolean ...)</code></pre>
+
+		<p>
+			A super common task in JavaScript is to find a particular item an array. Imagine we had list of accounts and we wanted 
+			to find the one belonging to a particular user. In traditional JavaScript, we could do something like...
+		</p>
+
+		<pre><code>
+			let userAccount;
+			for (let i = 0; i < accounts.length; i++) {
+				const account = accounts[i];
+				if (account.name === name) {
+					userAccount = account;
+					break;
+				}
+			}
+		</code></pre>
+
+		<p><code>Array.prototype.find</code> greatly simplifies this.</p>
+
+		<pre><code>const userAccount = accounts.find(account => account.name === name)</code></pre>
+
+		<p>Similarly, if you would prefer to find the index of an item, rather than the item itself, you can use <code>findIndex</code>.</p>
+
+		<pre><code>
+			an example where you have two arrays and you findIndex in one to retrieve a value from the other
+		</code></pre>
+
+		<p>
+			Sometimes, you don't just want to find the first item that matches your criteria - you want to find all the matching items.
+			For example, imagine you had a list of postcodes, and you wanted to find all the ones that are in Queensland. (Postcodes in 
+			Queensland all start with '4'). The postcodes are stored as strings.
+		</p>
+
+		<p>In traditional JavaScript, we could do this something like...</p>
+
+		<pre><code>
+			const queenslandPostcodes = [];
+			for (let i = 0, i < postcodes.length; i++) {
+				const postcode = postcodes[i];
+				if (postcode.startsWith(4)) {
+					queenslandPostcodes.push(postcode);
+				}
+			}
+		</code></pre>
+
+		<p>(The String prototype got a bunch of new declarative methods too - <code>startsWith</code> is one of those)</p>
+
+		<p>Using <code>Array.prototype.filter...</code></p>
+
+		<pre><code>const queenslandPostcodes = postcodes.filter(postcode => postcode.startsWith('4');</code></pre>
+
+		<h4><code>Array.prototype.some and Array.prototype.every</code></h4>
+
+		<pre><code>myList.some((item, index, list) => ... return a boolean ...)</code></pre>
+		<pre><code>myList.every((item, index, list) => ... return a boolean ...)</code></pre>
+
+		<p>
+			Often, you want to check whether any item in an array meets a specific criterion. For example, imagine you have a form where the 
+			user needs to enter some contact details. They can add a physical address, an email address, a phone number, or a Twitter handle.
+			You want to check that they've entered at least one before you submit the form.
+		</p>
+
+		<p>In traditional JavaScript, that usually looks something like this</p>
+
+		<pre><code>
+			const inputs = document.querySelectorAll('.contact');
+
+			let hasContactMethod = false;
+			for (let i = 0; i < inputs.length; i++) {
+				const input = inputs[i];
+				if (!!input.value) {
+					hasContactMethod = true;
+					break;
+				}
+			}
+		</code></pre>
+
+		<p>We can simplify this using <code>Array.prototype.some</code></p>
+
+		<pre><code>
+			const inputs = document.querySelectorAll('.contact');
+			const hasContactMethod = Array.from(inputs).some(input => !!input.value);
+		</code></pre>
+
+		<p>
+			Note we're using <code>Array.from</code> to convert the <code>NodeList</code> returned by <code>document.querySelectorAll</code>
+			into an actual array. Array functions will only work on true arrays, but just about anything that looks like an array can be converted to one.
+		</p>
+
+		<p>
+			On the other hand, sometimes we want to check that <i>everything</i> in the array meets the criterion. For example, imagine we have 
+			an order that contains a list of books. If all the books are digital, then we don't want to go through the shipping flow.
+		</p>
+
+		<p>In traditional JavaScript...</p>
+
+		<pre><code>
+			let allDigital = true;
+
+			for (let i = 0; i < items.length; i++) {
+				const item = items[i];
+				if (!isDigitalMedia(item)) {
+					allDigital = false;
+					break;
+				}
+			}
+		</code></pre>
+
+		<p>
+			You might notice that this is essentially the same code as the previous example, will all the trues and falses around the other way.
+			As such, we could implement it using an inversion of <code>some</code>.
+		</p>
+
+		<pre><code>
+			const allDigital = !items.some(item => !isDigitalMedia(item));
+		</code></pre>
+
+		<p>This is pretty confusing though. <code>Array.prototype.every</code> lets us do the same thing, without all the the <code>!</code>s.</p>
+
+		<pre><code>
+			const allDigital = items.every(item => isDigitalMedia(item));
+		</code></pre>
+
+		<p>Or, even better</p>
+
+		<pre><code>const allDigital = items.every(isDigitalMedia)</code></pre>
+
+		<p>
+			Remember, if you don't need to define your callbacks inline. You can always define them somewhere else and just pass in the function name.
+			It doesn't matter what you call the parameters of your callback function - the first one will get the value of the current item. If you declare 
+			a second and third parameter, they'll get the value of the index of the current item and the list itself respectively. If you declare fewer than
+			three parameters, then the index and/or list values just won't be available in your function. It won't cause any errors. And if you declare more 
+			than three parameters, the remainder will just be undefined. JavaScript is very forgiving with function parameters. This can be a good thing and 
+			a bad thing.
+		</p>
+
+		<h4><code>Array.prototype.includes</code></h4>
+
+		<pre><code>myList.includes(myItem)</code></pre>
+		<pre><code>myString.includes(substring)</code></pre>
+
+		<p>
+			We've already seen a couple of ways to check whether an item exists in an array, but here's another one.
+			This one is often preferable, because it's much simpler. However, it does have a drawback. It uses reference equality to check 
+			whether the item you're searching for is the same as the one in the array. This means it's going to work great for strings and 
+			numbers, and not so much for objects.
+		</p>
+
+		<p>Imagine that we want to check whether a user has a specific role. In traditional JavaScript, you might do somethign like...</p>
+
+		<pre><code>
+			const isAdmin = user.roles.indexOf(Roles.ADMIN) > -1;
+		</code></pre>
+
+		<p>Using <code>includes</code> allows us to tidy this up a bit</p>
+
+		<pre><code>const isAdmin = user.roles.includes(Roles.ADMIN)</code></pre>
+
+		<p>This function can be particularly useful when combined with <code>map</code> extracting a primitive value, like the following example</p>
+
+		<pre><code>
+			const someoneHasACat = users.map(user => user.pet).includes('cat');
+		</code></pre>
+
+		<p>
+			And it also exists on <code>String.prototype</code>, so you can use it check for the existence of substrings. The String protoype also 
+			includes new methods to check specifically whether the substring occurs at the start or end of the string.
+		</p>
+
+		<pre><code>
+			'elephant'.includes('ant'); // true 
+			'elephant'.startsWith('ant'); // false
+			'elephant'.endsWith('ant'); // true
+		</code></pre>
+
+		<h4><code>Array.prototype.reduce</code></h4>
+
+		<pre><code>myList.reduce((acc, curr) => { ... do stuff ... }, startingValue);</code></pre>
+
+		<p>
+			This is the most flexible of the array functions - all the others can actually be implemented using <code>reduce</code>.
+			Unfortunately, it's also a little tricky to understand.
+		</p>
+
+		<p>
+			Unlike the other array functions, <code>reduce</code> takes two parameters: a callback, which is called for every item in the 
+			list, and a starting value, which is passed into the callback on the first call.
+		</p>
+
+		<p>
+			The callback also takes two parameters: the accumulated value, and the current value. The current value is the next item in the list.
+			The first time the callback is called, the accumulated value is the starting value passed into <code>reduce</code>. Every other time, 
+			it's the value returned from the previous pass of the callback.
+		</p>
+
+		<p>The traditional example for demonstrating <code>reduce</code> is to sum the values in an array, so let's look at that.</p>
+
+		<pre><code>
+			const numbers = [2, 7, 3];
+			const total = numbers.reduce((sum, number) => sum + number, 0); // 12
+		</code></pre>
+
+		<p>Let's break it down step by step</p>
+
+		<ol>
+			<li>The callback is called with the starting value and the first number: (0, 2) => 0 + 2, which returns 2</li>
+			<li>The callback is called with the previous returned value, and the second number: (2, 7) => 2 + 7, which returns 9</li>
+			<li>The callback is called with the previous returned value, and the third number: (9, 3) => 9 + 3, which returns 12, our final value</li>
+		</ol>
+
+		<p class="needs-example">
+			While summing up arrays is undeniably useful, <code>reduce</code> can be used for a heap of other things too.
+		</p>
+
+		<p>
+			One small bit of advice - when using <code>reduce</code> I always used to struggle to remember which order the parameters went in.
+			One day, someone pointed out to me that they go in alphabetical order, if you use the standard names of <code>acc</code> and 
+			<code>cum</code>. I generally don't use those names in my own code, as they are incredibly generic, but I find them helpful to think 
+			of when I'm trying to remember which way around they go.
+		</p>
+
+
+		<h3>Other ways to reduce noise</h3>
+		<h3>This binding & how arrow functions can help</h3>
+	</section>
+	
+	<section><h2 class="incomplete" id="architecting-applications">Architecting applications</h2></section>
+	<section><h2 class="incomplete" id="testing">Testing</h2></section>
+	<section><h2 class="incomplete" id="semantic-html">Semantic HTML</h2></section>
+	<section><h2 class="incomplete" id="understanding-css">Understanding CSS</h2></section>
+	<section><h2 class="incomplete" id="css-layouts">CSS layouts</h2></section>
+	<section><h2 class="incomplete" id="conclusion">Wrap up</h2></section>
+</body>
+</html>
