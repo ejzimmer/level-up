@@ -1533,14 +1533,1038 @@ if (hasChildren(node)) {
 
 		<p>I don't think I've ever run into an actual use case for this, but you can totally do it, if you need to.</p>
 
+		<h4>Rest parameters & the spread operator</h4>
+
+		<p>
+			Rest and spread are essentially the same operator, used in different situations. They're used for converting groups of things into 
+			arrays or objects, and vice versa. Both are represented by three dots (...).
+		</p>
+
+		<p>
+			Rest parameters are used to convert an array into a list of arguments, or to convert a list of arguments into an array. This is helpful 
+			when dealing with functions which can accept any number of arguments. For example, the built-in function <code>Math.min()</code> takes 
+			any number of numbers and returns the lowest.
+		</p>
+
+		<pre><code>console.log(Math.min(4, 63, -2, 0, -79)) // -79</code></pre>
+
+		<p>
+			This isn't super practical in a lot of situations though as we can't use <code>Math.min</code> to find the lowest number in an array of numbers.
+			Historically, if we wanted to do that, we'd probably sort the array, then take the first value. Rest parameters simplify this problem for us 
+			a little. Here, we can use it to find the cheapest item in a list of items.
+		</p>
+
+		<pre><code>
+			const prices = items.map(({price}) => price);
+			const cheapestPrice = Math.min(...prices);
+			const cheapestItem = items.find(({price}) => price === cheapestPrice);
+		</code></pre>
+
+		<p>In this code we</p>
+		<ol>
+			<li>Convert the list of items into a list of prices, using object destructuring of the parameter</li>
+			<li>Find the lowest price, by converting the array of prices into a list of arguments for <code>Math.min</code></li>
+			<li>Find the cheapest item, by findind the item with the cheapest price! (Again using object destructuring)</li>
+		</ol>
+
+		<p>
+			Rest parameters also work the other way - to convert a list of arguments into an array. For example, we could define a <code>sum</code>
+			function, which takes any number of arguments, and converts them into an array.
+		</p>
+
+		<pre><code>
+			function sum(...numbers) {
+				numbers.reduce((total, number) => total + number, 0);
+			}
+
+			console.log(sum(4, 9, 17, 23)); // 53
+		</code></pre>
+
+		<p>
+			Generally speaking, I think rest parameters are more useful in the first case - passing an array into an existing function that doesn't 
+			accept an array. The second case essentially takes a function that works with an array, and makes it look like it doesn't work with an 
+			array. You'd want to think very carefully about why you're doing that.
+		</p>
+
+		<p>
+			The other thing that <code>...</code> can do is act as a spread operator. The spread operator converts an array into a kind of "array fragment"
+			that can then be used inside another array. We can use this for concatenating arrays, or for adding new values to an array.
+		</p>
+
+		<pre><code>
+			const cats = ['Burmese', 'Siamese', 'Ragdoll'];
+			const dogs = ['Labrador', 'Husky', 'Kelpie'];
+
+			const pets = [...cats, ...dogs];
+			console.log(pets); /// ['Burmese', 'Siamese', 'Ragdoll', 'Labrador', 'Husky', 'Kelpie'];
+
+			const moreDogs = [...dogs, 'Shiba Inu', 'Beagle'];
+			console.log(moreDogs); // ['Labrador', 'Husky', 'Kelpie', 'Shiba Inu', 'Beagle'];
+		</code></pre>
+
+		<p>
+			If it helps, you can think of the spread operator as creating a copy of your array, and stripping off the brackets.
+		</p>
+
+		<p>
+			The spread operator can also be used on objects. In that case, it essentially creates a copy and removes the curly braces.
+			You can use this for extending objects with more properties.
+		</p>
+
+		<pre><code>
+			const person = {
+				name: 'Amy Wong',
+				birthday: '2978-12-03'
+			};
+
+			const employee = {
+				...person,
+				role: 'intern'
+			};
+
+			console.log(employee); // { name: 'Amy Wong', birthday: '2978-12-03', role: 'intern' }
+		</code></pre>
+
+		<p>
+			Because the spread operator makes a copy of the array or object, you can also use it for... creating copies! 
+			Just bear in mind that it's only going to create a shallow copy. If you want to create a deep copy, you can use		
+			<code>JSON.parse(JSON.stringify(myThing))</code>, as long as none of your properties are functions.
+		</p>
+
+		<pre><code>
+			const birbs = ['Canary', 'Rosella', 'Galah'];
+			const copyOfBirbs = [...birbs];
+
+			const size = {
+				height: 47,
+				width: 23
+			};
+			const copyOfSize = {...size};
+		</code></pre>
+
+		<h4>Default parameter values</h4>
+
+		<p>
+			The last topic I wanted to touch on in this section is default parameter value. Due to the nature of JavaScript, all function
+			parameters are essentially optional. If a function expects an argument, and you don't pass anything in, it's simply undefined.
+		</p>
+		
+		<pre><code>
+			function sayHello(name) {
+				console.log('Hello', name);
+			}
+
+			sayHello(); // Hello undefined
+		</code></pre>
+
+		<p>
+			As a result, it's usually a good idea to check that arguments have been set. If they haven't, you can either set them to some 
+			sensible default, or throw an exception.
+		</p>
+
+		<pre><code>
+			function sayHello(name) {
+				name = name || 'world';
+				console.log('Hello', name);
+			}
+
+			sayHello('Captain Janeway'); // Hello Captain Janeway
+			sayHello(); // Hello world
+		</code></pre>
+
+		<p>
+			Setting a bunch of default values can get a bit cumbersome, so modern JavaScript gives us a simpler way to do it.
+		</p>
+
+		<pre><code>
+			function sayHellow(name = 'world') {
+				console.log('Hello', name);
+			}
+
+			sayHello(); // Hello world
+		</code></pre>
+
+		<p>
+			One small thing to remember - parameters with default values need to appear at the end of the argument list. Of course,
+			this won't be that much of a problem, as we only write functions with one or two parameters, right?
+		</p>
+
+		<p>
+			Also, your default values absolutely can refer to previous parameters.
+		</p>
+
+		<pre><code>
+			function registerUser(name, preferredName = name) {
+				createUser(name);
+				printNameBadge(preferredName);
+			}
+		</code></pre>
+
 		<h3>This binding & how arrow functions can help</h3>
+
+		<p>
+			The final part of modern JavaScript I wanted to talk about is arrow functions. By this point you've seen me using them all over the place.
+			They provide a nice way to write callbacks inline - they're a little shorter to declare than normal functions, and a single line 
+			arrow function has an implicit return, saving even more characters.
+		</p>
+
+		<pre><code>
+			const evenNumbersNormalFunction = numbers.filter(function (number) {
+				return number % 2 === 0;
+			});
+
+			const evenNumbersArrowFunction = numbers.filter(number => number % 2 === 0);
+		</code></pre>
+
+		<p>
+			As you can see, the arrow function is shorter, and has a greater signal-to-noise ration. However, arrow functions are special for another 
+			reason too. To understand this, we need to look at the <code>this</code> keyword in JavaScript.
+		</p>
+
+		<p>
+			Understanding how <code>this</code> works can be one of the most challenging parts of learning JavaScript. The rules themselves aren't 
+			super complicated, it's just that there are a lot of them. Often, you'll see people working around <code>this</code> by using code like 
+		</p>
+
+		<pre><code>
+			const that = this;
+		</code></pre>
+
+		<p>
+			While this hack works (and is used a lot), it's not really clean code. We're adding variables that don't add any meaning. And, in older code, 
+			before the introduction of <code>const</code>, there was nothing stopping us from assigning <code>that</code> to something else. Today,
+			there are plenty of ways to manage <code>this</code> without resorting to hacks, and I would see the code above as a pretty clear indicator 
+			that the author didn't really get how <code>this</code> works.
+		</p>
+
+		<p>
+			So how does <code>this</code> work? As a general rule, in JavaScript, <code>this</code> refers to the object that called the function.
+			However, there are a few ways to override that. Also, it's important to remember that <code>this</code> refers to the object that 
+			<i>called</i> the function, not the object that defined it.
+		</p>
+
+		<pre><code>
+			const uhura = {
+				givenName: 'Nyota',
+				familyName: 'Uhura',
+				sayHello: function () {
+					console.log('hello', this.givenName, this.familyName);
+				}
+			};
+
+			const scully = {
+				givenName: 'Dana',
+				familyName: 'Scully',
+				sayHello: uhura.sayHello
+			};
+
+			uhura.sayHello(); // Hello Nyota Uhura
+			scully.sayHello(); // Hello Dana Scully
+		</code></pre>
+
+		<p>
+			You'll notice that even though <code>scully.sayHello</code> calls <code>uhura.sayHello</code>, <code>this</code> refers to 
+			<code>scully</code>, <strong>not</strong> <code>uhura</code>. This can be confusing, especially if you've come from a language 
+			that doesn't work this way, but it makes a lot of sense in a language that deals with event handlers.
+		 </p>
+		 
+		 <pre><code>
+			 const button = document.getElementById('special-button');
+			 button.addEventListener('click', function () {
+				 console.log(this); // button
+			 });
+		 </code></pre>
+
+		<p>However, like I said, there are a bunch of ways to override this default behaviour.</p>
+		<ol>
+			<li>
+				If the function is called from the global scope, <code>this</code> refers to the <code>window</code> object.
+				<pre><code>
+					const person = {
+						name: 'Sarah Connor',
+						sayHello: function () {
+							console.log('Hello', this.name);
+						}
+					}
+
+					const sayHello = person.sayHello;
+					sayHello(); // Hello
+				</code></pre>
+			</li>
+			<li>
+				If the function is called from a strict global context, <code>this</code> is undefined. Any code written inside a module 
+				is in strict mode, as is any code with a <code>'use strict';</code> declaration.
+
+				<pre><code>
+					const person = {
+						name: 'Sarah Connor',
+						sayHello: function () {
+							'use strict';
+							console.log('Hello', this.name);
+						}
+					}
+
+					const sayHello = person.sayHello;
+					sayHello(); // Uncaught TypeError: Cannot read property 'name' of undefined
+				</code></pre>
+			</li>
+			<li>
+				If the function is called via <code>call</code> or <code>apply</code>, then <code>this</code> refers to the first argument 
+				of <code>call</code> or <code>apply</code>.
+
+				<pre><code>
+					const person = {
+						name: 'Sarah Connor',
+						sayHello: function () {
+							console.log('Hello', this.name);
+						}
+					};
+
+					const anotherPerson = {
+						name: 'Katniss Everdeen'
+					};
+
+					person.sayHello.call(anotherPerson); // Hello Katniss Everdeen
+				</code></pre>
+			</li>
+			<li>
+				If the function was created via <code>bind</code>, then <code>this</code> refers to the first of argument of <code>bind</code>.
+				This can't be overridden via <code>call</code> or <code>apply</code>
+
+				<pre><code>
+					const person = {
+						name: 'Sarah Connor',
+						sayHello: function () {
+							console.log('Hello', this.name);
+						}
+					};
+
+					const anotherPerson = {
+						name: 'Katniss Everdeen'
+					};
+
+					const boundHello = person.sayHello.bind(anotherPerson);
+
+					boundHello(); // Hello Katniss Everdeen 
+					boundHello.call(person); // Hello Katniss Everdeen
+				</code></pre>
+			</li>
+			<li>
+				And finally, if the function is called with the <code>new</code> keyword, then <code>this</code> refers to a brand new object, 
+				that will be returned by the function. This can't be overried by binding the function.
+			</li>
+
+			<pre><code>
+				function Ship(name) {
+					this.name = name;
+				}
+
+				const objectShip = Ship('Planet Express');
+				console.log(objectShip.name); // Uncaught TypeError: Cannot read property 'name' of undefined
+
+				const constructedShip = new Ship('Planet Express');
+				console.log(constructedShip.name); // Planet Express
+
+				const boundShip = Ship.bind({ name: 'Millenium Falcon' });
+				const constructedBoundShip = new boundShip('Planet Express');
+				console.log(constructedBoundShip.name); // Planet Express
+			</code></pre>
+		</ol>
+
+		<p>
+			All of this changes with arrow functions though. Arrow functions essentially don't bind <code>this</code>.
+		</p>
+
+		<pre><code>
+			const uhura = {
+				givenName: 'Nyota',
+				familyName: 'Uhura',
+				sayHello: () => {
+					console.log('hello', this.givenName, this.familyName);
+				}
+			};
+
+			uhura.sayHello(); // Hello undefined undefined
+		</code></pre>
+
+		<p>Instead, they'll use the <code>this</code> from the context that they're declared in.</p>
+
+		<pre><code>
+			class Person {
+				constructor(name) {
+					this.name = name;
+					this.sayHello = () => console.log('Hello', this.name);
+				}
+			}
+
+			const uhura = new Person('Uhura');
+			uhura.sayHello(); // Hello Uhura
+		</code></pre>
+
+		<p>So how does <code>this</code>-binding in arrow functions behave in our exceptional circumstances?</p>
+		<ol>
+			<li>In global context, it works the same as in normal functions, in strict and non-strict mode.</li>
+			<li>
+				Calling an arrow function via <code>call</code> or <code>apply</code> has no effect. <code>this</code> will refer to the same 
+				thing it would have referred to if you didn't use <code>call</code> or <code>apply</code>
+
+				<pre><code>
+					class Person {
+						constructor(name) {
+							this.name = name;
+							this.sayHello = () => console.log('Hello', this.name);
+						}
+					}
+
+					const uhura = new Person('Uhura');
+					const katniss = { name: 'Katniss' };
+					
+					uhura.sayHello.call(katniss); // Hello Uhura
+				</code></pre>
+			</li>
+			<li>
+				Creating a function from an arrow function with <code>bind</code> also has no effect.
+				<pre><code>
+					class Person {
+						constructor(name) {
+							this.name = name;
+							this.sayHello = () => console.log('Hello', this.name);
+						}
+					}
+
+					const katniss = { name: 'Katniss' };
+					const boundPerson = Person.bind(katniss);
+					
+					const uhura = new boundPerson('Uhura');
+					uhura.sayHello.call(katniss); // Hello Uhura
+				</code></pre>
+			</li>
+			<li>
+				And finally, you can't use <code>new</code> on an arrow function.
+
+				<pre><code>
+					const Person = (name) => ({ name });
+					const person = new Person('Uhura'); // Uncaught TypeError: Person is not a constructor
+				</code></pre>
+			</li>
+		</ol>
+
 	</section>
 	
 	<section><h2 class="incomplete" id="architecting-applications">Architecting applications</h2></section>
 	<section><h2 class="incomplete" id="testing">Testing</h2></section>
-	<section><h2 class="incomplete" id="semantic-html">Semantic HTML</h2></section>
-	<section><h2 class="incomplete" id="understanding-css">Understanding CSS</h2></section>
-	<section><h2 class="incomplete" id="css-layouts">CSS layouts</h2></section>
+
+	<section>
+		<h2 class="in-draft" id="semantic-html">Semantic HTML & accessibility/h2>
+
+		<p>
+			Semantic HTML refers to HTML that uses elements that have intrinsic meaning. For example, if you're creating something for a user 
+			to click on, then you should use a <code>&lt;button&gt;</code>, rather than a <code>&lt;div&gt;</code>. It's often spoken about in 
+			the context of accessibility, but it's important to remember that accessible code isn't just about making your code work with a 
+			screen reader.
+		</p>
+
+		<ul>
+			<li>
+				Using semantic HTML adds meaning to your code, increasing the signal-to-noise ratio. It's far easier to understand as a developer.
+			</li>
+			<li>
+				Web page users expect certain types of elements to behave in certain ways. If you use the correct semantic element, you
+				get a lot of this behaviour for free. This means you don't have to write as much code, and you're less likely to introduce 
+				bugs.
+			</li>
+			<li>
+				You don't know what type of device a user is going to use to interact with your app. It could be a mouse and keyboard, or a touch-screen,
+				or a less common device like a watch, a gaming controller, or a screen reader.  Using semantic HTML means your app follows 
+				a standard that will help your app work correctly on all those devices - as well as a bunch that haven't been invented yet!
+			</li>
+		</ul>
+
+		<aside>
+			<h3>What about ARIA?</h3>
+
+			<p>
+				ARIA is a set of attributes that you can add to your HTML elements to provide hints to the browser for building the accessibility tree.
+				The accessibility tree is used by screen readers to provide information to screen readers that sighted users can get visually.
+			</p>
+			
+			<pre><code>
+				<label>Please send me spam</label>
+				<input type="checkbox" aria-label="please send me spam">
+			</code></pre>
+
+			<p>
+				A screen reader encountering the above <code>&lt;input&gt;</code> element will read out that it has a label of <code>please send me spam</code>.
+			</p>
+
+			<p>
+				The thing about ARIA though, is that it's actually quite difficult to get right. And the majority of the time, you can accomplish the 
+				same thing just using plain HTML. For example,
+			</p>
+
+			<pre><code>
+				<label for="spam">Please send me spam</label>
+				<input id="spam" type="checkbox">
+			</code></pre>
+
+			<p>
+				achieves the exact same thing, from the screen reader's point of view. It also has the added bonus of linking the <code>&lt;label&gt;</code>
+				to the <code>&lt;input&gt;</code> without needing to maintain two versions of the label text.
+			</p>
+
+			<p>
+				Furthermore, ARIA doesn't add the functionality that you get from using semantic HTML. An HTML <code>&lt;button&gt;</code> element can be 
+				tabbed to, and activated via pressing the enter key or space bar. Adding <code>role="button"</code> to a <code>&lt;div&gt;</code> does not 
+				bestow these abilities on it. Similarly, in the first example above (the one using <code>aria-label</code>), the user must click on the 
+				<code>&lt;input&gt;</code> element to change the value of the checkbox. In the second example, the user can click on the <code>&lt;label&gt;</code>
+				element as well, greatly increasing the clickable area, and improving usability.
+			</p>
+
+			<p>
+				Generally speaking, compared to using semantic HTML, using ARIA is far more difficult, and provides benefits to far fewer of your users.
+			</p>
+
+			<p>
+				Now, that doesn't mean you're never going to need ARIA. Sometimes there are just things that work well for sighted users that aren't going 
+				to work well with a screen reader. For example, if you update part of a page after a screen-reader user as already read it, then you 
+				need a way to notify the user of the change. ARIA is perfect for this.
+			</p>
+
+			<p>
+				Just remember that ARIA <i>is</i> important - but it shouldn't be the first tool that you reach for when building accessible apps.
+			</p>			
+		</aside>
+
+		<p>So what does a semantic HTML look like?</p>
+
+		<h3>Landmarks & descriptions</h3>
+
+		<p>
+			Each page should contain some landmarks. These are especially helpful to screen-reader users, but a page designed with these landmarks 
+			in mind will also be easier for other users to navigate, especially in situations where you can't rely on CSS, like in Reader mode.
+			Landmark HTML elements include heading tags (<code>&lt;h1&gt; - &lt;h6&gt;</code>), <code>&lt;header&gt;</code>, <code>&lt;footer&gt;</code>,
+			<code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, and <code>&lt;aside&gt;</code> elements.
+		</p>
+
+		<p>
+			Not every page is going to have all of these features, but if your page has any of them, then you should use the appropriate element.
+			This fits with the clean coding principles we were discussing earlier - communicate your intent by using meaningful names.
+		</p>
+
+		<p>
+			If you're building a SPA with multiple logical pages, then you should give each page a distinct title via the 
+			<code>&lt;title&gt;</code> element. For example, on Twitter, the feed page has the title <code>Latest Tweets / Twitter</code>, while the 
+			notifications page is <code>Notifications / Twitter</code>. These titles help screen reader users know when they've navigated to a new 
+			page, but they also help sighted users distinguish between browser tabs, as the <code>&lt;title&gt;</code> element is used as the tab 
+			title. The title should include the specific page name, followed by your app name. (Put the app name last. The tab title is likely to be 
+			truncated, but sighted users can use the favicon to distinguish between apps.)
+		</p>
+
+		<p>
+			As well as having some landmarks, we should make sure we have appropriate descriptions for our elements. This is most relevant for 
+			<code>&lt;input&gt;</code> elements (where we're asking the user to do something), and images (which not be available, due to network
+			conditions, or device restrictions, or might not be visible, due to the user's vision, or lighting, or screen glare).
+		</p>
+
+		<p>
+			Every <code>input</code> element should have an obvious label that remains visible while the user is interacting with the element.
+			This means that placeholder text that disappears when the input has focus is not enough. Disappearing labels can be particularly 
+			difficult for users with cognitive difficulties, but they also make life harder for users who are using your app while distracted 
+			by something else. If you are particularly enamoured of inline labels, try something like Google's Material Design labels, which 
+			start inline, but move above the input once you start typing.
+		</p>
+
+		<p class="needs-example">material design labels</p>
+
+		<p>
+			Ideally, you should use a <code>&lt;label&gt;</code> element to label your <code>&lt;input&gt;</code> element. The <code>&lt;input&gt;</code>
+			should be a child of the <code>&lt;label&gt;</code> <i>or</i> they should be linked via <code>for</code> and <code>id</code> attributes.
+		</p>
+
+		<pre><code>
+			<label>
+				<input type="checkbox"> Yes! Please send me spam!
+			</label>
+
+			<label for="favourite-book">What is your favourite book?</label>
+			<input type="text" id="favourite-book">
+		</code></pre>
+
+		<p>
+			Linking labels and inputs like this means that a click on the <code>&lt;label&gt;</code> is treated like a click on the 
+			<code>&lt;input&gt;</code>. For checkboxes and radiobuttons, this means the item will be selected just by clicking the label. 
+			This increases the clickable area, which is particularly helpful on small screens. It also provides us with opportunities to style 
+			our radiobuttons and checkboxes in an accessible way, as we can add the styling to the label.
+		</p>
+
+		<p class="needs-example">example of styled checkbox or radiobutton</p>
+
+		<p>
+			Images are the other types of element that are super important to describe. The rules for describing them are a bit more complicated 
+			though. First of all, <strong>all</strong> <code>&lt;img&gt;</code> elements should have an <code>alt</code> attribute. Sometimes this 
+			attribute will be empty, but it's still important to include it. Otherwise, screen readers will read out the filename. 
+		</p>
+
+		<p class="needs-example">
+			Images should have a descriptive alt-text if the information in the image isn't available anywhere else. If you have an illustrative 
+			image, it should have a descriptive alt-text. If you have a button with an icon and some text, the icon doesn't need descriptive text.
+			If you have a button with an icon and no text, then you need to provide a description somewhere, but the alt-text probably isn't the 
+			right place for it. This is because alt-text is only available to screen readers. Your icon-only button is inaccessible to other users 
+			as well.
+		</p>
+
+		<p class="needs-example">why is the save icon a vending machine</p>
+
+		<p>
+			Icons are not a great way to convey meaning. You can use a <code>title</code> attribute, which will add some hover text. But this 
+			will only work for mouse users. I would strongly recommend against using icon-only buttons in most cases. The exceptions would be 
+			if space is extremely limited, and you have no real choice, or your users are experts, and are likely to understand the icons.
+			Icon-only buttons in a game, where space for controls is limited, and users invest a lot of time? Fine. Icon-only buttons in your banking 
+			app, which users only use once or twice a month? Not great.
+		</p>
+
+		<p class="needs-example">
+			When writing image descriptions, make sure you're describing what the image is illustrating. some examples. And don't use the words 
+			"image" or "picture" in the description. The screen reader will already announce that it's an image, so you're just wasting the user's 
+			time by repeating information they already have.
+		</p>
+
+		<p>
+			And finally, if all else fails, ARIA provides the <code>aria-labelledby</code> and <code>aria-describedby</code> attributes, which 
+			you can use to add descriptions aimed specifically at screen readers. If you do use these attributes though, make sure that the
+			same information is also available to your sighted readers in some form!
+		</p>
+
+		<h3>Navigation</h3>
+
+		<p>
+			Accessibility isn't just about semantic HTML though. You also need to think about how users navigate around your page.
+			Most websites are designed with a user using a mouse in mind. However, most users are actually using touchscreen devices 
+			(chiefly mobile phones). <p class="needs-example">citation needed</p> Furthermore, there's a reasonable segment of the 
+			population using non-standard inputs, like accessibility devices, watches, or game controllers.
+		</p>
+
+		<p class="needs-example">image of non-standard device</p>
+
+		<p>
+			The good news is that most non-standard devices appear as keyboards. So if you can get your site working for touchscreens and 
+			keyboards, you'll be fine for the vast majority of people. (Honestly, I wouldn't even bother too much with mouse users, as an
+			app which works for keyboards and touchscreens will work with a mouse. Maybe just add some hover states.)
+		</p>
+
+		<p>So what are the things you should keep in mind when designing for keyboard and touchscreen users?</p>
+
+		<p>For keyboard users</p>
+		<ul>
+			<li class="needs-example">
+				You need some kind of indicator of which element currently has focus. The browser will give you this for free - 
+				it's a blue fuzzy outline in Chrome.
+				picture of focus indicator
+				However, I find that most designers don't like the default - it appears differently on different browsers, and almost 
+				certainly doesn't match the site's theme. You can remove the default, but, if you do, you <i>must</i> replace it with 
+				something else. I find a dashed outline in the current colour is usually a good standby
+				<pre><code>
+					how to remove focus indicator in chrome & firefox
+					how to add dashed currentColor outline
+				</code></pre>
+				<code>currentColor</code> is a CSS variable that references the <code>color</code> attribute of the current element.
+				example of what that looks like
+			</li>
+			<li>
+				<p>
+					Pressing <kbd>tab</kbd> should take the user to the next <code>&lt;a&gt;</code>, <code>&lt;input&gt;</code>, or 
+					<code>&lt;button&gt;</code> element. If you use semantic HTML, this will Just Work. Don't force other elements to be 
+					tabbable by adding a <code>tabindex</code>, and don't remove elements from the tab order by setting <code>tabindex="-1"</code>.
+					Don't be tempted to add <code>tabindex</code> to things that you think screen reader users might want to tab to - screen readers 
+					have a different way of navigating that doesn't rely on tabbing.
+				</p>
+
+				<p>
+					The one exception to this is if you're building a custom control. Sometimes you need to group elements in a way that requires 
+					manual tab-indexing. You should give your control <code>tabindex="0"</code>, so the browser can insert it into the tab order 
+					automatically. You should <strong>never</strong> add a <code>tabindex</code> other than 0 or -1. This will cause the 
+					tab navigation in weird and unexpected ways, and generally cause unhappiness.
+				</p>
+			</li>
+			<li>
+				<p>
+					If you have a multi-page SPA (which, yes, sounds like an oxymoron) you need to move the focus back to the top of the page 
+					manually when the user navigates to a new route. Otherwise, the next tab will just continue on from where you were. And, given that
+					the rest of that particular page no longer exists, that's probably going to be the footer.
+				</p>
+				<p>
+					My recommendation would be to have an <code>&lt;h1&gt;</code> element at the start of each page. (I mean this is just good design, 
+					but is also helpful here). Give your <code>&lt;h1&gt;</code> a <code>tabindex</code> of -1, so it can be focussed with JavaScript, 
+					but can't actually be tabbed to. Then, have some kind of interceptor that moves the focus to the <code>&lt;h1&gt;</code> whenever
+					the route changes.
+
+					<pre><code class="needs-example">setting focus to h1</code></pre>
+				</p>
+			</li>
+			<li>
+				When using modals, you need to move the focus to the modal when it opens. Then you need to ensure that focus is trapped inside the
+				modal. As long as the modal is open, the user shouldn't be able to tab to anything outside of it. If they tab to the last item in 
+				the modal, then the next tab should take them back to the first item. (And don't forget your modal needs to be closeable via keyboard,
+				preferably via a close button (which is tabbable), or by hitting <kbd>esc</kbd>)
+			</li>
+		</ul>
+
+		<p>And what about touchscreen users?</p>
+		<ul>
+			<li>
+				Make sure you're not relying solely on hover actions. You can have hover states on your buttons to indicate they are clickable, 
+				just make sure they have focus states as well. And if you have tooltips or menus that open on hover, make sure they open on click 
+				as well. (In fact, I would suggest using only click, and ditching open on hover. Hover can be difficult for people with motor 
+				difficulties or in awkward situations, which includes people with disabilities, the elderly, people on buses, 
+				people sitting on the couch, people using Lenovo laptops with those awful nipple trackpoints...)
+			</li>
+			<li>
+				Make sure you're not assuming whether or not someone is using a touchscreen based on their screen size. Devices with large screens 
+				can have touch interfaces (2-in-1 laptops, touch-based whiteboards, etc), and some small devices don't have touch-screens 
+				(watches, portable gaming devices, e-readers). If you must, you can detect whether a device has "hover capability" via 
+				the <code>hover</code> media query. It's not supported in IE, but I don't think it's going to matter that much if your IE 
+				users just get the non-hover version of your site.
+			</li>
+			<li>
+				A person's finger is much less precise than a mouse cursor. Make sure that your touch targets are large enough. The Apple style 
+				guide suggests 44px by 44px. Apple themselves regularly break this rule <span class="needs-example">citation needed</span>. Be 
+				better than Apple.
+			</li>
+		</ul>
+
+		<h3>Standards</h3>
+
+		<p>
+			Finally, the web has been around for over 30 years now. There are well-established conventions for interating with pages.
+			If you use semantic HTML, you will follow these conventions automatically, and users will learn how to use your app far more 
+			quickly. And they'll probably enjoy it more. Some examples of these things are:
+		</p>
+
+		<ul>
+			<li>
+				If you use an <code>&lt;a&gt;</code> element for links, the cursor will automatically change to a hand, and the link destination 
+				will appear in the browser status bar on hover. The user can open the link in a new tab by ctrl-clicking, or using the context 
+				menu. Pressing <kbd>enter</kbd> while the link is focussed will activate it. (Furthermore, pressing <kbd>space</kbd> will
+				 <i>not</i> open the link. This behaviour is not preserved if you use a <code>&lt;button&gt;</code> for your link.)
+			</li>
+			<li>
+				If you use a <code>&lt;button&gt;</code> element, the <code>onclick</code> handler will be fired if the user presses <kbd>enter</kbd> or 
+				<kbd>space</kbd> while the button has focus, so it's automatically usable by a keyboard user.
+			</li>
+			<li>
+				When an element inside a <code>&lt;form&gt;</code> element has focus, pressing <kbd>enter</kbd> or <kbd>space</kbd> will 
+				submit the form.
+			</li>
+			<li>
+				As mentioned previously, a click on a <code>&lt;label&gt;</code> element is treated as a click on the linked <code>&lt;input&gt;</code>
+				element.
+			</li>
+		</ul>
+
+		<p>
+			When writing HTML, it is important to remember to choose your HTML element based on the <i>functionality</i> of the element, not its 
+			appearance. For example, for some reason, designers really like styling links as buttons (and vice versa). I'm sure they have their 
+			reasons, and that's fine. Let them have at it. You, however, should still use <code>&lt;a&gt;</code> elements for links, and just 
+			CSS the heck out of them. HTML describes what our app does. CSS describes how it looks.
+		</p>
+
+		<p>
+			And finally, I hope this has convinced you that accessibility isn't something that you just tack on at the end. Building an 
+			accessible app is almost as much about clean code as it is about user experience. And the user experience isn't just about catering 
+			to screen reader users - it's about making your app work for <i>everyone</i>. And, most importantly, building an accessible page 
+			doesn't have to be time-consuming or expensive. Using semantic HTML is actually <i>quicker</i> than adding functionality manually.
+		</p>
+
+		<p>
+			And, I mean, sure, the above guidelines aren't going to get you a AAA certified page. But it <i>will</i> get you a page that is 
+			significantly more accessible than most pages out there. This means your users are going to have a better time, you're going to have 
+			more users able to use your site, and you're much less likely to get sued by someone who can't use your site ;-)
+		</p>
+	</section>
+
+	<section>
+		<h2 class="in-draft" id="understanding-css">Understanding CSS</h2>
+
+		<p>
+			Out of CSS, HTML, and JavaScript, I think CSS is the thing people struggle with most. If you're looking for 
+			work as a frontend developer, strong JavaScript skills are important, but mastery of CSS and HTML is what 
+			will make you really stand out.
+		</p>
+
+		<p>
+			Part of the reason that CSS is so difficult is that it's a completely different paradigm to most programming 
+			languages. While knowing C++ or Java will give you a huge leg-up with learning JavaScript, it won't help at 
+			all with learning CSS.
+		</p>
+
+		<p>
+			Another factor is the fact that CSS seems to lack underlying principles. Learning CSS often feels like just 
+			memorising property names and allowed values, then learning a bunch of tricks to achieve what you want. This 
+			makes learning CSS very time consuming, but also very tedious.
+		</p>
+
+		<p>
+			Luckily, modern CSS is much more systematic than earlier versions. Rather than just adding new features willy-nilly, 
+			modern CSS has underlying models that are shared between different properties. This makes learning new CSS 
+			features much quicker and easier.
+		</p>
+
+		<p>
+			So today, rather than just explaining how to achieve various effects with CSS, we're going to have a look 
+			under the covers at the principles and models that make CSS work.
+		</p>
+
+		<h3>The box model</h3>
+
+		<p>
+			In CSS, everything is a box. Boxes are rectangular. They have a width and a height. Boxes are divided into 
+			four areas:
+		</p>
+		<ul>
+			<li>The content goes in the innermost part of the box</li>
+			<li>The content is surrounded by padding</li>
+			<li>The border goes around the content and padding</li>
+			<li>
+				The box is surrounded by the margin. The margin isn't technically part of the box - it's the space around
+				it. The margin isn't counted in the width or height, and backgrounds don't cover any of the margin.
+			</li>
+		</ul>
+
+		<p class="needs-example">picture of the box model</p>
+
+		<p>
+			A box also has a <code>box-sizing</code>, which determines how the width and height are calculated. The allowed values 
+			are <code>border-box</code> and <code>content-box</code>.
+		</p>
+
+		<dl>
+			<dt><code>border-box</code></dt>
+			<dd>
+				The width and height refer to the total size of the box, including the border and padding
+				<p class="needs-example">picture of border-box sizing</p>
+			</dd>
+			<dt><code>content-box</code></dt>
+			<dd>
+				The width and height refer to the size of the <i>content</i>. The padding and border are added on top of this.
+				<p class="needs-example">picture of content-box sizing</p>
+			</dd>
+		</dl>
+
+		<p>
+			All elements have <code>box-sizing: content-box</code> by default, in all browsers, except IE, which uses 
+			<code>box-sizing: border-box</code>. Now, as much as I hate to admit it, I actually think IE the IE way is better.
+			Designs almost always use <code>border-box</code> sizing, as it's just generally easier to work with.
+		</p>
+
+		<p class="needs-example">an illustration of buttons or something that stay the same size regardless of content</p>
+
+		<p>
+			As such, I would recommend over-riding the default value as a standard practice. (Overriding the browser's default styling 
+			like this is called a CSS reset. CSS resets are commonly used to ensure defaults are consistent across browsers.)
+			You can reset <code>box-sizing</code> to <code>border-box like so</code>
+		</p>
+
+		<pre><code>
+			*, *::before, *::after {
+				box-sizing: border-box;
+			}
+		</code></pre>
+		
+		<p>The <code>*</code> selector is as generic as it gets, so you can easily override it for specific elements if you need to.</p>
+
+		<h3>Normal flow</h3>
+
+		<p>
+			In CSS, individual elements are placed on the page according to normal flow. Each element is placed immediately adjacent to 
+			its previous sibling (respecting margins) in one of the two directions - inline, or block.
+		</p>
+
+		<p>
+			The inline direction is the direction that you write words in a sentence. On a page written in English, the inline direction 
+			is left to right, across the page. On an Arabic page, it's right to left. On a Japanese page, it's top to bottom, down the page.
+		</p>
+
+		<p>
+			The block direction is the direction that you add paragraphs to the page. On a page written in English or Arabic, it's top 
+			to bottom, down the page. In Japanese, it's right-to-left, across the page.
+		</p>
+
+		<p>
+			Why do we use the terms inline and block, rather than just saying across and down? Because we want CSS to be as language-agnostic 
+			as possible. It's not actually that good at it currently - just ask anyone who's ever tried to internationalise a page to a
+			non-left-to-right language. But we are moving towards a more language-agnostic CSS, and it's good to get the hang of these things 
+			sooner rather than later.
+		</p>
+
+		<p>
+			So how do we know if an element should be added in the inline direction, or the block direction? Each element has a <code>display</code>
+			property of either <code>block</code> or <code>inline</code>. (Technically, there are a few more <code>display</code> properties, as 
+			we'll see shortly. But they can all be thought of as a type of <code>block</code>, or a type of <code>inline</code>). Elements with 
+			<code>display: inline</code> are added in the inline direction. Elements with <code>display: block</code> are added in the block 
+			direction. <code>span</code> is your default inline element, with no other semantics. <code>div</code> is your default block element.
+			(But this can be overridden in CSS.)
+		</p>
+
+		<p class="needs-example">examples of block and inline elements</p>
+		<p class="needs-example">demo of adding block and inline elements</p>
+
+		<h3>Block layout</h3>
+
+		<p>
+			The display property controls more than just how the element is placed on the page though. Block and inline elements have 
+			other distinct properties and behaviours. Block elements are a little easier to understand conceptually though, so let's 
+			start with them.
+		</p>
+
+		<p>
+			As we already discussed, block elements are added in the block direction. Each block element is also on a row by itself - 
+			the next element will be placed below the block element, whether it is block or inline.
+		</p>
+
+		<p>
+			The size of a block element is determined by its width and height (plus the padding and border, if you're still using 
+			<code>content-sizing</code>, despite everything we just discussed). If the width of the element is <code>auto</code>
+			(which is the default value), then the element will be as wide as its parent element. If the height is <code>auto</code>,
+			then the element will be as tall as it needs to be to fit all its content, given the current width.
+		</p>
+
+		<p>
+			If you give your element a width and height that is too small to fit the contents, then it'll overflow, and probably look 
+			terrible. This overflowed contents won't affect the placement of the next element though - it'll just get covered up.
+		</p>
+
+		<p class="needs-example">overflow and how it doesn't affect placement</p>
+
+		<p>
+			One small gotcha with block layout is margin-collapse. In some situations, the margins of two adjacent block
+			elements will overlap, resulting in a single margin that is the same size as the larger one. This is due to HTML's 
+			origins as a document delivery system - author's didn't want to end up with double margins around headings, or the 
+			last paragraph on a page. It also means that an empty element will disappear completely, rather than hanging 
+			around as a margin-ghost.
+		</p>
+
+		<p class="needs-example">margins collapsing!</p>
+
+		<p>
+			If you think you've been affected by margin-collapse, or you just want to know more about it, check out 
+			<a href="https://www.smashingmagazine.com/2019/07/margins-in-css/">Rachel Andrew's article on CSS margins</a>.
+		</p>
+
+		<h3>Inline layout</h3>
+
+		<p>
+			Inline layout is a bit more complicated than block layout. Inline elements behave like text - they are laid out side-by-side 
+			in the inline direction, until they get to the end of the line, and then they wrap to the next line.
+		</p>
+
+		<p>
+			In order to layout inline elements (and text), the browser creates a line box. The line box is a container that the 
+			browser uses to place elements - it doesn't appear in the DOM, and it can't be styled. It's kind of like adding pencil 
+			lines that are erased later.
+		</p>
+
+		<p>
+			The width of the line box is the width of the parent element's content box. (In vertical languages, this will actually be the 
+			height. I'm just going to assume a horizontal language here though, because, honestly, this stuff is already confusing enough.)
+			The height of the line box is determined by the current font - it depends on both the font-size, and some of the font's internal 
+			metrics. If there are multiple fonts in the one line box, it's up to the browser to decide what height to use, but it'll probably 
+			pick one based on the tallest font.
+		</p>
+
+		<p>
+			If you need to, you can set the height of the line box yourself, using the <code>line-height</code> property. If you set the 
+			<code>line-height</code> of a block element, it will set the minimum height of all line boxes inside that element. If you set it on 
+			an inline element, then that height will be used in the line box height calculation, along with all the fonts and stuff.
+			You should use a unit-less value for <code>line-height</code>, so that it scales properly if the font size changes.
+		</p>
+
+		<p>
+			The width and height of an inline element are determined by the content of the element. You can't set them manually. You can,
+			however, add padding and margins. Paddings and margins in the inline direction will add space around the element, as you would 
+			expect. Paddings in the block direction will actually add space around the element, but if it makes the element taller than the 
+			line box, it will overflow. As a result, you won't be able to see the padding, unless you add a border or a background colour.
+			Margins in the block direction have no effect.
+		</p>
+
+		<p class="needs-example">overflowing over the line box</p>
+
+		<p>
+			If the line box is a different size than the line-height of your element, you can control whether your element is aligned to the top, 
+			middle, or bottom of the line box using the <code>vertical-align</code> property. (And yes, it's called <code>vertical-align</code>
+			even in situations where it's controlling the horizontal alignment. I told you CSS wasn't quite there yet with internationalisation.)
+			The <code>vertical-align</code> property is only going to have an effect on inline elements, in a line box that isn't the same size 
+			as their own line-height. This is why it never actually does what you want it to, when you try to use it to align things.
+		</p>
+
+		<p class="needs-example">using vertical-align</p>
+
+		<p>
+			Inline elements (and text) are placed into the line box until the line box until the line box is full. Then, the browser creates a 
+			new line box, directly after the first one, and continues adding items to that line box.
+		</p>
+
+		<p class="needs-example">wrapping line box</p>
+
+		<h3>New display values</h3>
+
+		<p>
+			Now, you might have noticed that there are some disadvantages to the inline/block system. It conflates the sizing with the 
+			layout. What if you want elements to sit side-by-side in the inline direction, but you <i>also</i> want to control their size?
+		</p>
+
+		<p>
+			<code>display: inline-block</code> was introduced to deal with this situation. An inline-block element is laid out like an 
+			inline element, but can be sized like a block element. 
+		</p>
+
+		<p>
+			Over time, other <code>display</code> properties were added too. <code>table</code> lays out an element like a table, 
+			<code>flex</code> gives us a flexible one-dimensional layout, and <code>grid</code> gives a flexible two-dimensional layout.
+			Of course, it's possible you might want any of these to exist in an inline context, so we also have <code>inline-table</code>,
+			<code>inline-flex</code>, and <code>inline-grid</code>.
+		</p>
+
+		<p>
+			At some point, someone realised that it was kind of silly to define two new display properties any time we wanted to add new 
+			display functionality. It makes a lot more sense just to treat how the element is laid out and how it behaves internally as 
+			two different things. So now, the <code>display</code> property can take <i>two</i> values - the outer display value, and 
+			the inner display value.
+		</p>
+
+		<p>
+			The outer value determines how the element itself is placed in the flow. The inner value determines how the element's children 
+			are laid out. So <code>display: block</code> is now <code>display: block flow</code>. <code>display: inline-flex</code> would be 
+			<code>display: inline flex</code>
+		</p>
+
+		<p>
+			No browsers actually support the new two-value syntax yet, so don't go using it. However, it is a good model of how they 
+			implement the existing values, so I think it's a good thing to understand.
+		</p>
+
+		<h3 class="incomplete">CSS is recursive</h3>
+
+		<p>something about how children are laid out inside their parents</p>
+
+		<h3 class="incomplete">CSS in three dimensions</h3>
+
+		<p>
+			Ok, so now we understand how an individual element behaves, and how elements are laid out in two dimensions. But CSS actually 
+			allows us to lay things out in <i>three</i> dimensions.
+		</p>
+
+	</section>
+	
+	<section>
+		<h2 class="in-draft" id="css-layouts">CSS layouts</h2>
+
+		<p>
+			Everything we've just talked about allows you to do some pretty nifty stuff. But there are some serious limitations to the 
+			normal flow. Elements can really only be positioned relative to their parent, or their immediately previous sibling.
+			There's no way to co-ordinate the layout of several elements at once.
+		</p>
+	</section>
+
 	<section><h2 class="incomplete" id="conclusion">Wrap up</h2></section>
 </body>
 </html>
