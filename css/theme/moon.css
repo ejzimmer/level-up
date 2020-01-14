@@ -23,6 +23,8 @@ body {
   background: var(--background-gradient);
   background-color: white; 
   color: var(--main-colour);
+  font-family: 'Raleway', Arial, Helvetica, sans-serif;
+  font-size: 18px;
 }
 
 .reveal {

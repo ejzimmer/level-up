@@ -2,11 +2,17 @@
 Monokai style - ported by Luigi Maselli - http://grigio.org
 */
 
+pre {
+  -moz-tab-size: 2em;
+  font-size: 1.6em;
+}
+
+
 .hljs {
   display: block;
   overflow-x: auto;
   padding: 0.5em;
-  background: #272822;
+  background: rgb(39, 40, 34);
   color: #ddd;
 }
 

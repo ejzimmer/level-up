@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+
+	<link rel="stylesheet" href="lib/css/monokai.css">
+	<link rel="stylesheet" href="css/fonts.css">
+	<link rel="stylesheet" href="css/notes.css">
+
+	<script src="js/highlight.pack.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+
+	<style>
+		pre {
+			-moz-tab-size: 2em;
+			font-size: 1.6em;
+		}
+	</style>
+
+</head>
+<body>
+
+<pre><code>
+
+
+	&lt;script&gt;
+		let widgets = []
+
+		function createWidget() {
+			const widget = new Widget();
+			widgets.push(widget);
+		}
+	&lt;/script&gt;
+
+	&lt;script&gt;
+		function deleteWidget(index) {
+			widgets.splice(index, 1);
+		}
+	&lt;/script&gt;
+
+	&lt;script type="module"&gt;
+		function getWidgetCount() {
+			return widgets.length;
+		}
+	&lt;/script&gt;
+
+	&lt;script src="widget-container.js"&gt;&lt;/script&gt;
+
+
+</code></pre>
+
+	<script>
+		function calculateCost(order) {
+			function getPrices() {
+				let price = 0;
+				for (let i = 0; i < order.items.length; i++) {
+					addPrice(order.items[i]);
+				}
+				addPostage();
+
+				function addPrice(item) {
+					price += item.price;
+				}
+				function addPostage() {
+					const postage = order.items.length * .25;
+					price += postage;
+				}
+			}
+		}
+	<script>
+
+	shadowing 
+	<script>
+		function getName(user) {
+			let name = `${capitalise(user.givenName)} ${capitalise(user.familyName)}`;
+
+			function capitalise(name) {
+				return name.replace(/((^.)|([\s].))/g, function (x) { return x.toUpperCase() })
+			}
+		}
+	<script>
+
+
+	
+
+	put arrows showing where the variables is available
+</body>
+</html>

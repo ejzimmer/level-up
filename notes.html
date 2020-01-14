@@ -6,7 +6,27 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Level up your front end development</title>
 
+	<link rel="stylesheet" href="lib/css/monokai.css">
+	<link rel="stylesheet" href="css/fonts.css">
+
+	<script src="js/highlight.pack.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+
+
 	<style>
+		*, *::before, *::after {
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Raleway', Arial, Helvetica, sans-serif;
+			font-size: 20px;
+		}
+
+		code {
+			font-size: 16px;
+		}
+
 		.incomplete {
 			background: red;
 			color: white;
@@ -25,6 +45,28 @@
 		.needs-review {
 			background: #aaf3aa;
 		}
+
+		.example {
+			border: 2px solid black;
+			border-radius: 8px;
+		}
+		.example .element {
+			border: 4px solid black;
+			border-radius: 8px;
+			background-color: hsl(350, 60%, 70%);
+			transition: all 1s;
+		}
+		.example .element.highlight {
+			background-color: hsl(170, 60%, 70%);
+		}
+
+		.flex {
+			display: flex;
+		}
+		.grid {
+			display: grid;
+		}
+
 	</style>
 </head>
 <body>
@@ -50,8 +92,8 @@
 			This workshop contains a bunch of stuff that I think is important to understand to become a 
 			good front end developer. Some of it - like how <code>Array.prototype.reduce</code> works - is 
 			fact. However, some of it - like when you should create a function - is my opinion, based on 
-			experience. And some of it - like <span class="needs-example">rule of thumb</span> is a good rule of 
-			thumb, but doesn't apply in all situations.
+			experience. And some of it - like the accessibility stuff - contains some good rules of thumb,
+			but isn't really the complete story.
 		</p>
 
 		<p>
@@ -208,10 +250,13 @@
 				</div>
 			</li>
 			<li>
-				<strong>Don't reuse variables</strong>, even if the two uses seem similar. Discovering that a variable 
-				suddenly refers to something else is surprising, and not the good kind. <div class="needs-example">
-					example of reusing variables that we should avoid
-				</div>
+				<strong>Don't reuse variables</strong>, even if the two uses seem related. Discovering that a variable 
+				suddenly refers to something else is surprising, and not the good kind of surprise. For example, if you have 
+				a function named <code>element()</code> that returns an element, don't be tempted to do something like 
+				<pre><code>
+					var element = element('div');
+				</code></pre>
+				You've turned a function into an object and that's potentially going to confuse the hell out of someone later.
 			</li>
 			<li>
 				<strong>Follow established patterns.</strong> Human brains are good at optimising for patterns. Ensuring
@@ -487,7 +532,7 @@ if (hasChildren(node)) {
 			negative value.
 		</p>
 
-		<pre class="needs-example"><code>good comments and bad comments</code></pre>
+		<pre class="needs-example"><code>JS doc comments and what you might do instead</code></pre>
 
 		<aside>
 			<h3>Other types of documentation</h3>
@@ -497,10 +542,14 @@ if (hasChildren(node)) {
 				useful for explaining <i>why</i> you did something, or adding some extra clarity.
 			</p>
 
-			<div class="needs-example">Doing something weird in CSS so it works in IE</div>
+			<pre><code class="css">
+				.menu .item {
+					outline-offset: -2px; /* ensure focus ring doesn't get cut off by overflow: hidden
+				}
+			</code></pre>
 
 			<p>
-				JSDoc-type comments are valuable, if you're buildiing a library and want to expose the API to
+				JSDoc-type comments are valuable, if you're building a library and want to expose the API to
 				your users. READMEs are essential for describing how the app works in generic terms, how to get 
 				it up and running, and any guides for contributing. When creating these guides, don't just describe 
 				how to get the system up and running - include information like the URL to go to, and any login 
@@ -526,8 +575,8 @@ if (hasChildren(node)) {
 		<h3>Design your code with humans in mind</h3>
 
 		<p>
-			Most studies show that humans can really only hold 4-5 things in our working memory at a time.
-			<span class="needs-example">[citation needed]</span>
+			Most studies show that humans can really only hold 4-5 things in our working memory at a time
+			(<a href="https://en.wikipedia.org/wiki/Working_memory#Capacity">Working memory capcity on Wikipedia</a>).
 			This means that we can really only keep track of that many things easily. However, we also have the ability to "chunk" data - that is to 
 			group a number of pieces of data together, and think of them as a single piece. For example, most people would struggle a bi 
 			remembering a list of eight single-digit numbers. But remembering two 4-digit years is fairly trivial.
@@ -564,7 +613,7 @@ if (hasChildren(node)) {
 		<ul>
 			<li>
 				It's hard to name. Are you having trouble coming up with a name that describes all the functionality of your component?
-				Does your class have a very generic name <span class="needs-example">like ...</span>. Does your function have a name with a conjunction in 
+				Does your class have a very generic name <code>System</code> or <code>Manager</code>? Does your function have a name with a conjunction in 
 				it (like 'and', 'or', 'if', or 'when')?
 			</li>
 			<li>
@@ -636,7 +685,7 @@ if (hasChildren(node)) {
 	</section>
 	
 	<section class="in-draft">
-		<h2 class="incomplete" id="modern-javascript">Modern JavaScript</h2>
+		<h2 id="modern-javascript">Modern JavaScript</h2>
 
 		<p>
 			JavaScript underwent a fairly serious update in 2015, which introduced a lot of new features into the language. Since then, it has 
@@ -1954,8 +2003,8 @@ if (hasChildren(node)) {
 	<section><h2 class="incomplete" id="architecting-applications">Architecting applications</h2></section>
 	<section><h2 class="incomplete" id="testing">Testing</h2></section>
 
-	<section>
-		<h2 class="in-draft" id="semantic-html">Semantic HTML & accessibility/h2>
+	<section class="in-draft">
+		<h2 id="semantic-html">Semantic HTML & accessibility</h2>
 
 		<p>
 			Semantic HTML refers to HTML that uses elements that have intrinsic meaning. For example, if you're creating something for a user 
@@ -1989,8 +2038,8 @@ if (hasChildren(node)) {
 			</p>
 			
 			<pre><code>
-				<label>Please send me spam</label>
-				<input type="checkbox" aria-label="please send me spam">
+				&lt;label&gt;Please send me spam&lt;label&gt;
+				&lt;input type="checkbox" aria-label="please send me spam"&gt;
 			</code></pre>
 
 			<p>
@@ -2003,8 +2052,8 @@ if (hasChildren(node)) {
 			</p>
 
 			<pre><code>
-				<label for="spam">Please send me spam</label>
-				<input id="spam" type="checkbox">
+				&lt;label for="spam"&gt;Please send me spam&lt;label&gt;
+				&lt;input id="spam" type="checkbox"&gt;
 			</code></pre>
 
 			<p>
@@ -2074,7 +2123,30 @@ if (hasChildren(node)) {
 			start inline, but move above the input once you start typing.
 		</p>
 
-		<p class="needs-example">material design labels</p>
+		<style>
+			#md-label-example {
+				position: relative;
+				padding: 20px 0;
+			}
+			#md-label-example label {
+				left: 5px;
+				top: 25px;
+				position: absolute;
+				font-size: 16px;
+				transition: all .5s;
+				font-weight: bold;
+			}
+			#md-label-example input:focus + label {
+				top: -5px;
+				left: 0;
+				font-size: 18px;
+			}
+		</style>
+
+		<div id="md-label-example">
+			<input id="md-name">
+			<label for="md-name">Name</label>
+		</div>
 
 		<p>
 			Ideally, you should use a <code>&lt;label&gt;</code> element to label your <code>&lt;input&gt;</code> element. The <code>&lt;input&gt;</code>
@@ -2082,12 +2154,12 @@ if (hasChildren(node)) {
 		</p>
 
 		<pre><code>
-			<label>
-				<input type="checkbox"> Yes! Please send me spam!
-			</label>
+			&lt;label&gt;
+				&lt;input type="checkbox"&gt; Yes! Please send me spam!
+			&lt;label&gt;
 
-			<label for="favourite-book">What is your favourite book?</label>
-			<input type="text" id="favourite-book">
+			&lt;label for="favourite-book"&gt;What is your favourite book?&lt;label&gt;
+			&lt;input type="text" id="favourite-book"&gt;
 		</code></pre>
 
 		<p>
@@ -2097,7 +2169,73 @@ if (hasChildren(node)) {
 			our radiobuttons and checkboxes in an accessible way, as we can add the styling to the label.
 		</p>
 
-		<p class="needs-example">example of styled checkbox or radiobutton</p>
+		<style>
+			#power-button {
+				--diameter: 40px;
+				width: var(--diameter);
+				height: var(--diameter);
+				border: 4px solid;
+				border-radius: 50%;
+				position: relative;
+				border-color: grey;
+				margin-left: .7em;
+				transition: all .5s;
+			}
+
+			#power-button::before {
+				--background: #333;
+				content: '';
+				height: 20px;
+				border: 2px solid;
+				border-color: inherit;
+				position: absolute;
+				transform: translate(-50%);
+				left: 50%;
+				top: -25%;
+				box-shadow: 
+					3px 3px var(--background),
+					-3px 3px var(--background),
+					3px -3px var(--background),
+					-3px -3px var(--background);
+				transition: all .5s;
+			}
+
+			#styled-checkbox {
+				opacity: 0;
+				position: fixed;
+			}
+			#styled-checkbox + label {
+				display: flex;
+				background-color: #333;
+				color: #ddd;
+				align-items: center;
+				font-size: 30px;
+				font-family: sans-serif;
+				padding: 20px;
+				cursor: pointer;
+				border: 1px solid #aaa;
+				border-radius: 8px;
+				width: max-content;
+				margin: auto;
+				box-shadow: 
+					inset 1px 1px 2px 1px #ccc,
+					inset -1px -1px #888,
+					1px 1px 3px 1px hsla(0, 0%, 20%, .3);
+				transition: all .5s;
+			}
+
+			#styled-checkbox:checked + label {
+				box-shadow: none;
+			}
+
+			#styled-checkbox:checked + label #power-button {
+				border-color: greenyellow;
+				border-width: 5px;
+				filter: drop-shadow(0 0 10px rgba(64, 245, 47, 0.377));
+			}
+		</style>
+		<input type="checkbox" id="styled-checkbox">
+		<label for="styled-checkbox">Power <div id="power-button"></div></label>
 
 		<p>
 			Images are the other types of element that are super important to describe. The rules for describing them are a bit more complicated 
@@ -2105,50 +2243,160 @@ if (hasChildren(node)) {
 			attribute will be empty, but it's still important to include it. Otherwise, screen readers will read out the filename. 
 		</p>
 
-		<p class="needs-example">
-			Images should have a descriptive alt-text if the information in the image isn't available anywhere else. If you have an illustrative 
-			image, it should have a descriptive alt-text. If you have a button with an icon and some text, the icon doesn't need descriptive text.
-			If you have a button with an icon and no text, then you need to provide a description somewhere, but the alt-text probably isn't the 
-			right place for it. This is because alt-text is only available to screen readers. Your icon-only button is inaccessible to other users 
-			as well.
+		<p>
+			If your image is illustrating a point, or providing information, then it needs a description. That description can be in the 
+			text of your page. If there is no descriptive text on the page, then you need to provide a description in the <code>alt</code>
+			attribute. This isnt just for accessibility either - it also helps with search engine optimisation.
 		</p>
 
-		<p class="needs-example">why is the save icon a vending machine</p>
+		<div class="example">
+			<p>As seen in the image below, giraffes must bend down awkwardly to drink.</p>
+			<img src="images/giraffe-drinking.jpg" alt="">
+			<p>Horses, on the other hand, don't have that problem</p>
+			<img src="images/horse-drinking.jpg" alt="horse drinking from beer glass by picking the glass up in its teeth">
+		</div>
+
+		<pre><code>
+			...
+			&lt;img src="images/giraffe-drinking.jpg" alt=""&gt;
+			...
+			&lt;img src="images/horse-drinking.jpg" alt="horse drinking from beer glass by picking the glass up in its teeth"&gt;
+		</code></pre>
 
 		<p>
-			Icons are not a great way to convey meaning. You can use a <code>title</code> attribute, which will add some hover text. But this 
-			will only work for mouse users. I would strongly recommend against using icon-only buttons in most cases. The exceptions would be 
-			if space is extremely limited, and you have no real choice, or your users are experts, and are likely to understand the icons.
-			Icon-only buttons in a game, where space for controls is limited, and users invest a lot of time? Fine. Icon-only buttons in your banking 
-			app, which users only use once or twice a month? Not great.
+			(<a href="https://www.flickr.com/photos/tambako/47572147022">Giraffe drinking from the pond</a> 
+			flickr photo by <a href="https://www.flickr.com/photos/tambako/">Tambako The Jaguar</a> 
+			shared under a <a href="https://creativecommons.org/licenses/by-nd/2.0/">Creative Commons (BY-ND) license</a>.)
 		</p>
-
-		<p class="needs-example">
-			When writing image descriptions, make sure you're describing what the image is illustrating. some examples. And don't use the words 
-			"image" or "picture" in the description. The screen reader will already announce that it's an image, so you're just wasting the user's 
-			time by repeating information they already have.
+		
+		<p>
+			Make sure your description describes what the picture is about <i>in the context that it's being used in</i>. In our horse example above,
+			the important part is that the horse isn't bending down to drink - it's picking up the glass in its teeth. If this picture appeared in 
+			a bunch of pictures from a party, it might have been important to mention that it was a horse drinking beer (as opposed to a human drinking beer).
 		</p>
 
 		<p>
-			And finally, if all else fails, ARIA provides the <code>aria-labelledby</code> and <code>aria-describedby</code> attributes, which 
-			you can use to add descriptions aimed specifically at screen readers. If you do use these attributes though, make sure that the
-			same information is also available to your sighted readers in some form!
+			As well as being descriptive, your <code>alt</code> text also needs to be succinct (which can seem like a tall order!). Screen readers will only 
+			read out 125 characters, so make sure you don't waste any! Especially make sure that you don't start your descriptions with "image of" or 
+			"picture showing". The screen reader will announce that it's an image, and a search engine bot will know from the image tag. Adding this 
+			information to the <code>alt</code> text is repetitive and boring.
+		</p>
+
+		<p>
+			On the other hand, if your image is purely decorative, it doesn't need a description.
+		</p>
+
+		<div class="example">
+			<p>And that's all I have to say on that topic.</p>
+			<img style="width: 30vw; margin: auto" src="images/divider.svg" alt="">
+			<p>But on this kind of related topic, I have a bunch more things to say.</p>
+		</div>
+
+		<pre><code class="html">
+			&lt;img src="images/divider.svg" alt=""&gt;
+		</code></pre>
+
+		<p>
+			(It would be even better to add this divider as a background image of an <code>hr</code> element.)
+		</p>
+
+		<p>
+			Icons are a kind of special case that kind of crosses the line between informative and descriptive.
+			While icons <i>can</i> convey meaning, you usually shouldn't rely on them by themselves. Instead, icons should 
+			be accompanied by descriptive text, that is visible to all users. The reason for this is that icons are not 
+			really very good at adding meaning. They usually rely on a picture of a physical object to convey an abstract 
+			concept. And, they're often so highly stylised, that it's not obvious what it's actually a picture <i>of</i>,
+			unless you already know.
+		</p>
+
+		<figure>
+			<img src="images/save-icon.png" alt="A tweet in Japanese, with a picture of the Excel save icon, which looks like a floppy disk">
+			<figcaption>The Japanese reads "Why is the Excel save icon a vending machine?"</figcaption>
+		</figure>
+
+		<p>
+			I'd recommend that you treat icons like acronyms in writing - only use them if you've already defined what they mean.
+			In writing, this means that you should provide the expanded version of the acronym the first time you use it - AF (as foretold).
+			Unfortunately, in an app, there's no real way to know where a user is going to encounter your icon first. So, best practice is 
+			to include text with them everywhere.
+		</p>
+
+		<figure>
+			<img src="images/icons-with-labels.png" alt="icon buttons with text labels">
+			<figcaption>Icons from <a href="https://css-tricks.com/">CSS Tricks website</a></figcaption>
+		</figure>
+
+		<p>
+			Sometimes though, it's not going to be practical to add the text. In these cases, you'll need to use your best judgement.
+			It's more ok to leave off the labels when space is extremely limited, or you're dealing with expert users. So, if you're 
+			building a game, with limited space for controls, and users who are going to invest time in learning the controls, and 
+			who play frequently enough to remember them, you can go to town with icon-only buttons. A banking app, which users are 
+			only going to interact with a few times a month - not so much.
+		</p>
+
+		<p>
+			Finally, sometimes there is information that is conveyed visually, that doesn't have a good text equivalent. For example, if you 
+			have an asterisk indicating some conditions. For these situations, ARIA provides the <code>aria-describedby</code> and 
+			<code>aria-labelledby</code> attributes. <code>aria-describedby</code> allows you to provide a text label for an element, similar 
+			to how the <code>alt</code> attribute works on an image. <code>aria-labelledby</code> allows you to provide the ID of an 
+			element provides a label for the current element. It's similar to how the <code>for</code> attribute links a label to an 
+			input, except the link is created from the labelled element's side.
+		</p>
+
+		<p>
+			For more information on the topic (including some pratical exercises) check out <a href="https://webaim.org/techniques/alttext/">
+			WebAIM page on Alternative Text</a>
 		</p>
 
 		<h3>Navigation</h3>
 
 		<p>
-			Accessibility isn't just about semantic HTML though. You also need to think about how users navigate around your page.
-			Most websites are designed with a user using a mouse in mind. However, most users are actually using touchscreen devices 
-			(chiefly mobile phones). <p class="needs-example">citation needed</p> Furthermore, there's a reasonable segment of the 
-			population using non-standard inputs, like accessibility devices, watches, or game controllers.
+			Accessibility isn't just about semantic HTML though. You also need to think about how users navigate around your app. 
+			Most apps are designed with a user using a computer with a mouse in mind. Designs for mobile phones and tablets are 
+			tacked on as an afterthought (or not at all). However, more people are actually using phones and tablets than 
+			desktop to laptop computers.
 		</p>
 
-		<p class="needs-example">image of non-standard device</p>
+		<figure>
+			<img 
+				src="images/StatCounter-comparison-ww-monthly-201812-201912.png"
+				alt="Graph of usage over the last 12 months. Mobile increases: 49%-53%. 
+				Desktop drops: 47%-44%. Tablet stays around 3%">
+			<figcaption>Source: https://gs.statcounter.com/platform-market-share/desktop-mobile-tablet</figcaption>
+		</figure>
 
 		<p>
-			The good news is that most non-standard devices appear as keyboards. So if you can get your site working for touchscreens and 
-			keyboards, you'll be fine for the vast majority of people. (Honestly, I wouldn't even bother too much with mouse users, as an
+			As you can see, mobile usage accounted for almost 10% more users than desktop usage in December last year, and the gap is 
+			widening. And tablets account for a very small percentage of users. These figures are for the entire world though - if we 
+			restrict ourselves to data from Australian users, then the picture is a little different, but not significantly.
+		</p>
+
+		<figure>
+			<img
+				src="images/StatCounter-comparison-AU-monthly-201812-201912.png"
+				alt="Graph of ussage in the Australian market. Mobile increases: 38%-47%. Desktop drops: 52%-45%. Tablet drops: 10%-7%.">
+			<figcaption>Source: https://gs.statcounter.com/platform-market-share/desktop-mobile-tablet/australia</figcaption>
+		</figure>
+
+		<p>
+			While desktop usage is a bit higher in Australia, it's still dropping. And tablet usage is also much higher than the global 
+			average. Combining mobile and tablet usage, touchscreen devices still account for around 10% more of the market than 
+			traditional computers.
+		</p>
+
+		<p>
+			On top of this, there is an unknown number of users employing non-standard input devices, such as accessibility devices, 
+			game controllers, or even watches.
+		</p>
+
+		<figure>
+			<img src="images/Accessible gaming controller.jpg" alt="accesible gaming control pad">
+			<figcaption>Accessible gaming control pad. Source: https://mediaaccess.org.au/latest_news/gaming-is-growing-more-accessible-0</figcaption>
+		</figure>
+
+		<p>
+			The good news is that most non-standard devices function like keyboards. So if you can get your site working for touchscreens and 
+			keyboards, you should be OK for the vast majority of people. (Honestly, I wouldn't even bother too much with mouse users, as an
 			app which works for keyboards and touchscreens will work with a mouse. Maybe just add some hover states.)
 		</p>
 
@@ -2156,19 +2404,70 @@ if (hasChildren(node)) {
 
 		<p>For keyboard users</p>
 		<ul>
-			<li class="needs-example">
-				You need some kind of indicator of which element currently has focus. The browser will give you this for free - 
-				it's a blue fuzzy outline in Chrome.
-				picture of focus indicator
-				However, I find that most designers don't like the default - it appears differently on different browsers, and almost 
-				certainly doesn't match the site's theme. You can remove the default, but, if you do, you <i>must</i> replace it with 
-				something else. I find a dashed outline in the current colour is usually a good standby
-				<pre><code>
-					how to remove focus indicator in chrome & firefox
-					how to add dashed currentColor outline
+			<li>
+				<p>You need some kind of indicator of which element currently has focus. The browser will basically give you this one for free.</p>
+				
+				<figure>
+					<img src="images/focus-indicators.png" alt="default focus indicator in Safari, Chrome, and Firefox">
+					<figcaption>Default focus indicator in Safari, Chrome, and Firefox</figcaption>
+				</figure>
+
+				<p>
+					The HTML standard recommends just using the browser default indicators, but I find there are a couple of problems with this 
+					advice. For a start, most designers don't like them - they appear differently on different browsers, and they don't match 
+					with the site's default. They're also completely inaccessible if your site happens to use background colours that are similar 
+					to the focus indicator colour (and the colour changes between different versions of the same browser, and even between 
+					different input types in the same version of the same browser).
+				</p>
+
+				<p>
+					The good news is that you can fairly easily replace the default indicators with your own. You can use an outline, like the 
+					browsers do, or change the border or colour of the element. Just make sure you're not relying solely on changing the hue 
+					of the colour, as this won't be visible to colour-blind users. For inputs, I find adding a thicker border usually works 
+					well. For links, my usual go-to is a dashed outline the current colour.
+				</p>
+
+				<pre><code class="css">
+						/* New focus style will replace the default style in Chrome and Safari */
+						.link:focus {
+							outline: 1px dashed currentColor;
+							outline-offset: 2px;
+						}
+						/* You need to remove the Firefox focus indicator manually */
+						.link:-moz-focusring {
+							outline: none;
+						}
 				</code></pre>
-				<code>currentColor</code> is a CSS variable that references the <code>color</code> attribute of the current element.
-				example of what that looks like
+
+				<p>
+					<code>currentColor</code> is a CSS variable that references the <code>color</code> attribute of the current element.
+				</p>
+
+				<style>
+					#focus-indicator-demo {
+						display: flex;
+					}
+					#focus-indicator-demo a {
+						outline: 1px dashed currentColor;
+						outline-offset: 3px;
+						font-size: 36px;
+						margin-right: 1em;
+					}
+					#focus-indicator-demo a:nth-child(2) {
+						color: hsl(12, 80%, 40%);
+					}
+					#focus-indicator-demo a:nth-child(3) {
+						background-image: linear-gradient(yellow, fuchsia);
+						-webkit-background-clip: text;
+						-webkit-text-fill-color: transparent;
+					}
+				</style>
+
+				<div id="focus-indicator-demo" aria-describedby="demonstration of focus styles using a 1px dashed currentColor outline">
+					<a href="https://css-tricks.com/">CSS Tricks</a>
+					<a href="https://css-tricks.com/">CSS Tricks</a>
+					<a href="https://css-tricks.com/">CSS Tricks</a>
+				</div>
 			</li>
 			<li>
 				<p>
@@ -2183,7 +2482,7 @@ if (hasChildren(node)) {
 					The one exception to this is if you're building a custom control. Sometimes you need to group elements in a way that requires 
 					manual tab-indexing. You should give your control <code>tabindex="0"</code>, so the browser can insert it into the tab order 
 					automatically. You should <strong>never</strong> add a <code>tabindex</code> other than 0 or -1. This will cause the 
-					tab navigation in weird and unexpected ways, and generally cause unhappiness.
+					tab navigation to go in weird and unexpected ways, and generally cause unhappiness.
 				</p>
 			</li>
 			<li>
@@ -2198,14 +2497,24 @@ if (hasChildren(node)) {
 					but can't actually be tabbed to. Then, have some kind of interceptor that moves the focus to the <code>&lt;h1&gt;</code> whenever
 					the route changes.
 
-					<pre><code class="needs-example">setting focus to h1</code></pre>
+					<pre><code class="html">
+						&lt;h1 tabindex="-1"&gt;Notifications&lt;/h1&gt;
+					</code></pre>
+
+					<pre><code>
+						// On route change
+						const heading = document.querySelector('h1');
+						heading.focus();
+					</code></pre>
 				</p>
 			</li>
 			<li>
 				When using modals, you need to move the focus to the modal when it opens. Then you need to ensure that focus is trapped inside the
 				modal. As long as the modal is open, the user shouldn't be able to tab to anything outside of it. If they tab to the last item in 
 				the modal, then the next tab should take them back to the first item. (And don't forget your modal needs to be closeable via keyboard,
-				preferably via a close button (which is tabbable), or by hitting <kbd>esc</kbd>)
+				preferably via a close button (which is tabbable), or by hitting <kbd>esc</kbd>) <div class="needs-example">an example modal if you can 
+					be fucked
+				</div>
 			</li>
 		</ul>
 
@@ -2226,16 +2535,17 @@ if (hasChildren(node)) {
 				users just get the non-hover version of your site.
 			</li>
 			<li>
-				A person's finger is much less precise than a mouse cursor. Make sure that your touch targets are large enough. The Apple style 
-				guide suggests 44px by 44px. Apple themselves regularly break this rule <span class="needs-example">citation needed</span>. Be 
-				better than Apple.
+				A person's finger is much less precise than a mouse cursor. Make sure that your touch targets are large enough. The Apple Human 
+				Interface Guide suggests a minimum of 44px by 44px. Google's Android guide recommends 48px by 48px. Some people who actually 
+				conducted a <a href="https://dl.acm.org/doi/10.1145/1152215.1152260">study into touch target sizes</a>, recommend a minimum size 
+				of 1cm squared. This is a bit hard to specify in CSS though.
 			</li>
 		</ul>
 
 		<h3>Standards</h3>
 
 		<p>
-			Finally, the web has been around for over 30 years now. There are well-established conventions for interating with pages.
+			Finally, the web has been around for over 30 years now. There are well-established conventions for interacting with pages.
 			If you use semantic HTML, you will follow these conventions automatically, and users will learn how to use your app far more 
 			quickly. And they'll probably enjoy it more. Some examples of these things are:
 		</p>
@@ -2282,8 +2592,8 @@ if (hasChildren(node)) {
 		</p>
 	</section>
 
-	<section>
-		<h2 class="in-draft" id="understanding-css">Understanding CSS</h2>
+	<section class="in-draft">
+		<h2 id="understanding-css">Understanding CSS</h2>
 
 		<p>
 			Out of CSS, HTML, and JavaScript, I think CSS is the thing people struggle with most. If you're looking for 
@@ -2330,7 +2640,7 @@ if (hasChildren(node)) {
 			</li>
 		</ul>
 
-		<p class="needs-example">picture of the box model</p>
+		<img src="images/box-model.png" alt="dev tools diagram of box model">
 
 		<p>
 			A box also has a <code>box-sizing</code>, which determines how the width and height are calculated. The allowed values 
@@ -2351,17 +2661,11 @@ if (hasChildren(node)) {
 		</dl>
 
 		<p>
-			All elements have <code>box-sizing: content-box</code> by default, in all browsers, except IE, which uses 
-			<code>box-sizing: border-box</code>. Now, as much as I hate to admit it, I actually think IE the IE way is better.
-			Designs almost always use <code>border-box</code> sizing, as it's just generally easier to work with.
-		</p>
-
-		<p class="needs-example">an illustration of buttons or something that stay the same size regardless of content</p>
-
-		<p>
-			As such, I would recommend over-riding the default value as a standard practice. (Overriding the browser's default styling 
-			like this is called a CSS reset. CSS resets are commonly used to ensure defaults are consistent across browsers.)
-			You can reset <code>box-sizing</code> to <code>border-box like so</code>
+			By default, all elements have <code>box-sizing: content-box</code>. Except in IE, which uses <code>box-sizing: border-box</code>,
+			because of course it does. Because of this, it's a good idea to set the box-sizing manually on any project you're working on.
+			What might be surprising is that most people actually follow IE's example and use <code>box-sizing: border-box</code>. You usually 
+			care about the total size of an element, regardless of how much padding it has, and <code>border-box</code> makes the 
+			calculations a bit easier. You can override the browser's default box-sizing with the following bit of code.
 		</p>
 
 		<pre><code>
@@ -2369,8 +2673,15 @@ if (hasChildren(node)) {
 				box-sizing: border-box;
 			}
 		</code></pre>
-		
-		<p>The <code>*</code> selector is as generic as it gets, so you can easily override it for specific elements if you need to.</p>
+
+		<p>
+			Overriding the browser's default styling like this is called a CSS reset. Resets like this are commonly used to ensure defaults
+			are consistent across browsers. The selectors used are as generic as possible, so that you can easily override them in your 
+			application if you need to. You can write your own CSS resets, or you can just grab one someone else has created. To see the 
+			kind of thing that normally goes in them, check out <a href="https://dev.to/hankchizljaw/a-modern-css-reset-6p3">Andy Bell's 
+			CSS reset</a> on dev.to.
+		</p>
+
 
 		<h3>Normal flow</h3>
 
@@ -2405,8 +2716,28 @@ if (hasChildren(node)) {
 			(But this can be overridden in CSS.)
 		</p>
 
-		<p class="needs-example">examples of block and inline elements</p>
-		<p class="needs-example">demo of adding block and inline elements</p>
+		<div class="example add-block-inline">
+			<button onclick="addElement('inline-block')">Add inline element</button>
+			<button onclick="addElement('block')">Add block element</button>
+			<div id="block-inline-demo" style="border: 1px solid black"></div>
+		</div>
+
+		<style>
+			.add-block-inline .element {
+				width: 100px;
+				height: 100px;
+			}
+		</style>
+
+		<script>
+			const blockInlineContainer = document.getElementById('block-inline-demo');
+			function addElement(display) {
+				const div = document.createElement('div');
+				div.style.display = display;
+				div.classList.add('element');
+				blockInlineContainer.appendChild(div);
+			}
+		</script>
 
 		<h3>Block layout</h3>
 
@@ -2417,7 +2748,7 @@ if (hasChildren(node)) {
 		</p>
 
 		<p>
-			As we already discussed, block elements are added in the block direction. Each block element is also on a row by itself - 
+			As we already discussed, block elements are added in the block direction. Each block element is on a row by itself - 
 			the next element will be placed below the block element, whether it is block or inline.
 		</p>
 
@@ -2428,12 +2759,54 @@ if (hasChildren(node)) {
 			then the element will be as tall as it needs to be to fit all its content, given the current width.
 		</p>
 
+		<div class="example">
+			<p>Type in the box below to add content</p>
+			<div class="element" id="block-auto" contenteditable="true" style="width: 100%">
+				some example content
+			</div>
+			<fieldset>
+				<legend>Element width</legend>
+				<input type="radio" name="block-width" id="block-width-auto" onchange="selectWidth('100%')" selected><label for="block-width-auto">auto</label>
+				<input type="radio" name="block-width" id="block-width-100px" onchange="selectWidth('200px')"><label for="block-width-auto">200px</label>
+			</fieldset>
+		</div>
+
+		<script>
+			const blockWidthElement = document.getElementById('block-auto');
+			function selectWidth(width) {
+				blockWidthElement.style.width = width;
+			}
+		</script>
+
+
 		<p>
 			If you give your element a width and height that is too small to fit the contents, then it'll overflow, and probably look 
 			terrible. This overflowed contents won't affect the placement of the next element though - it'll just get covered up.
 		</p>
 
-		<p class="needs-example">overflow and how it doesn't affect placement</p>
+		<div class="example overflow-demo">
+			<div id="overflow-demo" class="element" contenteditable="true">
+				Type here to add content
+			</div>
+			<div class="element">
+				some content that fits
+			</div>
+			<button onclick="clearContent()">Clear content</button>
+		</div>
+
+		<style>
+			.example.overflow-demo .element {
+				width: 120px;
+				height: 120px;
+			}
+		</style>
+
+		<script>
+			const overflowDemoElement = document.getElementById('overflow-demo');
+			function clearContent() {
+				overflowDemoElement.textContent = '';
+			}
+		</script>
 
 		<p>
 			One small gotcha with block layout is margin-collapse. In some situations, the margins of two adjacent block
@@ -2442,8 +2815,6 @@ if (hasChildren(node)) {
 			last paragraph on a page. It also means that an empty element will disappear completely, rather than hanging 
 			around as a margin-ghost.
 		</p>
-
-		<p class="needs-example">margins collapsing!</p>
 
 		<p>
 			If you think you've been affected by margin-collapse, or you just want to know more about it, check out 
@@ -2460,7 +2831,8 @@ if (hasChildren(node)) {
 		<p>
 			In order to layout inline elements (and text), the browser creates a line box. The line box is a container that the 
 			browser uses to place elements - it doesn't appear in the DOM, and it can't be styled. It's kind of like adding pencil 
-			lines that are erased later.
+			lines that are erased later. Inline elements (and text) are placed in the line box, until the next element won't fit. 
+			Then the browser creates a new linebox, directly below the previous one, and adds the remaining elements to the new line box.
 		</p>
 
 		<p>
@@ -2471,10 +2843,114 @@ if (hasChildren(node)) {
 			pick one based on the tallest font.
 		</p>
 
+		<div class="example linebox">
+			<button onclick="addToLinebox()">Add an inline element</button>
+			<p>The shaded area between the grey lines represents the line box.</p>
+			<div class="container" id="linebox"></div>
+		</div>
+
+		<style>
+			.example.linebox .container {
+				--linebox: hsla(254, 30%, 50%, .2);
+				--line-width: 2px;
+				--total-height: 105px;
+				padding: 20px;
+				min-height: 140px;
+				background-image: repeating-linear-gradient(grey, grey var(--line-width), 
+																										var(--linebox) var(--line-width), var(--linebox) calc(var(--total-height) - var(--line-width)), 
+																										grey calc(var(--total-height) - var(--line-width)), grey var(--total-height));
+			  background-clip: content-box;
+  			background-origin: content-box;
+			}
+			.example.linebox .element, .example.line-height .element {
+				display: inline-block;
+				width: 100px;
+				height: 100px;
+			}
+		</style>
+
+		<script>
+			const lineboxContainer = document.getElementById('linebox');
+			function addToLinebox() {
+				const element = document.createElement('span');
+				element.classList.add('element');
+				lineboxContainer.appendChild(element);
+			}
+		</script>
+
+
 		<p>
 			If you need to, you can set the height of the line box yourself, using the <code>line-height</code> property. If you set the 
-			<code>line-height</code> of a block element, it will set the minimum height of all line boxes inside that element. If you set it on 
-			an inline element, then that height will be used in the line box height calculation, along with all the fonts and stuff.
+			<code>line-height</code> of a block element, it will set the minimum height of all line boxes inside that element.
+		</p>
+
+		<div class="example line-height">
+			<label for="line-height">Line-height:</label><input type="number" id="line-height" onchange="updateLineHeight()" value="1.2" step="0.1">
+			<div class="container">
+				<span class="element"></span>
+				<span class="element"></span>
+				<span class="element"></span>
+				<span class="element"></span>
+				<span class="element"></span>
+				<span class="element"></span>
+				<span class="element"></span>
+				<span class="element"></span>
+				<span class="element"></span>
+				<span class="element"></span>
+			</div>
+		</div>
+
+		<style>
+			.example.line-height {
+				width: 420px;
+			}
+		</style>
+
+		<script>
+			const lineHeightContainer = document.querySelector('.example.line-height .container');
+			const lineHeightInput = document.getElementById('line-height');
+			lineHeightInput.value = 1.2;
+			function updateLineHeight() {
+				lineHeightContainer.style.lineHeight = lineHeightInput.value;
+			}
+		</script>
+		
+		<p>
+			If you set it on an inline element, then that height will be used in the line box height calculation, along with all the 
+			fonts and stuff. In the example below, you can see that changing the line-height for one of the elements doesn't change the 
+			height of any elements, but it changes the spacing between the lines. However, it only affects the spacing of the line 
+			boxes which actually contain that element. (Getting even line spacing with different fonts in CSS is surprisingly difficult).
+		</p>
+
+		<div class="example inline">
+			<label for="words-height">Line-height for the medium font</label>
+			<input type="number" id="words-height" onchange="updateWordsLineHeight()" step="0.1" value="1.2">
+			<span class="words">
+				<span style="font-size: 10px">some words in a small font</span>
+				<span style="font-size: 20px; color:hsl(12, 80%, 40%)">some words in a medium font</span>
+				<span style="font-size: 30px">some words in a large font</span>
+			</span>
+		</div>
+
+		<style>
+			.example.inline, .example.inline-padding {
+				width: 200px;
+			}
+			.words {
+				border: 1px solid blue;
+			}
+		</style>
+
+		<script>
+			const wordsHeightElement = document.getElementById('words-height');
+			wordsHeightElement.value = 1.2;
+			const mediumElement = document.querySelector('.words :nth-child(2)');
+			function updateWordsLineHeight() {
+				mediumElement.style.lineHeight = wordsHeightElement.value;
+			}
+		</script>
+			
+		<p>
 			You should use a unit-less value for <code>line-height</code>, so that it scales properly if the font size changes.
 		</p>
 
@@ -2486,24 +2962,77 @@ if (hasChildren(node)) {
 			Margins in the block direction have no effect.
 		</p>
 
-		<p class="needs-example">overflowing over the line box</p>
+		<div class="example inline-padding">
+			<label for="inline-padding">Padding</label>
+			<input type="number" id="inline-padding" onchange="adjustPadding()">
+			<label for="inline-margin">Margin</label>
+			<input type="number" id="inline-margin" onchange="adjustMargin()">
+			<div class="container">
+				normal text normal text <span id="inline-padding-demo">adjust my margin and padding!</span>
+				normal text normal text normal text
+			</div>
+		</div>
+
+		<style>
+			#inline-padding-demo {
+				outline: 2px dashed currentColor;
+			}
+		</style>
+
+		<script>
+			const paddingElement = document.getElementById('inline-padding');
+			const marginElement = document.getElementById('inline-margin');
+			const inlinePaddingElement = document.getElementById('inline-padding-demo');
+
+			function adjustPadding() {
+				inlinePaddingElement.style.padding = `${paddingElement.value}px`;
+			}
+			function adjustMargin() {
+				inlinePaddingElement.style.margin = `${marginElement.value}px`;
+			}
+		</script>
 
 		<p>
-			If the line box is a different size than the line-height of your element, you can control whether your element is aligned to the top, 
+			If the line box is a different size than the height of your element, you can control whether your element is aligned to the top, 
 			middle, or bottom of the line box using the <code>vertical-align</code> property. (And yes, it's called <code>vertical-align</code>
 			even in situations where it's controlling the horizontal alignment. I told you CSS wasn't quite there yet with internationalisation.)
 			The <code>vertical-align</code> property is only going to have an effect on inline elements, in a line box that isn't the same size 
-			as their own line-height. This is why it never actually does what you want it to, when you try to use it to align things.
+			as their own height. This is why it never actually does what anyone wants it to when they're trying to centre-align things.
 		</p>
 
-		<p class="needs-example">using vertical-align</p>
+		<div class="example vertical-align">
+			<label for="vertical-align">vertical-align</label>
+			<select id="vertical-align" onchange="updateVerticalAlign()">
+				<option value="top">top</option>
+				<option value="middle">middle</option>
+				<option value="bottom">bottom</option>
+			</select>
+			<div class="container">
+				<span class="large-text">LARGE TEXT</span>
+				<span class="small-text">small text</span>
+				<span class="large-text">LARGE TEXT</span>
+			</div>
+		</div>
 
-		<p>
-			Inline elements (and text) are placed into the line box until the line box until the line box is full. Then, the browser creates a 
-			new line box, directly after the first one, and continues adding items to that line box.
-		</p>
+		<style>
+			.example.vertical-align .large-text {
+				font-size: 40px;
+			}
+			.example.vertical-align .small-text {
+				font-size: 15px;
+			}
+		</style>
 
-		<p class="needs-example">wrapping line box</p>
+		<script>
+			const verticalAlignElement = document.querySelector('.example.vertical-align .small-text');
+			const verticalAlignSelect = document.getElementById('vertical-align');
+			verticalAlignSelect.value = 'top';
+			verticalAlignElement.style.verticalAlign = 'top';
+			function updateVerticalAlign() {
+				console.log(this.value)
+				verticalAlignElement.style.verticalAlign = verticalAlignSelect.value;
+			}
+		</script>
 
 		<h3>New display values</h3>
 
@@ -2553,16 +3082,1606 @@ if (hasChildren(node)) {
 			allows us to lay things out in <i>three</i> dimensions.
 		</p>
 
+		<h3 class="incomplete">CSS selectors & specificity</h3>
+
 	</section>
 	
-	<section>
-		<h2 class="in-draft" id="css-layouts">CSS layouts</h2>
+	<section class="in-draft">
+		<h2 id="css-layouts">CSS layouts</h2>
 
 		<p>
 			Everything we've just talked about allows you to do some pretty nifty stuff. But there are some serious limitations to the 
 			normal flow. Elements can really only be positioned relative to their parent, or their immediately previous sibling.
 			There's no way to co-ordinate the layout of several elements at once.
 		</p>
+
+		<p>
+			In the early days of CSS (and even before CSS was invented), we got around this by using <code>table</code> elements.
+			More recently, we've moved to 12-column CSS layout tools, like Bootstrap's grid. Both of these have some serious disadvantages 
+			though. Tables are not even a bit semantic, and require you to add <i>a heap</i> of extra HTML. They're also not responsive 
+			(beyond being able to specify column widths in percentages). Bootstrap requires you to add a bit less extra HTML, and it 
+			adds the ability to adjust the layout based on screen size. You're still limited to percentage widths though, you can only 
+			change the layout based on the viewport size (not based on the size of the parent container), and it only supports layouts 
+			at five different viewport sizes.
+		</p>
+
+		<p>
+			But don't stress - modern CSS now gives us a bunch of different options for controlling layouts. These options are pure CSS 
+			(you don't need to add extra HTML), and they are completely responsive.
+		</p>
+
+		<p>
+			One thing we should note before we start though. These new layout properties do not give you complete control over how your 
+			page is laid out. Instead, it gives you a way to communicate some guidelines to the browser, and the browser will work out 
+			the best layout, based on your requirements. This, in fact, is how all CSS works - it was never intended for specifying pixel-perfect 
+			layouts. Which makes a lot of sense - you have no way of knowing what kind of device your page is going to be displayed on, and 
+			it would be very tedious to try and specify every possible layout. Your time writing CSS is going to be a lot happier if you 
+			remember that the web is a dynamic medium, and that CSS is specifically designed to support that dynamicism.
+		</p>
+
+		<h3><code>display: flex</code></h3>
+
+		<p>
+			<code>display: flex</code> creates a flexible, one-dimensional layout. Setting <code>display: flex</code> on an element 
+			creates a flexbox inside that element. A flexbox is kind of like a line box, but with super powers.
+		</p>
+
+		<p>
+			You can control the direction that your flexbox runs using the <code>flex-direction</code> property. There are four possible 
+			values.
+		</p>
+		<dl>
+			<dt><code>row</code></dt>
+			<dd>Items will be placed in the inline direction. So, if our page is in English, left to right, across the page.</dd>
+			<dt><code>row-reverse</code></dt>
+			<dd>
+				Items will be placed along the inline axis, but in the opposite direction to the way text goes.
+				On our hypothetical English-speaking page, that would be right to left, across the page.
+			</dd>
+			<dt><code>column</code></dt>
+			<dd>Items will be placed in the block direction. So on our page, from top to bottom, down the page.</dd>
+			<dt><code>column-reverse</code></dt>
+			<dd>
+				Items will be placed along the block axis, but in the opposite direction to the way the text goes.
+				On our page, that's bottom to top, up the page.
+			</dd>
+		</dl>
+
+		<p>
+			Why do we use <code>row</code> and <code>column</code> instead of <code>block</code> and <code>inline</code>?
+			I have no idea. I suspect it's because the spec was written before the serious efforts at standardising CSS properties 
+			began.
+		</p>
+
+		<p>
+			By default, the browser will try to fit all your items into a single flex box. (We'll go into how it does this in a bit).
+			If you would prefer it to wrap (like a line box), then you can set <code>flex-wrap: wrap</code>.
+		</p>
+
+		<div class="example flex-wrap">
+			<label for="flex-wrap-direction">flex direction</label>
+			<select id="flex-wrap-direction" onchange="updateFlexWrapDirection()">
+				<option value="row">row</option>
+				<option value="row-reverse">row-reverse</option>
+				<option value="column">column</option>
+				<option value="column-reverse">column-reverse</option>
+			</select>
+			<input type="checkbox" id="flex-wrap" onchange="updateFlexWrap()">
+			<label for="flex-wrap">wrap</label>
+			<div class="container">
+				<div class="element"></div>
+				<div class="element"></div>
+				<div class="element"></div>
+				<div class="element"></div>
+				<div class="element"></div>
+				<div class="element"></div>
+			</div>
+		</div>
+
+		<style>
+			.example.flex-wrap .container {
+				display: flex;
+				width: 500px;
+				max-height: 500px;
+				align-items: center;
+			}
+			.example.example.flex-wrap .element {
+				flex-basis: 100px;
+				height: 100px;
+				width: 100px;
+			}
+		</style>
+
+		<script>
+			const flexWrapContainer = document.querySelector('.example.flex-wrap .container');
+			const flexWrapSelect = document.getElementById('flex-wrap-direction');
+			flexWrapSelect.value = 'row';
+			const flexWrapCheckbox = document.getElementById('flex-wrap');
+			flexWrapCheckbox.checked = false;
+			function updateFlexWrapDirection() {
+				flexWrapContainer.style.flexDirection = flexWrapSelect.value;
+			}
+			function updateFlexWrap() {
+				const wrap = flexWrapCheckbox.checked;
+				flexWrapContainer.style.flexWrap = wrap ? 'wrap' : 'nowrap';
+			}
+		</script>
+
+		<p>
+			Unlike line boxes, flexbox height is easy to calculate. If all your flex items are in a single line, then the height of the flexbox 
+			is the height of the flex container (the element that has <code>display: flex</code> on it). If your items are wrapped over several 
+			lines, then you can control the height of the lines using the <code>align-content</code> property.
+		</p>
+
+		<p>
+			By default, the lines will be evenly spaced across the entire container.
+		</p>
+
+		<div class="example flex default-align-content">
+			<div class="element"></div>
+			<div class="element"></div>
+			<div class="element"></div>
+			<div class="element"></div>
+			<div class="element"></div>
+			<div class="element"></div>
+			<div class="element"></div>
+			<div class="element"></div>
+			<div class="element"></div>
+		</div>
+
+		<style>
+			.flex {
+				display: flex;
+			}
+			.example.default-align-content {
+				flex-wrap: wrap;
+				width: 350px;
+				height: 450px;
+			}
+			.flex .element {
+				width: 100px;
+				height: 100px;
+			}
+		</style>
+
+		<p>You've got a few options to change this though</p>
+
+		<table class="align-content-values">
+			<thead>
+				<th>Value</th><th>Effect</th><th>Diagram</th>
+			</thead>
+			<tbody>
+				<tr>
+					<td>flex-start/start</td>
+					<td>Items will be placed towards the start of the container</td>
+					<td>
+						<div class="example" style="align-content: start">
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>flex-end/end</td>
+					<td>Items will be placed towards the end of the container</td>
+					<td>
+						<div class="example" style="align-content: end">
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>center</td>
+					<td>Items will be placed in the centre of the container</td>
+					<td>
+						<div class="example" style="align-content: center">
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>space-between</td>
+					<td>
+						The first line will be at the start of the container, the last line will be at the end of the container.
+						The remaining lines will be spaced between them.
+					</td>
+					<td>
+						<div class="example" style="align-content: space-between">
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>space-around</td>
+					<td>
+						Lines are spaced evenly in the container. The space between the container and the first line, and the container and 
+						the last line, is half of the space between adjacent lines.
+					</td>
+					<td>
+						<div class="example" style="align-content: space-around">
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>space-evenly</td>
+					<td>
+						Lines are spaced evenly in the container. The space between the container and the first line, and the container and
+						the last line, is the same as the space between adjacent lines.
+					</td>
+					<td>
+						<div class="example" style="align-content: space-evenly">
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>stetch</td>
+					<td>
+						If none of the elements have a height specified, then all the lines will 
+						be of equal height, stretched to fill up the available space. If any elements 
+						have a height specified, then those elements will have their given height, and 
+						the remaining space will be spread out equally between all lines, including the 
+						ones that already have some height. This can lead to some unpredictable 
+						behaviour (try adding heights to the example via dev tools).
+					</td>
+					<td>
+						<div class="example stretch" style="align-content: stretch">
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+							<div class="element"></div>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<style>
+			.align-content-values .example {
+				display: flex;
+				flex-wrap: wrap;
+				border-style: dashed;
+				width: 115px;
+				height: 115px;
+			}
+			.align-content-values .element {
+				width: 30px;
+				height: 30px;
+				border-width: 1px;
+				border-radius: 3px;
+			}
+			.align-content-values .stretch .element {
+				height: auto;
+			}
+		</style>
+
+		<p>
+			<code>start</code> and <code>end</code> are new values, intended to replace <code>flex-start</code> and <code>flex-end</code>,
+			to give us a more flexible way of defining alignment and justification (ie so we can use them in grid too!). They're currently 
+			only supported by Firefox.
+		</p>
+
+		<p>
+			<code>stretch</code> isn't supported in IE and some versions of Edge.
+		</p>
+
+		<p>
+			Check <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/align-content">the MDN article on <code>align-content</code></a>
+			for up-to-date browser compatiblity data.
+		</p>
+
+		<p class="needs-example">would be good to add controls so diagrams can switch to different row/column, ltr/rtl etc</p>
+
+		<p>
+			Just like we can use <code>vertical-align</code> to place an item relative to a line box, we can use <code>align-self</code> to
+			place an item relative to the flex-box. By default, <code>align-self</code> is <code>stretch</code>, which means the item 
+			will stretch to fill the height (or width) of the entire flexbox. You can also set it to <code>flex-start/start</code>, 
+			<code>flex-end/end</code>, or <code>center</code>.
+		</p>
+
+		<div class="example align-self">
+			<label for="align-self">align-self</label>
+			<select id="align-self" onchange="changeAlignSelf()">
+				<option value="stretch">stretch</option>
+				<option value="flex-start">flex-start</option>
+				<option value="flex-end">flex-end</option>
+				<option value="center">center</option>
+			</select>
+			<div class="container flex">
+				<div class="element"></div>
+				<div class="element highlight"></div>
+				<div class="element"></div>	
+			</div>
+		</div>
+
+		<style>
+			.example.align-self .element {
+				margin-right: 10px;
+			}
+			.example.align-self .highlight {
+				width: auto;
+				height: auto;
+			}
+			.example.align-self .highlight::before {
+				content: '';
+				display: block;
+				width: 50px;
+				height: 50px;
+			}
+		</style>
+
+		<script>
+			const alignSelfSelect = document.getElementById('align-self');
+			alignSelfSelect.value = 'stretch';
+			const alignSelfElement = document.querySelector('.example.align-self .highlight');
+			function changeAlignSelf() {
+				alignSelfElement.style.alignSelf = alignSelfSelect.value;
+			}
+		</script>
+
+		<p>
+			And if you don't want to set the alignment on every item individually, you can use <code>align-items</code> on the flex container 
+			to align all the children at once.
+		</p>
+
+		<div class="example align-items">
+			<label for="align-items">align-items</label>
+			<select id="align-items" onchange="changeAlignItems()">
+				<option value="stretch">stretch</option>
+				<option value="flex-start">flex-start</option>
+				<option value="flex-end">flex-end</option>
+				<option value="center">center</option>
+			</select>
+			<div class="container flex">
+				<div class="element"></div>
+				<div class="element"></div>
+				<div class="element"></div>	
+			</div>
+		</div>
+
+		<style>
+			.example.align-items .container {
+				height: 100px;
+			}
+			.example.align-items .element {
+				margin-right: 10px;
+				width: auto;
+				height: auto;
+			}
+			.example.align-items .element::before {
+				content: '';
+				display: block;
+				width: 50px;
+				height: 50px;
+			}
+		</style>
+
+		<script>
+			const alignItemsSelect = document.getElementById('align-items');
+			alignItemsSelect.value = 'stretch';
+			const alignItemsElement = document.querySelector('.example.align-items .container');
+			function changeAlignItems() {
+				alignItemsElement.style.alignItems = alignItemsSelect.value;
+			}
+		</script>
+
+		<p>
+			We can also control how the flex items are laid out in the inline direction, just like we controlled how the flexboxes were laid 
+			out in the block direction. We can do this via the <code>justify-content</code> property. <code>justify-content</code> takes 
+			the same values as <code>align-content</code>, and has similar browser support.
+		</p>
+
+		<div class="example justify-content">
+			<label for="justify-content">justify-content</label>
+			<select id="justify-content" onchange="changeJustifyContent()">
+				<option value="flex-start">flex-start</option>
+				<option value="flex-end">flex-end</option>
+				<option value="center">center</option>
+				<option value="space-between">space-between</option>
+				<option value="space-around">space-around</option>
+				<option value="space-evenly">space-evenly</option>
+			</select>
+			<div class="container flex">
+				<div class="element"></div>
+				<div class="element"></div>
+				<div class="element"></div>	
+			</div>
+		</div>
+
+		<style>
+			.example.align-items .container {
+				height: 100px;
+				width: 100%;
+			}
+			.example.align-items .element {
+				width: 100px;
+				height: 100px;
+			}
+		</style>
+
+		<script>
+			const justifyContentSelect = document.getElementById('justify-content');
+			justifyContentSelect.value = 'flex-start';
+			const justifyContentElement = document.querySelector('.example.justify-content .container');
+			function changeJustifyContent() {
+				justifyContentElement.style.justifyContent = justifyContentSelect.value;
+			}
+		</script>
+
+		<p>
+			Are all these align and justify properties confusing? Yes. Do I have a good way of remembering them, other than just practice? 
+			Not really. You can try to remember that "justify" is like justifying text, and goes in the same direction. And "align" is like 
+			<code>vertical-align</code>? I guess? I can't help you with "content" and "items", except to say that "x-items" can be overridden 
+			by "x-self", because it refers to the items individually. "x-content" refers to the items as a whole, so a single one can't be set
+			differently. <code>flex</code> lacks a <code>justify-items/justify-self</code>, because it only operates in one dimension. 
+			If you find yourself needing to do that, then you should think about using <code>grid</code> code.
+		</p>
+
+		<p>
+			And, if you want to practice using these properties, I recommend checking out <a href="https://flexboxfroggy.com/">
+			Flexbox Froggy</a> - it's a cute game where you use <code>flex</code> properties to position frogs on lilypads. 
+		</p>
+
+		<p>
+			So far, we've looked at positioning things with <code>flex</code>. However, the real magic of <code>flex</code> comes from how 
+			items within a flexbox are sized. And I'm not going to lie, it involves a bit of browser voodoo.
+		</p>
+
+		<p>
+			First up, let's have a look at height in the cross-axis direction. The cross-axis direction means the direction perpendicular to 
+			the flow of text. If we're working with a row going across the page, then we're talking about the height. If we're working with 
+			a column going down the page, then we're talking about the width. For the sake of simplicity, let's assume it's a row, and we're 
+			talking about height. 
+		</p>
+
+		<p class="needs-example">diagram of main vs cross axis</p>
+
+		<p>
+			Luckily, this one isn't <i>too</i> complicated. If you've set a height on your element, then that's the height it will be.
+			Otherwise, the height will be whatever it needs to be to fit the content, given the width. Just remember, if you've not 
+			set <code>align-items</code>, or <code>align-self</code>, then those properties will default to a value of <code>stretch</code>,
+			and fill the entire height of the container.
+		</p>
+
+		<div class="example flex vertical-sizing" style="height: 250px">
+			<div class="element" style="height: 200px;">
+				This element has a height of 200px;
+			</div>
+			<div class="element" style="align-self: center">
+				This element has small content and <code>align-self: center</code>
+			</div>
+			<div class="element" style="align-self: center">
+				This element has lots and lots and lots and lots and lots and lots of content and <code>align-self: center</code>
+			</div>
+			<div class="element">
+				This element has small content and <code>align-self</code> unset
+			</div>
+		</div>
+
+		<style>
+			.example.vertical-sizing .element {
+				width: 200px;
+				height: auto;
+			}
+		</style>
+
+		<p>
+			If your item contains dynamic content (ie, you don't know how big it needs to be in advance), then I recommend setting 
+			the alignment to whatever you like, and letting the browser work out the height. I promise it will do a good job.
+		</p>
+
+		<p>
+			If your item is an image, then I also recommend setting the alignment. Otherwise, the default alignment of <code>stretch</code>
+			is going to completely trash the aspect ratio.
+		</p>
+
+		<div class="example flex borked-ratio">
+			<div>
+				Pikachu are a species of Pokémon, fictional creatures that appear in an assortment of video games, animated television shows and movies, trading card games, and comic books licensed by The Pokémon Company, a Japanese corporation. They are yellow rodent-like creatures with powerful electrical abilities.
+			</div>
+			<img src="images/pikachu.png" alt="pikachu">
+			<div>
+				Celebi is a Pokémon species in Nintendo and Game Freak's Pokémon franchise and one of the Mythical Pokémon. Created by Ken Sugimori, it first appeared in the video games Pokémon Gold and Silver and later appeared in various merchandise, spinoff titles, and animated and printed adaptations of the franchise.
+			</div>
+			<img src="images/celebi.jpeg" alt="celebi">
+			<div>
+				Eevee is a Pokémon species in Nintendo and Game Freak's Pokémon franchise. Created by Ken Sugimori, it first appeared in the video games Pokémon Red and Blue. It has later appeared in various merchandise, spinoff titles, and animated and printed adaptations of the franchise.
+			</div>
+			<img src="images/eevee.jpeg" alt="eevee">
+		</div>
+
+		<style>
+			.example.borked-ratio div {
+				width: 200px;
+			}
+		</style>
+
+		<p>
+			This is easily corrected by adding <code>align-self: center</code> to the images.
+		</p>
+
+		<div class="example flex fixed-ratio">
+			<div>
+				Pikachu are a species of Pokémon, fictional creatures that appear in an assortment of video games, animated television shows and movies, trading card games, and comic books licensed by The Pokémon Company, a Japanese corporation. They are yellow rodent-like creatures with powerful electrical abilities.
+			</div>
+			<img src="images/pikachu.png" alt="pikachu">
+			<div>
+				Celebi is a Pokémon species in Nintendo and Game Freak's Pokémon franchise and one of the Mythical Pokémon. Created by Ken Sugimori, it first appeared in the video games Pokémon Gold and Silver and later appeared in various merchandise, spinoff titles, and animated and printed adaptations of the franchise.
+			</div>
+			<img src="images/celebi.jpeg" alt="celebi">
+			<div>
+				Eevee is a Pokémon species in Nintendo and Game Freak's Pokémon franchise. Created by Ken Sugimori, it first appeared in the video games Pokémon Red and Blue. It has later appeared in various merchandise, spinoff titles, and animated and printed adaptations of the franchise.
+			</div>
+			<img src="images/eevee.jpeg" alt="eevee">
+		</div>
+
+		<style>
+			.example.fixed-ratio div {
+				width: 200px;
+			}
+			.example.fixed-ratio img {
+				align-self: center;
+			}
+		</style>
+
+		<p>
+			The size along the main axis is a lot more complicated to work out, but you also have more control over what happens. So I guess 
+			it balances out? Assuming we're still working on a horizontal row, this is going to be the width of the elements.
+		</p>
+
+		<p>
+			It starts out simple though. If you set a width on your element, it will be that width.
+		</p>
+
+		<div class="example set-width">
+			<label for="set-width">width</label>
+			<input type="number" id="set-width" onchange="updateSetWidth()">px
+			<div class="container flex">
+				<div class="element"></div>
+				<div class="element"></div>
+				<div class="element"></div>
+				<div class="element"></div>
+			</div>
+		</div>
+
+		<style>
+			.set-width .container {
+				justify-content: space-evenly;
+			}
+		</style>
+
+		<script>
+			const setWidthInput = document.getElementById('set-width');
+			setWidthInput.value = '200';
+			const setWidthElements = document.querySelectorAll('.example.set-width .element');
+			function updateSetWidth() {
+				const width = `${setWidthInput.value}px`;
+				setWidthElements.forEach(element => element.style.width = width);
+			}
+			updateSetWidth();
+		</script>
+
+		<p>
+			If you don't set a width, each element will be the biggest possible size that just fits all its content. So, if you have an element 
+			that only contains text, all of the text will appear on a single line. This width is referred to as the <code>max-content</code>
+			width. You can actually use <code>max-content</code> as a value for width on any element to make it behave in this way. It won't 
+			work in IE, or some versions of Edge though. Check out the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/width">
+			MDN docs on width</a> for more details.
+		</p>
+
+		<p>You can type in the elements to add or remove content</p>
+		<div class="example flex max-content">
+			<div class="element" contenteditable="true">small content</div>
+			<div class="element" contenteditable="true">lots and lots and lots of content</div>
+			<div class="element" contenteditable="true"></div>
+			<div class="element" contenteditable="true">a bit of content</div>
+		</div>
+
+		<style>
+			.max-content .element {
+				width: auto;
+			}
+		</style>
+
+		<p>
+			If you don't have <code>flex-wrap: wrap</code>, and there's not enough space for all your elements, then they will shrink to 
+			fit the available space. All the elements will shrink by the same amount, with a few exceptions.
+		</p>
+		<ul>
+			<li>If an element has a <code>min-width</code> set, it won't shrink smaller than the <code>min-width</code></li>
+			<li>
+				No element will shrink smaller than its <code>min-content</code> width. The <code>min-content</code> width refers to the 
+				smallest width that will allow the element to fit its content. If the element only contains text, then the <code>min-content</code>
+				width will be the width of the longest word. If it contains other elements, then the <code>min-content</code> width will be 
+				the larger of the largest element and the longest word. You can use <code>min-content</code> as a width value, just like 
+				<code>max-content</code>
+			</li>
+		</ul>
+
+		<div class="example flex resize shrink-widths>
+			<div class="element" style="width: 200px">width: 200px</div>
+			<div class="element" style="min-width: 200px">min-width: 100px;</div>
+			<div class="element" contenteditable="true">Type here to change the content</div>
+		</div>
+
+		<style>
+			.resize {
+				overflow: hidden;
+				resize: horizontal;
+			}
+			.example.shrink-widths .element {
+				height: auto;
+			}
+		</style>
+
+		<p>
+			In the previous example, you might have noticed that if you made the container too small, the bits that didn't fit got cut off.
+			This isn't actually the default behaviour - I had to set <code>overflow: hidden</code> so that I could make the container 
+			resizable (via <code>resize: horizontal</code>). The real default behaviour is for the content to overflow (and usually look rubbish).
+		</p>
+
+		<div class="example flex flex-overflow">
+			<div class="element"></div>
+			<div class="element"></div>
+			<div class="element"></div>
+		</div>
+
+		<style>
+			.example.flex-overflow {
+				width: 400px;
+				padding: 5px;
+			}
+			.example.flex-overflow .element {
+				min-width: 150px;
+				height: 100px;
+			}
+		</style>
+
+		<p>
+			If, on the other hand, you <i>do</i> have <code>flex-wrap: wrap</code>, your items will wrap rather than shrinking.
+		</p>
+
+		<div class="example flex resize flex-overflow-wrap">
+			<div class="element"></div>
+			<div class="element"></div>
+			<div class="element"></div>
+			<div class="element"></div>
+		</div>
+
+		<style>
+			.example.flex-overflow-wrap {
+				flex-wrap: wrap;
+			}
+			.example.flex-overflow-wrap .element {
+				min-width: 150px;
+				height: 100px;
+			}
+		</style>
+
+		<p>
+			Flex elements also support the <code>flex-basis</code> property. <code>flex-basis</code> is the size of the element along the main axis.
+			If we're working in a row, it's the width. If we're working in a column, it's the height. If <code>flex-basis</code> isn't set, it 
+			will fallback to the width/height value. If it is set, it will override the width/height value. Other than that, it works just like 
+			the <code>width</code> and <code>height</code> properties. I would recomment preferring <code>flex-basis</code> over <code>width</code>
+			or <code>height</code>, because that's what's used in the <code>flex</code> shortcut that we're going to see shortly, but in most 
+			cases it isn't really going to make a difference.
+		</p>
+
+		<p>
+			By default, all elements will shrink by the same amount. You can change that if you want though!
+		</p>
+		<ul>
+			<li>If you don't want an element to shrink at all, you can set <code>flex-shrink: 0</code></li>
+			<li>If you want an element with a width to shrink, you can set <code>flex-shrink: 1</code></li>
+			<li>
+				If you want elements to shrink at a different rate, you can set <code>flex-shrink</code> to another number.
+				An element with <code>flex-shrink: 2</code> will shrink twice as fast as the default. An element with 
+				<code>flex-shrink: .5</code> will shrink half as fast. You can set <code>flex-shrink</code> to any 
+				non-negative number.
+			</li>
+		</ul>
+
+		<div class="example flex resize flex-shrink">
+			<div class="element">
+				<label for="flex-shrink-0">flex-shrink:</label>
+				<input id="flex-shrink-0" type="number" min="0" step="1" value="0">
+			</div>
+			<div class="element">
+				<label for="flex-shrink-1">flex-shrink:</label>
+				<input id="flex-shrink-1" type="number" min="0" step="1" value="1">
+			</div>
+			<div class="element">
+				<label for="flex-shrink-2">flex-shrink:</label>
+				<input id="flex-shrink-2" type="number" min="0" step="1" value="2">
+			</div>
+			<div class="element">
+				<label for="flex-shrink-3">flex-shrink:</label>
+				<input id="flex-shrink-3" type="number" min="0" step="1" value="3">
+			</div>
+		</div>
+
+		<style>
+			.example.flex-shrink {
+				width: 100%;
+			}
+			.example.flex-shrink .element {
+				width: 400px;
+			}
+			.example.flex-shrink .element:first-child {
+				flex-shrink: 0;
+			}
+			.example.flex-shrink .element:nth-child(2) {
+				flex-shrink: 1;
+			}
+			.example.flex-shrink .element:nth-child(3) {
+				flex-shrink: 2;
+			}
+			.example.flex-shrink .element:nth-child(4) {
+				flex-shrink: 3;
+			}
+		</style>
+
+		<script>
+			document.querySelectorAll('.example.flex-shrink .element input').forEach((input) => input.addEventListener('change', function () {
+				this.parentElement.style.flexShrink = this.value;
+			}));
+		</script>
+
+		<p>(Try making the container smaller than the elements, and then changing the <code>flex-shrink</code> values.)</p>
+
+		<p>
+			Remember, <code>flex-shrink</code> controls <i>the rate at which an element shrinks</i>, not its final size. The final 
+			size is going to depend on the starting size, the shrink-rate, and the min-content size. And if you don't want them to 
+			shrink all the way down to their min-content size, you can set a <code>min-width</code>.
+		</p>
+
+		<p>
+			You can also make elements grow to take up the available space. If you've got <code>flex-wrap: wrap</code>, elements will 
+			grow to fill up all lines. They won't necessarily grow by the same amount in each line though - it will depend on the 
+			amount of free space in each line. To allow an element to grow, set <code>flex-grow</code> to a non-negative number.
+		</p>
+
+		<div class="example flex multi-line-grow">
+			<div class="element"></div>
+			<div class="element"></div>
+			<div class="element"></div>
+			<div class="element"></div>
+			<div class="element"></div>
+		</div>
+
+		<style>
+			.example.multi-line-grow {
+				flex-wrap: wrap;
+				width: 400px;
+			}
+			.example.multi-line-grow .element {
+				flex-grow: 1;
+			}
+		</style>
+
+		<p>
+			<code>flex-grow</code> works like <code>flex-shrink</code> (but in the opposite direction). It controls the <i>rate at 
+				which the element grows</i>. You can use <code>max-width</code> to stop an element growing beyond a certain size.
+		</p>
+
+		<p>
+			The browser is going to place as many elements as fit into a single flex box.
+		</p>
+
+		<div class="needs-example">inital placement of elements</div>
+
+		<p>Then, it's going to add up the flex-grow values of all the elements in the box.</p>
+
+		<div class="needs-example">adding up flex grow</div>
+
+		<p>It'll take the amount of empty space in the flex box, and divide it by the total of the flex-grow values.</p>
+
+		<div class="needs-example">amount per element</div>
+
+		<p>
+			Then it will give each element some extra space. This amount of space will be equal to the number we just calculated, times
+			the flex-grow for that element. 
+		</p>
+
+		<div class="needs-example">distributing the space</div>
+
+		<p>
+			Remember, the initial widths are determined by the <code>width</code> or <code>flex-basis</code> property, or the content.
+			And no element will grow beyond its <code>max-width</code>.
+		</p>
+
+		<div class="example flex-grow">
+			<input type="radio" id="flex-grow-wrap" name="flex-grow-wrap" onchange="updateFlexGrowWrap(true)" checked>
+			<label for="flex-grow-wrap">flex-wrap: wrap</label>
+			<input type="radio" id="flex-grow-nowrap" name="flex-grow-wrap" onchange="updateFlexGrowWrap(false)">
+			<label for="flex-grow-nowrap">flex-wrap: nowrap</label>
+
+			<div class="container resize flex">
+				<div class="element">
+					<label for="flex-grow-0">flex-grow:</label>
+					<input id="flex-grow-0" type="number" min="0" step="1" value="0">
+					<label for="flex-basis-0">flex-basis:</label>
+					<input id="flex-basis-0" type="number" min="0" step="1" value="200">px
+					<div contenteditable="true">add content</div>
+				</div>
+				<div class="element">
+					<label for="flex-grow-1">flex-grow:</label>
+					<input id="flex-grow-1" type="number" min="0" step="1" value="0">
+					<label for="flex-basis-1">flex-basis:</label>
+					<input id="flex-basis-1" type="number" min="0" step="1" value="200">px
+					<div contenteditable="true">add content</div>
+				</div>
+				<div class="element">
+					<label for="flex-grow-2">flex-grow:</label>
+					<input id="flex-grow-2" type="number" min="0" step="1" value="0">
+					<label for="flex-basis-2">flex-basis:</label>
+					<input id="flex-basis-2" type="number" min="0" step="1" value="200">px
+					<div contenteditable="true">add content</div>
+				</div>
+				<div class="element">
+					<label for="flex-grow-3">flex-grow:</label>
+					<input id="flex-grow-3" type="number" min="0" step="1" value="0">
+					<label for="flex-basis-3">flex-basis:</label>
+					<input id="flex-basis-3" type="number" min="0" step="1" value="200">px
+					<div contenteditable="true">add content</div>
+				</div>
+				<div class="element">
+					<label for="flex-grow-4">flex-grow:</label>
+					<input id="flex-grow-4" type="number" min="0" step="1" value="0">
+					<label for="flex-basis-4">flex-basis:</label>
+					<input id="flex-basis-4" type="number" min="0" step="1" value="200">px
+					<div contenteditable="true">add content</div>
+				</div>
+			</div>
+		</div>
+
+		<style>
+			.example.flex-grow .container {
+				width: 100%;
+			}
+			.example.flex-grow .element {
+				flex-basis: 200px;
+				flex-grow: 0;
+				height: auto;
+			}
+		</style>
+
+		<script>
+			const flexGrowContainer = document.querySelector('.example.flex-grow .container');
+			flexGrowContainer.style.flexWrap = 'wrap';
+			function updateFlexGrowWrap(value) {
+				flexGrowContainer.style.flexWrap = value ? 'wrap' : 'nowrap';
+			}
+
+			document.querySelectorAll('.example.flex-grow input[id^=flex-grow]').forEach((input) => {
+				input.value = 0;
+				input.addEventListener('change', function () {
+					this.parentElement.style.flexGrow = this.value;
+				});
+			});
+
+			document.querySelectorAll('.example.flex-grow input[id^=flex-basis]').forEach((input) => {
+				input.value = 200;
+				input.addEventListener('change', function () {
+					this.parentElement.style.flexBasis = `${this.value}px`;
+				});
+			});
+		</script>
+
+		<p>
+			It's common to want to set all of <code>flex-grow</code>, <code>flex-shrink</code>, and <code>flex-basis</code> on an element.
+			Good news: there's a shortcut for that! <code>flex: grow shrink basis</code>. The default value is <code>0 1 0</code>, and both 
+			of the second two values are optional. (You can set just <code>flex-grow</code> and <code>flex-basis</code>, but you need to use 
+			a unit on the <code>flex-basis</code> value, else it will be interpreted as <code>flex-shrink</code>!)
+		</p>
+
+		<p>
+			The final bit of magic that flex can do is change the order that elements appear in. As we already mentioned, you can set 
+			<code>flex-direction</code> to <code>row-reverse</code> or <code>column-reverse</code> to invert the order of the line.
+			You can also set <code>flex-wrap</code> to <code>wrap-reverse</code> to reverse the wrapping order. (So in a
+			<code>flex-direction: row</code> situation, <code>flex-wrap: wrap-reverse</code> would cause the second row to appear 
+			<i>above</i> the first one.)
+		</p>
+
+		<p>
+			You can also control the placement of individual elements, by setting the <code>order</code>. Elements will appear in 
+			order corresponding to their <code>order</code> value. <code>order</code> can be any integer value, and the default 
+			is <code>0</code>. So an element with <code>order: -1</code>, will appear first in its line. An element with 
+			<code>order: 1</code> will appear last (assuming no other <code>order</code>s have been set).
+		</p>
+
+		<div class="example reordering">
+			<label for="order-flex-direction">flex-direction</label>
+			<select name="flex-direction" id="order-flex-direction">
+				<option value="row">row</option>
+				<option value="row-reverse">row-reverse</option>
+				<option value="column">column</option>
+				<option value="column-reverse">column-reverse</option>
+			</select>
+
+			<label for="order-flex-wrap">flex-wrap</label>
+			<select name="flex-wrap" id="order-flex-wrap">
+				<option value="nowrap">nowrap</option>
+				<option value="wrap">wrap</option>
+				<option value="wrap-reverse">wrap-reverse</option>
+			</select>
+
+			<div class="container flex">
+				<div class="element">
+					<span>Element 1</span>
+					<label for="order-element-1">order:</label>
+					<input type="number" step="1" id="order-element-1">
+				</div>
+				<div class="element">
+					<span>Element 2</span>
+					<label for="order-element-2">order:</label>
+					<input type="number" step="1" id="order-element-2">
+				</div>
+				<div class="element">
+					<span>Element 3</span>
+					<label for="order-element-3">order:</label>
+					<input type="number" step="1" id="order-element-3">
+				</div>
+				<div class="element">
+					<span>Element 4</span>
+					<label for="order-element-4">order:</label>
+					<input type="number" step="1" id="order-element-4">
+				</div>
+				<div class="element">
+					<span>Element 5</span>
+					<label for="order-element-5">order:</label>
+					<input type="number" step="1" id="order-element-5">
+				</div>
+				<div class="element">
+					<span>Element 6</span>
+					<label for="order-element-6">order:</label>
+					<input type="number" step="1" id="order-element-6">
+				</div>
+				<div class="element">
+					<span>Element 7</span>
+					<label for="order-element-7">order:</label>
+					<input type="number" step="1" id="order-element-7">
+				</div>
+				<div class="element">
+					<span>Element 8</span>
+					<label for="order-element-8">order:</label>
+					<input type="number" step="1" id="order-element-8">
+				</div>
+			</div>
+		</div>
+
+		<style>
+			.example.reordering .container {
+				max-height: 400px;
+			}	
+		</style>
+
+		<script>
+			const orderContainer = document.querySelector('.example.reordering .container');
+
+			const orderDirectionSelect = document.getElementById('order-flex-direction');
+			orderDirectionSelect.addEventListener('change', () => {
+				orderContainer.style.flexDirection = orderDirectionSelect.value;
+			});
+			orderDirectionSelect.value = 'row';
+
+			const orderWrapSelect = document.getElementById('order-flex-wrap');
+			orderWrapSelect.addEventListener('change', () => {
+				orderContainer.style.flexWrap = orderWrapSelect.value;
+			});
+			orderWrapSelect.value = 'nowrap';
+
+			document.querySelectorAll('.example.reordering .element input').forEach((input) => {
+				input.value = 0;
+				input.addEventListener('change', function () {
+					this.parentElement.style.order = this.value;
+				});
+			});
+		</script>
+
+		<p>
+			One word of warning though - when you change the display order like this, the document order remains the same. A screen reader 
+			will read the elements in document order, and the tab order will follow the document order. This can lead to a confusing 
+			experience for users. As such, I suggest your treat this order-changing properties with extreme caution.
+		</p>
+
+		<p>
+			Finally, the question I'm sure is burning everyone's lips: how well supported is <code>display: flex</code>? The answer is 
+			"very well". All the flex-related properties are 100% supported by all modern browsers, and IE.
+		</p>
+
+		<figure>
+			<img src="images/flexbox-support.png" alt="can i use support table for flexbox, showing support in all major browsers">
+			<figcaption>Source: <a href="https://caniuse.com/#feat=flexbox">Can I Use</a></figcaption>
+		</figure>
+
+		<p>
+			However, there are a couple of known bugs in IE that aren't likely to be fixed.
+		</p>
+		<ul>
+			<li>If the content of your flex container is overflowing unexpectedly, try setting <code>max-width: 100%</code></li>
+			<li>
+				The <code>flex-basis</code> value in the <code>flex</code> shorthand requires a unit, even when it's 0. So you'll 
+				need to do something like <code>flex: 1 0 0%</code>
+			</li>
+		</ul>
+		<p>
+			For a full list of known bugs, refer to the Known Issues tab on the <a href="https://caniuse.com/#feat=flexbox">Flexbox page on 
+			Can I Use</a>.
+		</p>
+
+		<p>
+			If you're looking for any more help with flex, then you should check out the definitive guide: 
+			CSS Tricks' <a href="https://css-tricks.com/snippets/css/a-guide-to-flexbox/">Complete Guide to Flexbox</a>.
+		</p>
+
+		<h3><code>display: grid</code></h3>
+
+		<p>
+			Grid is perhaps the most useful CSS layout available. It allows us to create dynamic, responsive, two-dimensional layouts.
+			This is not to say that we don't need flexbox anymore though! It's often simpler to setup a flex layout than a grid, and there are 
+			some things you can do in flexbox that you just can't manage in grid. Both are useful, and have their place. However, grid does 
+			simplify some of the things we used to rely on flexbox for.
+		</p>
+
+		<p>
+			Like flexbox, the <code>display: grid</code> property is applied to the container elements, and affects the layout of the children 
+			of the container. Unlike flexbox though we can visualise how the grid is going to behave without any actual elements in it.
+		</p>
+
+		<p>
+			For this next section, I highly recommend using Firefox, as the Firefox dev tools includes a grid inspector which I find 
+			invaluable when working with grid.
+		</p>
+
+		<div class="example grid dev-tools">
+
+		</div>
+
+		<style>
+			.example.dev-tools {
+				grid-template-columns: 1fr 1fr;
+				grid-template-rows: 1fr 1fr;
+				height: 400px;
+			}
+		</style>
+
+		<p>To use the grid inspector in Firefox</p>
+		<ol>
+			<li>Right-click on the example above and select Inspect Element</li>
+			<li>
+				Click on the grid tag beside the element in the Inspector.
+				<img src="images/grid-tag.png" alt="Location of grid tag in Inspector">
+			</li>
+		</ol>
+
+		<div class="needs-example">what it looks like with the grid inspector turned on</div>
+
+		<p>
+			Our example here defines a 2x2 grid, using three CSS properties.
+		</p>
+
+		<pre><code class="css">
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			grid-template-rows: 1fr 1fr;
+		</code></pre>
+
+		<p>
+			<code>display: grid</code> makes our container a grid. <code>grid-template-columns</code> takes a list of widths. It will create 
+			a column of the given width for each width in the list. In our case, we've got two columns, each 1fr wide.
+			<code>grid-template-rows</code> takes a list of heights and creates a row of the given height for each height in the list. So 
+			we've got two rows, each 1fr high. And, altogether, we've got a 2x2 grid, where each cell is 1fr x 1fr.
+		</p>
+
+		<p>
+			At this point, you might be wondering what an <code>fr</code> is. This is a good question. <code>fr</code> stands for "fraction 
+			of the available space", and it works just like <code>flex-grow</code> does in a flexbox. So, to calculate the widths of the 
+			columns in the above example, the browser is going to work out how much space is availale to start with - 100% of the width of 
+			the grid element. Then it's going to add up how many <code>fr</code>s there are altogether - 1fr + 1fr = 2fr. Then, divide the 
+			amount of space by the number of <code>fr</code>s to calculate how much space each <code>fr</code> gets - 100% / 2 = 50%. Then
+			assign that much space to each <code>fr</code>. In our example, each column is 50% of the width of the container. 
+		</p>
+
+		<p>
+			This example is a little simplistic though. We could also have different sized columns - say 
+			<code>grid-template-columns: 4fr 1fr</code>. In this case, there are 5frs altogether, so each fr receives 20% of the space
+			(100% / 5 = 20%). The first column is 4frs wide, so it receives 80% (20% x 4 = 80%). The second column is 1fr, so it just gets 20%.
+		</p>
+
+		<div class="needs-example">grid to check out in grid inspector</div>
+
+		<p>
+			We can also mix units, like <code>grid-template-columns: 100px 1fr</code>. In this case, the first column will always be 100px 
+			wide, no matter the size of the container. The second column will take up the remaining space.
+		</p>
+
+		<div class="needs-example">grid inspector</div>
+
+		<p>
+			And we can do more complicated stuff, like combinations of different units and multiple fr units, like
+			<code>grid-template-columns: 200px 1fr 2em 3fr</code>. So how wide is each column here? Let's say the container is 500px 
+			wide and 1em is 12px.
+		</p>
+
+		<ol>
+			<li>Calculate how much space is used by the fixed width elements: 200px + 2em = 200px + 2 * 12px = 224px</li>
+			<li>Calculate how much space is remaining: 500px - 224px = 276px</li>
+			<li>Add up all the frs: 1fr + 3fr = 4fr</li>
+			<li>Calculate how much space per fr = 276px / 4fr = 69px/fr</li>
+			<li>Multiple frs by space per fr to get sizes: 1fr * 69px/fr = 69px; 3fr * 69px/fr = 207px</li>
+		</ol>
+
+		<p>This gives us final column sizes of 200px, 69px, 24p, 207px.</p>
+
+		<p>
+			Don't worry - you'll never really need to do this maths yourself! If you want to see how big your columns are, just stick them in 
+			the dev tools and play around.
+		</p>
+
+		<p>
+			So, why do we use frs instead of just sticking with percentages? Well, the maths is easier, especially if you're mixing units, and 
+			you can't get it wrong and end up with columns adding up to more than 100%. It also makes it super easy to add and remove columns 
+			without needing to recalculate everything, which also works well in responsive designs, where you might have different numbers of 
+			columns on different size screens. There are also a couple of other advantages we'll get to later.
+		</p>
+
+		<p>
+			Ok, so this is all well and good, but a grid with nothing in it is pretty boring. So let's see what happens when we add some 
+			elements.
+		</p>
+
+		<div class="example grid placing-elements">
+			<div class="element">1</div>
+			<div class="element">2</div>
+			<div class="element">3</div>
+		</div>
+
+		<style>
+			.placing-elements {
+				grid-template-columns: 1fr 1fr;
+				grid-template-rows: 1fr 1fr;
+				height: 400px;
+			}
+
+			.placing-elements .element {
+				width: 100px;
+				height: 100px;
+			}
+		</style>
+
+		<p>
+			You can see the elements get placed along the first row, until that row fills up. Then we start filling up the next row.
+			And so on until we run out of elements. If we prefer to fill up the columns first, we can do that by setting 
+			<code>grid-auto-flow: column</code>.
+		</p>
+
+		<div class="example">
+			<input type="radio" name="grid-auto-flow" id="auto-flow-row" value="row">
+			<label for="auto-flow-row">grid-auto-flow: row</label>
+			<input type="radio" name="grid-auto-flow" id="auto-flow-column" value="column">
+			<label for="auto-flow-column">grid-auto-flow: column</label>
+			<div class=" placing-elements container grid">
+				<div class="element">1</div>
+				<div class="element">2</div>
+				<div class="element">3</div>	
+			</div>
+		</div>
+
+		<script>
+			const container = document.querySelector('.placing-elements.container');
+			document.querySelectorAll('input[id^=auto-flow').forEach((input) => {
+				input.addEventListener('change', function () {
+					container.style.gridAutoFlow = this.value;
+				});
+			});
+			document.getElementById('auto-flow-row').checked = true;
+		</script>
+
+		<p>
+			Also by default, each element is placed in the upper left corner of the cell (in a left-to-right, top-to-bottom language - more 
+			generally, each element is placed at the point where you would start reading in the current language). We can change this, using 
+			the same kind of properties we used in flexbox - <code>align-items</code>, <code>align-self</code>, <code>justify-items</code>,
+			<code>justify-self</code>. You'll notice grid lacks <code>align/justify-content</code>. This is because the grid rows and columns
+			essentially cover this functionality, while giving us much more fine-grained control. We've also gained 
+			<code>justify-items/self</code>, because, in a grid context we <i>can</i> place elements relative to their neighbours in the inline
+			direction.
+		</p>
+
+		<p>
+			Just like with flexbox, <code>*-items</code> properties are placed on the container element, and control placement for all items 
+			in the grid. <code>*-self</code> properties are placed on the items themselves, and only change the placement of a specific item.
+			<code>*-self</code> properties override <code>*-items</code> properties.
+		</p>
+
+		<p>
+			As with flexbox, we can choose between the values <code>start</code>, <code>center</code>, <code>end</code>, and <code>stretch</code>.
+			(Note that <code>stretch</code> has the same effect as <code>start</code> when applied to an element with an explicit width or height, 
+			like the elements in the example below.)
+		</p>
+
+		<div class="example align-justify">
+			<label for="align-items">align-items</label>
+			<select name="align-items" id="align-items">
+				<option value="start">start</option>
+				<option value="center">center</option>
+				<option value="end">end</option>
+				<option value="stretch">stretch</option>				
+			</select>
+			<label for="justify-items">justify-items</label>
+			<select name="justify-items" id="justify-items">
+				<option value="start">start</option>
+				<option value="center">center</option>
+				<option value="end">end</option>
+				<option value="stretch">stretch</option>				
+			</select>
+			<div class="container placing-elements grid">
+				<div class="element">
+					1
+					<label for="align-self-1">align-self</label>
+					<select name="align-self-1" id="align-self-1">
+						<option value="start">start</option>
+						<option value="center">center</option>
+						<option value="end">end</option>
+						<option value="stretch">stretch</option>				
+					</select>
+					<label for="justify-self-1">justify-self</label>
+					<select name="justify-self-1" id="justify-self-1">
+						<option value="start">start</option>
+						<option value="center">center</option>
+						<option value="end">end</option>
+						<option value="stretch">stretch</option>				
+					</select>		
+				</div>
+				<div class="element">		
+					2	
+					<label for="align-self-2">align-self</label>
+					<select name="align-self-2" id="align-self-2">
+						<option value="start">start</option>
+						<option value="center">center</option>
+						<option value="end">end</option>
+						<option value="stretch">stretch</option>				
+					</select>
+					<label for="justify-self-2">justify-self</label>
+					<select name="justify-self-2" id="justify-self-2">
+						<option value="start">start</option>
+						<option value="center">center</option>
+						<option value="end">end</option>
+						<option value="stretch">stretch</option>				
+					</select>
+					</div>
+				<div class="element">
+					3
+					<label for="align-self-3">align-self</label>
+					<select name="align-self-3" id="align-self-3">
+						<option value="start">start</option>
+						<option value="center">center</option>
+						<option value="end">end</option>
+						<option value="stretch">stretch</option>				
+					</select>
+					<label for="justify-self">justify-self</label>
+					<select name="justify-self" id="justify-self">
+						<option value="start">start</option>
+						<option value="center">center</option>
+						<option value="end">end</option>
+						<option value="stretch">stretch</option>				
+					</select>		
+				</div>
+			</div>
+		</div>
+
+		<style>
+			.align-justify .placing-elements .element {
+				width: 150px;
+				height: 150px;	
+			}
+		</style>
+
+		<script>
+			const alignJustifyContainer = document.querySelector('.align-justify .container');
+			document.querySelectorAll('.align-justify select[id$=items]').forEach((select) => {
+				select.selectedIndex = 0;
+
+				select.addEventListener('change', function () {
+					alignJustifyContainer.style[this.id] = this.value;
+				});
+			});
+
+			document.querySelectorAll('.align-justify .element select').forEach((select) => {
+				select.selectedIndex = 0;
+				select.addEventListener('change', function () {
+					const property = `${this.id.split('-')[0]}-self`;
+					this.parentElement.style[property] = this.value;
+				})
+			});
+		</script>
+
+		<p>
+			While this is pretty handy, often we actually want the elements to resize relative to the size of the grid cells.
+			We can do this by setting the width and height as percentages. The percentages will be treated as percentages of the
+			size of the cell, rather than the size of the parent element.
+		</p>
+
+		<div class="example grid placing-elements relative-size resize">
+			<div class="element" style="width: 100%; height: 100%">
+				width: 100%; height: 100%;
+			</div>
+			<div class="element" style="width: 80%; height: 80%">
+				width: 80%;
+				height: 80%;
+			</div>
+			<div class="element" style="width: 40%; height: auto; min-width: min-content; height: auto">
+				width: 40%;
+				height: auto
+			</div>
+		</div>
+
+		<style>
+			.relative-size {
+				align-items: center;
+				justify-items: center;
+			}
+		</style>
+
+		<p>
+			We can stop the smallest element shrinking down too narrow to fit its content by adding <code>min-width: min-content</code>. 
+			As you might recall from earlier, this will set its minimum width to the smallest size which will accomodate its content -
+			essentially the length of the longest word it contains.
+		</p>
+
+		<p>
+			Now we could use this as a way of creating gaps between cells - set the elements sizes as a percentage of the size of the cell
+			that's just a bit small than 100%, and voila!
+		</p>
+
+		<div class="example grid placing-elements percent-gap resize">
+			<div class="element"></div>
+			<div class="element"></div>
+			<div class="element"></div>
+			<div class="element"></div>
+		</div>
+
+		<style>
+			.percent-gap .element {
+				width: 90%;
+				height: 90%;
+			}
+		</style>
+
+		<p>
+			This makes our grid a little lop-sided though. If we align all our items to the left, we get a gap on the right. If we align them in the 
+			center, we get a gap around the outside. Plus, it's difficult to make our row and column gaps the same. Luckily, grid provides us 
+			with a better way to handle this - the aptly named <code>grid-gap</code>.
+		</p>
+
+		<p>
+			You can set <code>grid-gap</code> to be a specific measurement, like 10px, or 1em. Or you can use a percentage. The percentage will be 
+			calculated from the width of the entire grid for the column gaps, and the height of the entire grid for the row gaps (potentially leading 
+			to uneven row and column gaps again, but sometimes that's what you want). You can also set the row and column gaps to be different 
+			deliberately, by padding in to values, like <code>grid-gap: 10px 20px</code>. The first value is the row gap, the second is the column gap.
+		</p>
+
+		<div class="example grid-gap">
+			<label for="grid-gap">grid-gap</label>
+			<input type="text" id="grid-gap" placeholder="10px 10px">
+			<div class="container grid placing-elements resize">
+				<div class="element"></div>
+				<div class="element"></div>
+				<div class="element"></div>
+				<div class="element"></div>
+			</div>
+		</div>
+
+		<style>
+			.grid-gap .container .element {
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+
+		<script>
+			const gridGapContainer = document.querySelector('.grid-gap .container');
+			document.getElementById('grid-gap').addEventListener('change', function () {
+				gridGapContainer.style.gridGap = this.value;
+			});
+		</script>
+
+		<p>
+			<code>grid-gap</code> is another reason to prefer fr over percentages. fr will take the gap into account automatically. 
+			While it's entirely possible to do this with percentages, using <code>calc()</code>, it's far, far more difficult.
+		</p>
+
+		<p>
+			On top of all this, we can also place elements so that they take up more than one cell. We can do this by making them 
+			span multiple rows and/or columns. The resulting shape will still always be a rectangle though.
+		</p>
+
+		<p>
+			There are a couple of ways we can do this. The first is to specify which row/column we want to element to start/end in,
+			using <code>grid-row</code> and <code>grid-column</code>.
+			Rows and columns are numbered starting at 1. We can also refer to a row/column relative to the end of the grid using 
+			negative numbers. So, we could specify that we want an element to cover all of the cells in its row, we could 
+			use <code>grid-column: 1 / -1</code>. Other elements will be shuffled around the element, according to a complex 
+			algorithm that we're not going to look at today. If you're interested, start with the 
+			<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Auto-placement_in_CSS_Grid_Layout">
+				MDN article on Auto-placement in CSS Grid Layout
+			</a>
+		</p>
+
+		<div class="example grid-row">
+			<label for="grid-row">grid-row</label>
+			<input type="text" id="grid-row" placeholder="1 / -1">
+			<label for="grid-column">grid-column</label>
+			<input type="text" id="grid-column" placeholder="1 / -1">
+			<div class="container grid">
+				<div class="element"></div>
+				<div class="element highlight"></div>
+				<div class="element"></div>
+			</div>
+		</div>
+
+		<style>
+			.grid-row .container {
+				grid-template-columns: repeat(8, 1fr);
+				grid-template-rows: repeat(8, 1fr);
+				height: 400px;
+			}
+
+			.grid-row .container .element {
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+
+		<script>
+			const gridRowElement = document.querySelector('.grid-row .highlight');
+			document.querySelectorAll('.grid-row input').forEach((input) => {
+				input.value = '';
+				input.addEventListener('change', function () {
+					gridRowElement.style[this.id] = this.value;
+				});
+			})
+		</script>
+
+		<p>
+			If we want an element to cover multiple row/columns, but we're not sure exactly where in the grid it is, we can 
+			use the <code>grid-row/column</code> property with a <code>span</code> value. <code>grid-column: span 2</code> will 
+			cause the element to cover two columns, without affecting its start position. We can also combine span with start or 
+			end values. <code>grid-column: span 4 / -1</code> will place the element across four columns, ending in the last one.
+		</p>
+
+		<p>You can try out span values in the example above.</p>
+
+		<p>
+			The final way that we can cause an element to cover several cells is by using <code>grid-template-areas</code> with
+			<code>grid-area</code>grid-template-areas</code> to create a kind of ascii map of how want our grid to be laid out.
+		</p>
+
+		<div class="needs-example">media object using grid-area</div>
+
+		<p>
+			While these properties provide a very powerful way of rearranging your grid, you should bear in mind the same caveats 
+			as when reordering flexboxes. The tab order will follow the document order, not the visible order, so extensively
+			rearranged elements can result in an inaccessible experience. For this reason, I'd suggest preferring a single 
+			<code>span</code> value of specifying start and end values, and ensuring that your <code>grid-template-areas</code>
+			follow your source order fairly closely.
+		</p>
+
+		<p>
+			Everything we've looked at so far has assumed that we know how many elements are going to be in our grid. 
+			Often though, that isn't the case. Luckily, grid has us covered there too!
+		</p>
+
+		<p>
+			If we add more elements than we have defined in our grid, the browser will just add another row to the grid 
+			and continue adding elements there.(If you're using <code>grid-auto-flow: column</code>, then it will add a 
+			new column instead.) The new row will follow the same template as your other rows, and have a height of 
+			<code>auto</code>. <div class="needs-example">what does height of auto actually mean</div>
+		</p>
+
+		<p>
+			Additional rows that are added like this are called the "implicit grid". (Rows and columns that are defined 
+			explicitly are called the "explicit grid".) <span class="needs-example">In Firefox grid inspector, implicit 
+			grid is indicated by dashed lines.</span> The most important difference between the implicit and explicit grids 
+			is that you can't place elements using negative track numbers. In the implicit grid, the browser doesn't know 
+			how many rows/columns there's going to be until after it's placed all the items in them, so it doesn't know 
+			where the last row/column is going to be! <span class="needs-example">what happens with template areas?</span>
+		</p>
+
+		<div class="example implicit-grid">
+			<label for="grid-template-columns">grid-template-columns</label>
+			<input type="text" id="grid-template-columns">
+			<label for="grid-template-rows">grid-template-rows</label>
+			<input type="text" id="grid-template-rows">
+			<button id="add-grid-item">Add element to grid</button>
+			<div class="container grid">
+				<div class="element" contenteditable="true">1</div>
+				<div class="element" contenteditable="true">2</div>
+				<div class="element" contenteditable="true">3</div>
+				<div class="element" contenteditable="true">4</div>
+			</div>
+		</div>
+
+		<style>
+			.implicit-grid .container {
+				height: 500px;
+			}
+			.implicit-grid .element {
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+
+		<script>
+			
+		</script>
+
+	
+
+		<div class="incomplete">
+		what happens when we add more elements than there are cells & the implicit grid
+		when we care about how big the columns are, not how many there are
+		when we want the columns to resize within a certain range
+		reordering elements in grid with the same warning as flex
+		</div>
+
+		<h3 class="incomplete"><code>columns</code></h3>
+
+		<h3 class="incomplete"><code>float</code></h3>
+
 	</section>
 
 	<section><h2 class="incomplete" id="conclusion">Wrap up</h2></section>

@@ -8,14 +8,18 @@
 
 	<style>
 		body {
-			/* display: flex; */
+			display: flex;
 			flex-wrap: wrap;
+			width: 80vw;
+			height: 80vh;
+			border: 2px solid blue;
 		}
 		div, span {
 			box-sizing: border-box;
 			border: 1px solid red;
 			flex-shrink: 1;
 			height: 100px;
+			width: 100px;
 		}
 
 		span {
@@ -26,12 +30,25 @@
 	</style>
 </head>
 <body>
-	<div>
-		text and inline elements are added to the line box in the inline direction
-the vertical-align property determines where the element is placed relative to the line box. the naming is a bit of a holdover from before CSS was direction-agnostic. it only affects inline elements in line boxes where everything isn't the same size, which is why it almost never does what you want. use it to align text properly when you're using multiple fonts or font sizes in a single line box.
-if an element is taller than the line box <span>a span</span> (usually due to the addition of padding or margin), then it will overflow, overlapping with elements above and below. in practice this usually just means that margins and paddings in the block direction won't have any effect. margins and paddings in the inline direction will still work as expected though.
-if an element can't fit into the linebox in the inline direction - either because it is wider than the line box, or because there is already too much stuff - the browser will create a new line box in the block direction, and wrap
-
-	</div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
 </body>
 </html>
