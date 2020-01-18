@@ -1,0 +1,175 @@
+*, *::before, *::after {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Raleway', Arial, Helvetica, sans-serif;
+	font-size: 20px;
+	margin: 10vmin;
+	background-attachment: fixed;
+}
+
+section {
+	margin: 20px auto;
+	background-color: hsla(0, 0%, 100%, .4);
+	padding: 5vmin;
+	border-radius: 10px;
+	box-shadow: 0 1px 4px 2px hsla(250, 50%, 50%, 0.2);
+	max-width: 1000px;
+}
+
+h1 {
+	text-align: center;
+	font-size: calc(2em + 4vw);
+}
+@media (min-width: 800px) {
+	h1 {
+		font-size: 80px;
+	}
+}
+
+aside h4, aside h3 {
+	margin-top: 20px;
+}
+
+.contents div {
+	font-size: 1.7em;
+	font-family: "League Gothic", Impact, sans-serif;
+	text-transform: uppercase;
+	margin-bottom: 20px;
+}
+
+.incomplete {
+	display: none;
+}
+
+table.docs {
+	border-collapse: collapse;
+	margin-bottom: 1em;
+}
+table.docs td, table.docs th {
+	width: 25%;
+}
+table.docs tr:not(:last-child) th {
+	border-right: 2px solid currentColor;
+	padding-right: .5em;
+	padding-top: .5em;
+	text-align: right;
+}
+table.docs tr:last-child th {
+	border-top: 2px solid currentColor;
+}
+table.docs .doc:nth-child(2) {
+	position: relative;
+	left: 8px;
+	top: -2px;
+}
+
+table.docs-key {
+	font-size: .8em;
+	border: 1px solid currentColor;
+	padding: .75em;
+}
+table.docs-key thead th {
+	text-align: left;
+	font-weight: bold;
+	text-decoration: underline;
+}
+table.docs-key th {
+	font-weight: normal;
+	font-style: italic;
+	text-align: right;
+	margin-right: 1em;
+}
+table.docs-key td {
+	margin: 1em;
+	padding: .25em;
+}
+
+.doc {
+	width: 20px;
+	height: 20px;
+	margin: auto;
+}
+.doc.external {
+	background-color: hsl(200, 50%, 50%);
+	border-radius: 50%;
+}
+.doc.readme {
+  border: 12.5px solid transparent;
+  border-bottom-color: hsl(250, 50%, 50%);
+  transform: translateY(-30%);
+}
+.doc.comments {
+	background-color: hsl(150, 50%, 50%);
+}
+.doc.code {
+	background-color: hsl(350, 50%, 50%);
+	border-radius: 0 50%;
+}
+
+li pre {
+	margin-left: -2em;
+}
+
+.flex-columns {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	justify-content: space-around;
+}
+
+aside {
+	border: 1px solid currentColor;
+	border-radius: 10px;
+	padding: 0 var(--margin-size);
+	margin: var(--margin-size);
+}
+
+.example {
+	border: 2px solid currentColor;
+	border-radius: 8px;
+	padding: var(--margin-size);
+	margin: auto;
+}
+
+.container {
+	margin-top: var(--margin-size);
+}
+
+.element {
+	--hue: 250;
+  background-color: hsl(var(--hue), 93%, 71%);
+  background-image: linear-gradient(135deg,hsl(var(--hue), 100%, 81%), hsl(var(--hue), 80%, 66%));
+  box-shadow: inset 2px 2px 4px hsla(var(--hue), 0%, 100%, .6), inset -2px -2px 4px hsla(var(--hue), 100%, 0%, .6);
+	border-color: hsl(var(--hue), 63%, 26%);
+	padding: 20px;
+	color: white;
+  font-weight: bold;
+  text-shadow: 1px 1px hsl(var(--hue), 80%, 66%);
+}
+
+.element.highlight {
+	--hue: 80;
+}
+
+.element.numbered {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.5em;
+}
+
+button {
+  min-height: 50px;
+  font-size: 19px;
+  background-color: hsl(136, 95%, 36%);
+  color: white;
+  padding: 10px;
+  border: 2px solid hsl(136, 95%, 20%);
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  box-shadow: inset 1px 1px 2px hsla(136, 0%, 100%, .6), inset -1px -1px 2px hsla(136, 100%, 0%, .6);
+}
+
