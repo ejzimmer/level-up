@@ -373,6 +373,7 @@ figcaption {
   padding: var(--margin-medium);
   font-size: .9em;
   font-style: italic;
+  width: calc(100% + 2 * var(--margin-size));
 }
 
 figcaption a {

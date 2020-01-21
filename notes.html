@@ -310,7 +310,7 @@ hasAccountChanged(newAccount) {
 		currentAccount.accountNumber !== newAccount.accountNumber ||
 		currentAccount.bsb !== newAccount.bsb
 	);
-	this.isDirectDebitChanged = hasChanged;
+	thkis.isDirectDebitChanged = hasChanged;
 	return this.isDirectDebitChanged;
 }				
 				</code></pre>
@@ -1188,17 +1188,17 @@ const arrayCopy2 = [...arrayToCopy];
 
 		<h3 class="in-draft">Don't repeat yourself</h3>
 
-		<p class="in-draft">
+		<p>
 			Perhaps the most effective way you can reduce noise in your code, though, is by DRYing out your code. If you've not heard of DRY before, it stands 
 			for "Don't Repeat Yourself". At its most fundamental, this means that you shouldn't implement the same logic twice in your code. Instead, factor 
 			the repeated logic out into a function, class, or module.
 		</p>
 
-		<p class="in-draft">
+		<p>
 			There are several reasons why you want to avoid repeated logic in your code.
 		</p>
 
-		<ul class="in-draft">
+		<ul>
 			<li>More code means more things that can go wrong</li>
 			<li>Having logic implemented in multiple places means it's more work to update it when things change</li>
 			<li>Similarly, it's more work to fix bugs, as they will need to be fixed multiple times</li>
@@ -1229,9 +1229,9 @@ const arrayCopy2 = [...arrayToCopy];
 
 		<pre class="needs-example"><code>JS doc comments and what you might do instead</code></pre>
 
-		<h3 class="in-draft">Design your code with humans in mind</h3>
+		<h3>Design your code with humans in mind</h3>
 
-		<p class="in-draft">
+		<p>
 			Most studies show that humans can really only hold 4-5 things in our working memory at a time
 			(<a href="https://en.wikipedia.org/wiki/Working_memory#Capacity">Working memory capacity on Wikipedia</a>).
 			This means that we can really only keep track of that many things easily. However, we also have the ability to "chunk" data - that is to 
@@ -1239,100 +1239,156 @@ const arrayCopy2 = [...arrayToCopy];
 			remembering a list of eight single-digit numbers. But remembering two 4-digit years is fairly trivial.
 		</p>
 
-		<p class="in-draft">
-			How can this help us write code? We can break our code up into logical units that only deal with 4-5 variables.
+		<h4>Chunks</h4>
+
+		<p>
+			How can this help us write code? We break our code up into chunks - where a chunk is a function, a class, or a module.
+			Each chunk should have a single, unifying purpose - something you can describe in two or three words. Chunks can be made 
+			of smaller chunks, but each chunk should consist of no more than 4-5 smaller units.
 		</p>
 
-		<p class="needs-example">
-			One way to do this is to keep variables as local as possible. If you've got a function that deals with 10 variables, then don't 
-			declare them until you actually need to use them. 
+		<p>
+			The idea that each class should do only one thing comes from object-oriented programming, and is called the Single Responsiblity 
+			Principle. More formally stated, the Single Responsibility Principle states that a class should only have one reason to change.
+			I don't find that definition particularly helpful - but classes (and functions) that do more than one thing do tend to be more 
+			difficult to remember how to use.
 		</p>
 
-		<p class="in-draft">
-			Better than this though, is not to have functions with ten variables in them. As we talked about earlier, we can factor out 
-			functionality into other functions - essentially using chunking to turn a lot of information into a manageable amount. We can also 
-			do this on multiple levels. We could factor out the functionality of a group of related functions into a class, or a component. And we can 
-			factor out multiple classes and components into a module.
+		<p>
+			Take, for example, the built-in JavaScript function <code>Array.prototype.splice</code>. 
 		</p>
 
-		<p class="in-draft">
-			The important principle here is that each unit (function, component, class, or module) should only do one thing. In object-oriented programming,
-			this is knows as the Single Responsibility Principle, which states that a class should only have one reason to change. Now, JavaScript isn't 
-			an object-oriented language, and I don't actually think that description is that helpful, but I do think that following the Single 
-			Responsibility Principle does make your code easier to understand and reason about.
+		<pre><code>let arrDeletedItems = array.splice(start[, deleteCount[, item1[, item2[, ...]]]])</code></pre>
+		<div>Source: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice">MDN</a></div>
+
+		<p>	
+			It takes a start index and a number of things to be deleted. It also takes an optional list of things to be added to the array.
+			(Except it's not a list, you just add the other things to the end of the parameter list.) It deletes the number of things to be 
+			deleted, starting from the start index, adds in all the things from the end of the parameter list, and returns the list of things 
+			that were deleted. 	
 		</p>
 
-		<p class="in-draft">
-			So, how do we decide what "one thing" is? Unfortunately, I can't give you a hard and fast rule, here - it's a bit of a judgement call.
-			There are a few things that can hint that your unit of code could benefit from being split up though.
+		<p>
+			This function does two things - it deletes items, and it adds them. And because it does two things, it has a name that isn't very
+			descriptive. So, it's easily confused with the similarly named <code>Array.prototype.slice</code>. It's also the only way to delete 
+			items from an array. Wouldn't it be easier if we had a function named <code>removeItems</code>?
 		</p>
 
-		<ul class="in-draft">
+		<pre><code>const updatedArray = array.removeItems(start, deleteCount)</code></pre>
+
+		<p>We could have another function that added items in, if we really needed it.</p>
+
+		<pre><code>const updatedArray = array.addItems(start, itemsToAdd)</code></pre>
+
+		<p>
+			Unfortunately, I can't really give you a hard and fast rule for what constitutes "one thing", but there are some 
+			red flags that you can keep an eye out for.
+		</p>
+		<ul>
 			<li>
-				It's hard to name. Are you having trouble coming up with a name that describes all the functionality of your component?
-				Does your class have a very generic name <code>System</code> or <code>Manager</code>? Does your function have a name with a conjunction in 
-				it (like 'and', 'or', 'if', or 'when')?
+				Is your function/class difficult to name? Is it difficult to find a name that covers all the functionality (like <code>splice</code>)?
+				Have you ended up with a very generic class name, like <code>System</code> or <code>Manager</code>? Does your function name 
+				have a conjunction in it (like 'and', 'or', 'if', or 'when')?
 			</li>
 			<li>
-				Does your function or class have a heap of variables? <span class="needs-example">Sometimes</span>, this is inevitable, but it's always 
-				a sign you should at least think about whether it needs splitting.
+				Is your function long? If it doesn't fit on a screen, it's going to be hard to keep track of.
+				Does it have more than four or five variables? (Remember humans can only keep up with four or fives things at once).
+				Does your function have more than four or five public methods?
 			</li>
-			<li class="needs-example">
-				Are you covering multiple levels of abstraction? 
+			<li class="needs-example">Are you covering multiple levels of abstraction?</li>
+			<li>
+				Is your code deeply nested? As we discussed earlier, more than one or two levels of nesting is a good sign that you should 
+				consider factoring out some functionality into another function, with a nice, descriptive name.
 			</li>
 			<li>
-				Is your code deeply nested? As we discussed earlier, more than one or two levels of nesting is a good sign you should consider factoring 
-				some functionality out into another function, which a nice, descriptive name.
-			</li>
-			<li class="needs-example">
-				Does your function have a flag parameter? A flag parameter is usually a boolean value that is used to change the behaviour of a function.
-				Flag parameters make your code harder to understand, because it's not really clear what the function is doing from the name alone. And 
-				they're a pretty good indicator that the function is doing two things.
+				Does your function have a flag parameter? A flag parameter that is used to change the behaviour of a function. <div class="needs-example">
+					flag parameter</div>. A function with a flag parameter does two things.
 			</li>
 		</ul>
 
-		<p class="in-draft">
-			A corollary of the idea that we only want 4-5 variables in scope at once is that we want our functions to take as few parameters as possible. 
-			It's very easy to understand what a function with no parameters is doing. But it's a bit impractical to only use functions with no parameters.
-			So functions with one or two parameters are ok too. Using three or more parameters greatly increases the cognitive load of using your function. 
-			It's harder to understand what's going on, because there's more in scope, and it's harder to use your function, as we've got to remember what 
-			more parameters do. The smart context in your IDE can help mitigate this a little, but it's still not ideal.
+		<h4>Parameters</h4>
+
+		<p>
+			Parameters are something else that we need to keep track of when understanding a function. So it probably won't suprise you when I 
+			say the fewer parameters the better. The ideal number of parameters for a function is zero. A function that takes zero parameters and 
+			always produces the same results is very easy to understand! Of course, writing all our functions with no parameters kind of limits 
+			what we can do, so functions with one or two parameters are ok too. Three, at a pinch. Using more than three parameters greatly increases 
+			the cognitive load of using your function though. For a start, it's harder to remember what all the parameters do!
 		</p>
 
-		<p class="needs-example">
-			However, if you do need to pass a lot of stuff into a function, don't forget that we can rely on our old friend chunking!
+		<div class="needs-example">a function with too many parameters</div>
+
+		<p>
+			If you do find yourself needing to pass a lot of parameters into a function though, then don't forget that we can use chunking to help.
+			Can the parameters be grouped together into a single cohesive object? Well, that only counts as one parameter!
 		</p>
 
-		<p class="needs-example">
-			One final thing to remember, when factoring out into new classes, is that we want to favour composition over inheritance. We prefer to share 
-			functionality by composing classes from a number of lower-level classes, rather than using inheritance. Using composition makes our objects more 
-			flexible, as things don't need to be in the same family tree to share stuff. It also makes them easier to understand as everything at a given 
-			level of abstraction is in the same place, instead of being spread across a parent class and child class.
+		<div class="needs-example">chunking parameters</div>
+
+		<h4>Composition over inheritance</h4>
+
+		<p>
+			Something that kind of comes naturally with this kind of coding is that we favour composition over inheritance. This means that 
+			we build our app our of smaller pieces, that are in turn built of smaller pieces, and so on down the line. We share functionality 
+			around our app by sharing the smaller pieces (or chunks, as we've been calling them).
 		</p>
 
-		<h3 class="in-draft">Refactoring code & testing</h3>
+		<div class="needs-example">objects sharing functionality via composition</div>
 
-		<p class="in-draft">
-			One last note on the topic of clean code: keeping your code base clean is going to require refactoring your code, a lot.
-			In order to do this reliably, you're going to need good tests, which test the intent of your code, not your implementation. One way to 
-			achieve this is to use Test Driven Development (TDD). I highly recommend that you at least give TDD a shot, even if you don't end up 
-			using it all the time. I find it particularly helpful when fixing bugs, and writing new utility code. I find it less helpful when I'm 
-			writing new components, or anything that involves a lot of HTML & CSS.
+		<p>
+			This is generally preferable to the object-oriented concept of sharing functionality via inheritance.
 		</p>
 
-		<p class="in-draft">
-			If you're working with legacy code which doesn't have good test coverage, things are a bit trickier. Often, it's incredibly difficult to work 
+		<div class="needs-example">objects sharing functionality via inheritance</div>
+
+		<p>
+			Sharing via composition is more flexible, as object don't need to be within the same class hierarchy to share. It also produces 
+			code that is easier to understand. Objects built via composition each contain everything they need to function, at a given level 
+			of abstraction. Objects built via inheritance can have their implementation details at any level of abstraction spread across 
+			multiple classes, with properties and methods available in the child class as if by magic.
+		</p>
+
+		<div class="needs-example">OO thing with implementation all over the place, using magic variables</div>
+		<div class="needs-example">better, compositional implementation</div>
+
+		<h3>Refactoring code & testing</h3>
+
+		<p>
+			One last note on the topic of clean code: keeping your code clean is going to require frequent refactoring. And reliable 
+			refactoring requires good tests. Good tests mean tests that test the <i>intent</i> of your code, <i>not</i> the implementation 
+			details.
+		</p>
+
+		<div class="needs-example">test that tests implementation details</div>
+		<div class="needs-example">better test</div>
+
+		<p>
+			One thing that can help with this is the use of Test Driven Development (TDD). If you've not heard of TDD, the idea is that you 
+			write tests based on your acceptance criteria, and <i>then</i> write the code to pass the tests. If you've never tried TDD before, 
+			I highly recommend giving it a try, at least for a little while. I personally find it very helpful when fixing bugs, and writing 
+			"utility" code, like state management, or transformations. I find it less helpful for writing component code.
+		</p>
+
+		<p>
+			"Uncle" Bob Martin is a huge proponent of TDD. You can find a bunch of articles about it on his blog, including 
+			<a href="https://blog.cleancoder.com/uncle-bob/2016/03/19/GivingUpOnTDD.html">this one on designing tests</a>.
+		</p>
+
+		<p>
+			If you're working with legacy code which doesn't have good test coverage, things can get quite tricky. Often, it's incredibly difficult to work 
 			out what the original author's intent was. In these cases, I recommend writing tests that test the current behaviour (whether it's correct or 
 			not), and working against those. Make sure you clearly communicate that this is what you're doing.
 		</p>
 
-		<p class="in-draft">
+		<div class="needs-example">writing tests for legacy code</div>
+
+		<p>
 			When it comes time to actually do the refactoring, smaller is better. Refactor a small piece of code, and check that it still works. Then do 
 			another small piece. Once you've done a few small pieces you can combine them into a larger refactor. Ideally though, you should be able to 
 			drop your refactoring work at just about any point, and still have functioning code.
 		</p>
 
-		<p class="in-draft">
+		<p>
 		 And finally, make deliberate decisions about what code you're going to refactor. Generally speaking, only refactor code that you're actually 
 		 touching. It might be tempting to re-write that 1000-line component written in archaic JavaScript with inconsistent naming everywhere, but if 
 		 it's actually working ok, then you're more likely to just introduce bugs. If you find yourself needing to make changes to it, then feel free to 
@@ -1341,7 +1397,7 @@ const arrayCopy2 = [...arrayToCopy];
 		</p>
 	</section>
 	
-	<section class="needs-review">
+	<section>
 		<h2 id="modern-javascript">Modern JavaScript</h2>
 
 		<p>
@@ -1361,18 +1417,41 @@ const arrayCopy2 = [...arrayToCopy];
 			<code>const</code>, and <code>var</code>. Each declaration type has different properties.
 		</p>
 
-		<table>
+		<style>
+			table.variables {
+				border-collapse: collapse;
+				margin: auto;
+			}
+			table.variables th, table.variables td {
+				padding: 1em;
+			}
+			table.variables tr:not(:first-child) td:not(:first-child) {
+				border: 1px solid currentColor;
+				text-align: center;
+			}
+			table.variables tr:first-child th {
+				border-bottom: 2px solid currentColor;
+				padding-bottom: .25em;
+			}
+			table.variables tr:not(:first-child) th {
+				border-right: 2px solid currentColor;
+				padding-right: 0.5em;
+				text-align: right;
+			}
+		</style>
+
+		<table class="variables">
 			<tr>
 				<td></td><th>Mutable</th><th>Scoping</th>
 			</tr>
 			<tr>
-				<th>var</th><td>✔️</td><td>function</td>
+				<th><code>var</code></th><td>✔️</td><td>function</td>
 			</tr>
 			<tr>
-				<th>let</th><td>✔️</td><td>block</td>
+				<th><code>let</code></th><td>✔️</td><td>block</td>
 			</tr>
 			<tr>
-				<th>const</th><td>❌</td><td>block</td>
+				<th><code>const</code></th><td>❌</td><td>block</td>
 			</tr>
 		</table>
 
@@ -1425,9 +1504,11 @@ galahad.favouriteColour = 'yellow'; // Quite alright
 		</p>
 
 		<p>
-			There are plenty of people who disagree with this suggestion though, or just plain don't care. Dan Abramov outlines the arguments 
-			for both sides in <a href="https://overreacted.io/on-let-vs-const/">a blog post on the topic</a>. When it comes down to it, it's unlikely
-			that it's going to make a huge difference which you choose, so just pick one and go with it.
+			There are plenty of people who would disagree with this assessment though. There is an argument that declaring everything as 
+			<code>const</code> dilutes its meaningfulness. Instead you should declare everything as <code>let</code>, unless you specifically 
+			need <code>const</code>. And there are people who don't care either way - just pick one and stick with it. Dan Abramov summarises
+			the arguments for both sides in <a href="https://overreacted.io/on-let-vs-const/">a blog post on the topic</a>, if you're interested.
+			When it comes down to it, it's unlikely that it's going to make a huge difference which you choose, so just pick one and go with it.
 		</p>
 
 		<h4>Scoping</h4>
@@ -1528,11 +1609,11 @@ const greeting = isMorning ? 'Good morning!' : 'Good afternoon!';
 		<p>
 			ES6 also added a bunch of new functions to <code>Array.prototype</code>, for looping through and manipulating data. These functions 
 			let us write cleaner code by allowing us to write more declarative code. Declarative code describes <i>what</i> the code should do,
-			rather than <i>how</i> to do it. CSS and SQL are both examples of declarative coding taken to the extreme - 100% declarative.
+			rather than <i>how</i> to do it. CSS and SQL are both examples of declarative coding taken to the extreme - 100% declarative languages.
 		</p>
 
 		<p>
-			The advantage of declarative code, is that it hides the implementation details that we're not interested in. For example, 
+			The advantage of declarative code is that it hides the implementation details that we're not interested in. For example, 
 			<code>Array.protoype.forEach</code> allows us to do something for each item in an array, without worrying about the details of how
 			the loop actually works. Or, to put it another way, it increases the signal-to-noise ratio.
 		</p>
@@ -1699,35 +1780,37 @@ for (let i = 0; i < accounts.length; i++) {
 		<p>Similarly, if you would prefer to find the index of an item, rather than the item itself, you can use <code>findIndex</code>.</p>
 
 		<pre><code>
-function removeItemById(list, id) {
-	const index = list.findIndex(item => item.id === id);
-	list.splice(index, 1);
+function removeAccountById(accounts, id) {
+	const index = accounts.findIndex(item => item.id === id);
+	accounts.splice(index, 1);
 }
 		</code></pre>
 
 		<p>
 			Sometimes, you don't just want to find the first item that matches your criteria - you want to find all the matching items.
-			For example, imagine you had a list of postcodes, and you wanted to find all the ones that are in Queensland. (Postcodes in 
-			Queensland all start with '4'). The postcodes are stored as strings.
+			For example, rather than finding an account that matches a particular name, we might want to find all the accounts that are 
+			currently active.
 		</p>
 
 		<p>In traditional JavaScript, we could do this something like...</p>
 
 		<pre><code>
-const queenslandPostcodes = [];
-for (let i = 0, i < postcodes.length; i++) {
-	const postcode = postcodes[i];
-	if (postcode.startsWith(4)) {
-		queenslandPostcodes.push(postcode);
+const activeAccounts = [];
+for (let i = 0, i < accounts.length; i++) {
+	const account = accounts[i];
+	if (account.status === ACTIVE) {
+		activeAccounts.push(postcode);
 	}
 }
 		</code></pre>
 
-		<p>(The String prototype got a bunch of new declarative methods too - <code>startsWith</code> is one of those)</p>
-
 		<p>Or we could do the same thing with <code>Array.prototype.filter...</code></p>
 
-		<pre><code>const queenslandPostcodes = postcodes.filter(postcode => postcode.startsWith('4');</code></pre>
+		<pre><code>const activeAccounts = accounts.filter(account => account.status === ACTIVE);</code></pre>
+
+		<p>Or, with object destructuring</p>
+
+		<pre><code>const activeAccounts = accounts.filter(({status}) => status === ACTIVE);</code></pre>
 
 		<h4><code>Array.prototype.some and Array.prototype.every</code></h4>
 
@@ -1787,7 +1870,7 @@ for (let i = 0; i < items.length; i++) {
 		</code></pre>
 
 		<p>
-			You might notice that this is essentially the same code as the previous example, with all the trues and falses around the other way.
+			You might notice that this is essentially the same loop as the previous example, with all the trues and falses around the other way.
 			As such, we could implement it using an inversion of <code>some</code>.
 		</p>
 
@@ -1810,11 +1893,6 @@ const allDigital = items.every(item => isDigitalMedia(item));
 
 		<p>
 			Remember, you don't need to define your callbacks inline. You can always define them somewhere else and just pass in the function name.
-			It doesn't matter what you call the parameters of your callback function - the first one will get the value of the current item. If you declare 
-			a second and third parameter, they'll get the value of the index of the current item and the list itself respectively. If you declare fewer than
-			three parameters, then the index and/or list values just won't be available in your function. It won't cause any errors. And if you declare more 
-			than three parameters, the remainder will just be undefined. JavaScript is very forgiving with function parameters. This can be a good thing and 
-			a bad thing.
 		</p>
 
 		<h4><code>Array.prototype.includes</code></h4>
@@ -1839,7 +1917,7 @@ const isAdmin = user.roles.indexOf(Roles.ADMIN) > -1;
 
 		<pre><code>const isAdmin = user.roles.includes(Roles.ADMIN)</code></pre>
 
-		<p>This function can be particularly useful when combined with <code>map</code> extracting a primitive value, like the following example</p>
+		<p>This function can be particularly useful when combined with <code>map</code> extracting a primitive value, as in the following example.</p>
 
 		<pre><code>
 const someoneHasACat = users.map(user => user.pet).includes('cat');
@@ -1892,7 +1970,7 @@ const total = numbers.reduce((sum, number) => sum + number, 0); // 12
 		</ol>
 
 		<p>
-			It turns out that summing the contents of an array isn't actually a thing that comes up that often though. But <code>reduce</code>
+			It turns out that summing the contents of an array isn't actually a thing that comes up that often though. Luckily, <code>reduce</code>
 			can be used for other things! The most common is turning an array "inside out". Say we had an API that returned a list of hospitals 
 			that a doctor had shifts at. And for each hospital, it had a list of shifts at that hospital. We could find a list of all the 
 			shifts the doctor had at all hospitals using <code>reduce</code>.
@@ -1908,16 +1986,16 @@ const shifts = getHospitals((shifts, hospital) => shifts.concat(hospital.shift),
 		</p>
 
 		<p>
-			Take this example, for instance, based on something in a real production code base. We're building a list of codes for 
-			devices that the user has selected on a form. We go through each checkbox on the form, and test whether it has been 
-			checked (selected). If it has, then grab the device that has the same index as our checkbox from a list of devices, and 
-			push its value into our list of codes.
+			Take this example (based on a true story). We've got a list of devices. 
+			We've also got a form with a list of checkboxes. Each checkbox correlates to a device in the list - so the first 
+			checkbox is for the first device, the second checkbox is for the second device, and so on. We want to get the list of 
+			codes belonging to the devices that the user has selected.
 		</p>
 
 		<pre><code>
-const selectedDevices = checkboxes.reduce((codes, checkbox, index) => {
+const selectedDeviceCodes = checkboxes.reduce((codes, checkbox, index) => {
 	if (checkbox.selected) {
-		codes.push(devices[index].value);
+		codes.push(devices[index].code);
 	}
 	return codes;
 }, []);
@@ -1928,8 +2006,8 @@ const selectedDevices = checkboxes.reduce((codes, checkbox, index) => {
 		</p>
 
 		<pre><code>
-const selectedDevices = devices.filter((device, index) => checkboxes[index].selected)
-															 .map(device => device.value)
+const selectedDeviceCodes = devices.filter((device, index) => checkboxes[index].selected)
+															 .map(device => device.code)
 		</code></pre>
 
 		<p>
@@ -1982,7 +2060,8 @@ function setPrices(items) {
 		</code></pre>
 
 		<p>
-			You'll notice that it's the callback function that is <code>async</code> in this case. This is because 
+			You'll notice that it's the callback function that is <code>async</code> in this case - not the <code>setPrices</code> function. 
+			This is because 
 			<code>await</code> can only be used immediately inside an <code>async</code> function. This means that 
 			the callback function will fire off the request to fetch the price, and then immediately continue to the 
 			next item, without waiting for the response to come back.
@@ -2051,7 +2130,8 @@ async function setPrices(items) {
 		<ol>
 			<li>
 				This is a <code>for ... of</code> loop. It is a different beast from a <code>for ... in</code> loop, and should not be confused with
-				it. If you can think of a way to remember which is which, I'd love to hear it.
+				it. The <code>for ... of</code> loop iterates through the items in an array-like thing. The <code>for ... in</code> loop iterates 
+				through the properties of an object. If you can think of a way to remember which is which, I'd love to hear it.
 			</li>
 			<li>
 				You can declare your <code>item</code> using <code>const</code>, if you want. This is due to the way scope works in <code>for</code>
@@ -2105,7 +2185,7 @@ const request = {
 };
 		</code></pre>
 
-		<h4>Object and array destructuring</h4>
+		<h4>Object destructuring</h4>
 
 		<p>
 			While the object property shorthand makes it easier to create objects, object destructuring makes it easier to extract things 
@@ -2154,7 +2234,7 @@ console.log(id); // '34352'
 		</code></pre>
 
 		<p>
-			Note that the property name goes first, the variable being declared second. So here, we declaring a variable named <code>id</code>, which is 
+			Note that the property name goes first, the variable being declared second. So here, we are declaring a variable named <code>id</code>, which is 
 			taking the value of <code>account.number</code>. I personally find this a little confusing, and would think twice about using it.
 		</p>
 
@@ -2224,8 +2304,10 @@ function makeRequest({ method, url, body }) {
 			which properties the config object should have.
 		</p>
 
+		<h4>Array destructuring</h4>
+
 		<p>
-			But, wait, there's more! Objects aren't the only thing that can be destructured - we can do the same thing with arrays!
+			But wait - there's more! Objects aren't the only thing that can be destructured: we can do the same thing with arrays!
 			For example, the new <code>Object.entries</code> function returns the properties of an object as a array of arrays 
 			containing the property name and value.
 		</p>
@@ -2244,14 +2326,14 @@ console.log(properties); // [['name', 'Ellen Ripley'], ['type', 'PHONE'], ['numb
 		<p>Array destructuring can make processing these properties simpler.</p>
 		
 		<pre><code>
-const firstProperty = properties[0];
+const firstProperty = properties[0]; // ['name', 'Ellen Ripley']
 const [name, value] = firstProperty;
 
 console.log(name); // 'name'
 console.log(value); // 'Ellen Ripley'
 		</code></pre>
 
-		<p>We can use array destructing on function parameters as well</p>
+		<p>We can use array destructuring on function parameters as well.</p>
 
 		<pre><code>
 const copyOfAccount;
@@ -2315,14 +2397,14 @@ const smallest = Math.min.apply(undefined, numbers);
 
 		<p>
 			(If you're not familiar with <code>apply</code>, its primary purpose is to define the value of <code>this</code> when a function 
-			is called. For more information on <code>apply</code> (and its close relative <code>call</code>), check out 
+			is called. For more information on <code>apply</code> - and its close relative <code>call</code> - check out 
 			<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply">MDN's article 
 			on Function.prototype.apply</a>. For more information on <code>this</code> and how <code>this</code>-binding works, wait for the next 
 			section!)
 		</p>
 
 		<p>
-			Now, while using <code>apply</code> certainly works, it's not exactly the most readable code. What is that <code>undefined</code> doing 
+			Now, while using <code>apply</code> certainly works, it's not exactly the most elegant code. What is that <code>undefined</code> doing 
 			in the middle there? (We actually don't care about the value of <code>this</code> in this example, so we could have passed anything in 
 			as that first argument, which is even more confusing).
 		</p>
@@ -2343,7 +2425,7 @@ const smallest = Math.min(...numbers);
 
 		<p>
 			Rest parameters also work the other way - to convert a list of arguments into an array. For example, we could define a <code>sum</code>
-			function, which takes any number of arguments, and converts them into an array.
+			function, which takes any number of arguments, and returns the sum of all of them.
 		</p>
 
 		<pre><code>
@@ -2514,7 +2596,7 @@ const evenNumbersArrowFunction = numbers.filter(number => number % 2 === 0);
 		</code></pre>
 
 		<p>
-			As you can see, the arrow function is shorter, and has a greater signal-to-noise ration. However, arrow functions are special for another 
+			As you can see, the arrow function is shorter, and has a greater signal-to-noise ratio. However, arrow functions are special for another 
 			reason too. To understand this, we need to look at the <code>this</code> keyword in JavaScript.
 		</p>
 
@@ -2530,8 +2612,7 @@ const that = this;
 		<p>
 			While this hack works (and is used a lot), it's not really clean code. We're adding variables that don't add any meaning. And, in older code, 
 			before the introduction of <code>const</code>, there was nothing stopping us from assigning <code>that</code> to something else. Today,
-			there are plenty of ways to manage <code>this</code> without resorting to hacks, and I would see the code above as a pretty clear indicator 
-			that the author didn't really get how <code>this</code> works.
+			there are plenty of ways to manage <code>this</code> without resorting to hacks.
 		</p>
 
 		<p>
@@ -2575,8 +2656,9 @@ button.addEventListener('click', function () {
 		<p>However, like I said, there are a bunch of ways to override this default behaviour.</p>
 		<ol>
 			<li>
-				If the function is called from the global scope, <code>this</code> refers to the <code>window</code> object.
+				If the function is called from the global scope, with no caller object, <code>this</code> refers to the <code>window</code> object.
 				<pre><code>
+window.name = 'Global demo';
 const person = {
 	name: 'Sarah Connor',
 	sayHello: function () {
@@ -2585,7 +2667,7 @@ const person = {
 }
 
 const sayHello = person.sayHello;
-sayHello(); // Hello
+sayHello(); // Hello Global demo
 				</code></pre>
 				I mean, this isn't really overriding the default behaviour, just kind of dealing with a situation where the default 
 				behaviour is unclear, because there is no obvious caller.
@@ -2650,24 +2732,44 @@ boundHello.call(person); // Hello Katniss Everdeen
 			</li>
 			<li>
 				And finally, if the function is called with the <code>new</code> keyword, then <code>this</code> refers to a brand new object, 
-				that will be returned by the function. This can't be overried by binding the function.
-			</li>
+				that will be returned by the function. This can't be overridden by binding the function.
 
-			<pre><code>
+				<pre><code>
 function Ship(name) {
 	this.name = name;
 }
 
+// 1
 const objectShip = Ship('Planet Express');
 console.log(objectShip.name); // Uncaught TypeError: Cannot read property 'name' of undefined
 
+// 2
 const constructedShip = new Ship('Planet Express');
 console.log(constructedShip.name); // Planet Express
 
+// 3
 const boundShip = Ship.bind({ name: 'Millenium Falcon' });
 const constructedBoundShip = new boundShip('Planet Express');
 console.log(constructedBoundShip.name); // Planet Express
-			</code></pre>
+				</code></pre>
+
+				<p>
+					In the first example, we didn't use the <code>new</code> keyword, so within <code>Ship()</code>, <code>this</code> refers to 
+					<code>window</code>. Additionally, <code>Ship()</code> doesn't actually return anything.
+				</p>
+
+				<p>
+					In the second example, using the <code>new</code> keyword turns <code>Ship</code> into a constructor. Constructors create a brand new 
+					object, and return it implicitly. (You don't need to have an explicit return statement in a constructor.) Within a constructor,
+					<code>this</code> refers to the newly created object. 
+				</p>
+
+				<p>
+					In the third example, we create a new function, <code>boundShip</code>, but calling <code>bind</code> on <code>Ship</code>.
+					We call <code>boundShip</code> as a constructor. Within the constructor, <code>this</code> still refers to the newly 
+					constructed object - not the object we passed into <code>bind</code>.
+				</p>
+			</li>
 		</ol>
 
 		<p>
@@ -2675,29 +2777,29 @@ console.log(constructedBoundShip.name); // Planet Express
 		</p>
 
 		<pre><code>
-			const uhura = {
-				givenName: 'Nyota',
-				familyName: 'Uhura',
-				sayHello: () => {
-					console.log('hello', this.givenName, this.familyName);
-				}
-			};
+const uhura = {
+	givenName: 'Nyota',
+	familyName: 'Uhura',
+	sayHello: () => {
+		console.log('hello', this.givenName, this.familyName);
+	}
+};
 
-			uhura.sayHello(); // Hello undefined undefined
+uhura.sayHello(); // Hello undefined undefined
 		</code></pre>
 
 		<p>Instead, they'll use the <code>this</code> from the context that they're declared in.</p>
 
 		<pre><code>
-			class Person {
-				constructor(name) {
-					this.name = name;
-					this.sayHello = () => console.log('Hello', this.name);
-				}
-			}
+class Person {
+	constructor(name) {
+		this.name = name;
+		this.sayHello = () => console.log('Hello', this.name);
+	}
+}
 
-			const uhura = new Person('Uhura');
-			uhura.sayHello(); // Hello Uhura
+const uhura = new Person('Uhura');
+uhura.sayHello(); // Hello Uhura
 		</code></pre>
 
 		<p>So how does <code>this</code>-binding in arrow functions behave in our exceptional circumstances?</p>
@@ -2745,8 +2847,8 @@ uhura.sayHello.call(katniss); // Hello Uhura
 				And finally, you can't use <code>new</code> on an arrow function.
 
 				<pre><code>
-					const Person = (name) => ({ name });
-					const person = new Person('Uhura'); // Uncaught TypeError: Person is not a constructor
+const Person = (name) => ({ name });
+const person = new Person('Uhura'); // Uncaught TypeError: Person is not a constructor
 				</code></pre>
 			</li>
 		</ol>
@@ -2756,7 +2858,7 @@ uhura.sayHello.call(katniss); // Hello Uhura
 	<section class="incomplete"><h2 id="architecting-applications">Architecting applications</h2></section>
 	<section class="incomplete"><h2 id="testing">Testing</h2></section>
 
-	<section class="needs-review">
+	<section>
 		<h2 id="semantic-html">Semantic HTML & accessibility</h2>
 
 		<p>
@@ -2833,7 +2935,7 @@ uhura.sayHello.call(katniss); // Hello Uhura
 			</p>
 
 			<p>
-				Just remember that while ARIA <i>is</i> important - but it shouldn't be the first tool that you reach for when building accessible apps.
+				Just remember that while ARIA <i>is</i> important, it shouldn't be the first tool that you reach for when building accessible apps.
 			</p>			
 		</aside>
 
@@ -2843,7 +2945,8 @@ uhura.sayHello.call(katniss); // Hello Uhura
 
 		<p>
 			Every page should contain some landmarks. Landmarks are things like headings, sections, navigation, and sidebars. Using these types of 
-			elements is just good design - imagine trying to read this page if it wasn't broken up into sections, or didn't have any headings!
+			elements is generally essential for good design - imagine trying to read this page if it wasn't broken up into sections, 
+			or didn't have any headings!
 		</p>
 		
 		<p>If we use semantic HTML to demark these elements, then our page will still be 
@@ -2852,7 +2955,13 @@ uhura.sayHello.call(katniss); // Hello Uhura
 			HTML in an IDE.
 		</p>
 
-		<div class="needs-example">an image showing a page rendered with CSS, and no CSS, but still being ok</div>
+		<figure class="example">
+			<img src="images/no-css.png" alt="The current page, with no CSS. The browser default styles mean it is still quite readable.">
+			<figcaption>
+				The current page, without CSS. As you can see, it's still quite readable. The headings, paragraphs, lists, and links are all 
+				clearly marked. Even the quote from Martin Fowler has a special "quote" style.
+			</figcaption>
+		</figure>
 
 		<p>
 			Landmark HTML elements include heading tags (<code>&lt;h1&gt; - &lt;h6&gt;</code>), <code>&lt;header&gt;</code>, <code>&lt;footer&gt;</code>,
@@ -2865,11 +2974,11 @@ uhura.sayHello.call(katniss); // Hello Uhura
 
 		<p>
 			If you're building a SPA with multiple logical pages, then you should give each page a distinct title via the 
-			<code>&lt;title&gt;</code> element. For example, on Twitter, the feed page has the title <code>Latest Tweets / Twitter</code>, while the 
+			<code>&lt;title&gt;</code> element, within <code>&lt;head&gt;</code>. For example, on Twitter, the feed page has the title <code>Latest Tweets / Twitter</code>, while the 
 			notifications page is <code>Notifications / Twitter</code>. These titles help screen reader users know when they've navigated to a new 
 			page, but they also help sighted users distinguish between browser tabs, as the <code>&lt;title&gt;</code> element is used as the tab 
 			title. The title should include the specific page name, followed by your app name. (Put the app name last. The tab title is likely to be 
-			truncated, but sighted users can use the favicon to distinguish between apps.)
+			truncated, and sighted users can use the favicon to distinguish between apps.)
 		</p>
 
 		<img src="images/twitter-titles.png" alt="each page on Twitter has a distinctive title, displayed in the tab heading">
@@ -3006,7 +3115,6 @@ uhura.sayHello.call(katniss); // Hello Uhura
 
 				#styled-checkbox:checked + label #power-button {
 					border-color: greenyellow;
-					border-width: 5px;
 					filter: drop-shadow(0 0 10px rgba(64, 245, 47, 0.377));
 				}
 			</style>
@@ -3038,11 +3146,11 @@ uhura.sayHello.call(katniss); // Hello Uhura
 			<img src="images/horse-drinking.jpg" alt="horse drinking from beer glass by picking the glass up in its teeth">
 		</div>
 
-		<pre><code>
-			...
-			&lt;img src="images/giraffe-drinking.jpg" alt=""&gt;
-			...
-			&lt;img src="images/horse-drinking.jpg" alt="horse drinking from beer glass by picking the glass up in its teeth"&gt;
+		<pre><code class="html">
+...
+&lt;img src="images/giraffe-drinking.jpg" alt=""&gt;
+...
+&lt;img src="images/horse-drinking.jpg" alt="horse drinking from beer glass by picking the glass up in its teeth"&gt;
 		</code></pre>
 
 		<p>
@@ -3060,7 +3168,7 @@ uhura.sayHello.call(katniss); // Hello Uhura
 		<p>
 			As well as being descriptive, your <code>alt</code> text also needs to be succinct (which can seem like a tall order!). Screen readers will only 
 			read out 125 characters, so make sure you don't waste any! Especially make sure that you don't start your descriptions with "image of" or 
-			"picture showing". The screen reader will announce that it's an image, and a search engine bot will know from the image tag. Adding this 
+			"picture showing". The screen reader will announce that it's an image, and a search engine bot will know from the <code>img</code> tag. Adding this 
 			information to the <code>alt</code> text is repetitive and boring.
 		</p>
 
@@ -3121,23 +3229,48 @@ uhura.sayHello.call(katniss); // Hello Uhura
 			only going to interact with a few times a month - not so much.
 		</p>
 
-		<div class="needs-example">image of game controls vs banking app icons</div>
+		<style>
+			.example.game-vs-bank {
+				display: grid;
+				grid-template-columns: 17fr 6fr;
+				align-items: center;
+				grid-gap: 10px;
+			}
+
+			.example.game-vs-bank img {
+				border: 0;
+				padding: 0;
+			}
+
+			.example.game-vs-bank figcaption {
+				grid-column: 1 / -1;
+			}
+		</style>
+
+		<figure class="example game-vs-bank">
+			<img src="images/angrybirds.jpg" alt="Angry birds game, using icon-based controls">
+			<img src="images/ing.png" alt="ING bank menu, showing icons with text labels">
+			<figcaption>
+				The Angry Birds game (left) relies entirely on non-text-based controls. The ING banking app (right)	opts for a slide-out 
+				menu on smaller screens, so there's enough space to add text along with the icon images.		
+			</figcaption>
+		</figure>
 
 		<p>
 			For more information on the topic (including some pratical exercises) check out <a href="https://webaim.org/techniques/alttext/">
 			WebAIM page on Alternative Text</a>.
 		</p>
 
-		<h4>Tricky labels</h4>
+		<h4 class="needs-review">Tricky labels</h4 c>
 
-		<p>
+		<p class="needs-review">
 			Finally, sometimes there's just no good way to convey information non-visually. For example, HTML doesn't provide us with 
 			an obvious way to label a group of radiobuttons.
 		</p>
 
 		<div class="needs-example">question with radio button answers</div>
 
-		<p>
+		<p class="needs-review">
 			This is the kind of thing we need ARIA for! We can use <code>aria-describedby</code> to add a text description directly on the 
 			element in question - like adding an <code>alt</code> tag. Or, we can use <code>aria-labelledby</code> to provide the ID 
 			of an element that describes this element - like linking an input and a label using the <code>for</code> attribute. The important 
@@ -3147,7 +3280,7 @@ uhura.sayHello.call(katniss); // Hello Uhura
 
 		<div class="needs-example">implementing aria-labelledby for above radio buttons</div>
 
-		<p>
+		<p class="needs-review">
 			<a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_aria-labelledby_attribute">
 			MDN's page on aria-labelledby</a> has a tonne of use cases and examples.
 		</p>
@@ -3170,9 +3303,8 @@ uhura.sayHello.call(katniss); // Hello Uhura
 		</figure>
 
 		<p>
-			As you can see, mobile usage accounted for almost 10% more users than desktop usage in December last year, and the gap is 
-			widening. And tablets account for a very small percentage of users. These figures are for the entire world though - if we 
-			restrict ourselves to data from Australian users, then the picture is a little different, but not significantly.
+			As you can see, mobile usage accounted for almost 10% more users than desktop usage worldwide in December last year, and the gap is 
+			widening. In Australia, the picture is a little different, but not significantly.
 		</p>
 
 		<figure class="example">
@@ -3364,7 +3496,7 @@ heading.focus();
 					In fact, I would recommend always using click and ditching hover altogether. Not only does it not work on touchscreens, or 
 					with a keyboard, it can be difficult to use for people 
 				</p>
-				<ul>
+				<ul style="margin-bottom: 20px">
 					<li>with motor difficulties</li>
 					<li>using a device with a small screen</li>
 					<li>using a device with an awkward mouse input (like a trackpoint)</li>
@@ -3372,7 +3504,7 @@ heading.focus();
 					<li>using a standard trackpad, but on a train, or a bus, or a plane</li>
 				</ul>
 
-				<figure class="example">
+				<figure class="example" style="margin-bottom: 20px">
 					<img src="images/lenovo-trackpoint.png" alt="" style="border: 0; padding: 0; margin-top: 0">
 					<figcaption>
 						Lenovo keyboard with trackpoint. (It's the red dot between the <kbd>G</kbd> and <kbd>H</kbd> keys, if you're not familiar with 
@@ -3393,7 +3525,8 @@ heading.focus();
 				suggests a minimum of 44px by 44px. Google's <a href="https://developer.android.com/design">Android design guide</a>
 				recommends 48px by 48px. Some people who actually 
 				conducted a <a href="https://dl.acm.org/doi/10.1145/1152215.1152260">study into touch target sizes</a>, recommend a minimum size 
-				of 1cm squared. That's a bit hard to specify in CSS though.
+				of 1cm squared. That's a bit hard to specify in CSS though, so you're going to need to experiment a little to work out how 
+				big your touch targets end up.
 			</li>
 		</ul>
 
@@ -3434,15 +3567,15 @@ heading.focus();
 		</p>
 
 		<p>
-			And finally, I hope all this has convinced you that accessibility is about building an app that works for all your users.
-			It's not just an annoying thing you do at the end to cater for some small segment of the population. Furthermore, building 
-			accessibility through semantic HTML isn't just good for users - it's good for developers as well. It results in code that is 
-			much cleaner, and much easier to understand. So, building an accessible website doesn't have to be time-consuming or 
-			expensive - it can actually be <i>faster</i> than the alternative.
+			And finally, I hope I've convinced you that accessibility isn't some annoying thing you do at the end to cater for some small segment 
+			of the population. It's about building an app that works well for all your users, in all the situations they find themselves in. 
+			Furthermore, building accessibilty through semantic HTML isn't just good for users - it's good for developers as well. It results in 
+			code that is cleaner, and easier to understand. Building an accessible website doesn't have to be time-consuming or expensive - 
+			it can actually be <i>faster</i> than the alternative.
 		</p>
 	</section>
 
-	<section class="needs-review">
+	<section>
 		<h2 id="understanding-css">Understanding CSS</h2>
 
 		<p>
@@ -3497,7 +3630,7 @@ heading.focus();
 			are <code>border-box</code> and <code>content-box</code>.
 		</p>
 
-		<dl>
+		<dl style="margin-bottom: var(--margin-size)">
 			<dt><code>border-box</code></dt>
 			<dd>
 				The width and height refer to the total size of the box, including the border and padding
@@ -3563,7 +3696,10 @@ heading.focus();
 			</script>
 			
 			<figcaption>
-				Adjust the size of the box by changing the <code>box-sizing</code>
+				Adjust the size of the box by changing the <code>box-sizing</code>. When <code>border-box</code> is selected, the total 
+				width of the box is 100px: 2 * 4px of border + 2 * 20px of padding + 52px of content. When <code>content-box</code> is 
+				selected, the content is 100px wide. 2 * 4px of border + 2 * 20px of padding are added on top of this, giving a total width of 
+				148px. You can find this information in the CSS section of your browser dev tools.
 			</figcaption>
 		</figure>
 
@@ -3602,10 +3738,14 @@ heading.focus();
 			is left to right, across the page. On an Arabic page, it's right to left. On a Japanese page, it's top to bottom, down the page.
 		</p>
 
+		<div class="needs-example">diagram of inline directions</div>
+
 		<p>
 			The block direction is the direction that you add paragraphs to the page. On a page written in English or Arabic, it's top 
 			to bottom, down the page. In Japanese, it's right-to-left, across the page.
 		</p>
+
+		<div class="needs-example">diagram of block direction</div>
 
 		<p>
 			Why do we use the terms inline and block, rather than just saying across and down? Because we want CSS to be as language-agnostic 
@@ -3620,7 +3760,7 @@ heading.focus();
 			we'll see shortly. But they can all be thought of as a type of <code>block</code>, or a type of <code>inline</code>). Elements with 
 			<code>display: inline</code> are added in the inline direction. Elements with <code>display: block</code> are added in the block 
 			direction. <code>span</code> is your default inline element, with no other semantics. <code>div</code> is your default block element.
-			(But this can be overridden in CSS.)
+			The <code>displ</code> can be overridden in CSS.
 		</p>
 
 		<div class="example add-block-inline">
@@ -3728,6 +3868,8 @@ heading.focus();
 			around as a margin-ghost.
 		</p>
 
+		<div class="needs-example">a margin ghost</div>
+
 		<p>
 			If you think you've been affected by margin-collapse, or you just want to know more about it, check out 
 			<a href="https://www.smashingmagazine.com/2019/07/margins-in-css/">Rachel Andrew's article on CSS margins</a>.
@@ -3745,23 +3887,24 @@ heading.focus();
 		<p>
 			In order to layout inline elements (and text), the browser creates a line box. The line box is a container that the 
 			browser uses to place elements - it doesn't appear in the DOM, and it can't be styled. It's kind of like adding pencil 
-			lines that are erased later. Inline elements (and text) are placed in the line box, until the next element won't fit. 
+			lines, that you erase once you've finished writing. Inline elements (and text) are placed in the line box, until the next element won't fit. 
 			Then the browser creates a new linebox, directly below the previous one, and adds the remaining elements to the new line box.
 		</p>
 
 		<p>
 			The width of the line box is the width of the parent element's content box. (In vertical languages, this will actually be the 
 			height. I'm just going to assume a horizontal language here though, because, honestly, this stuff is already confusing enough.)
-			The height of the line box is determined by the current font - it depends on both the font-size, and some of the font's internal 
-			metrics. If there are multiple fonts in the one line box, it's up to the browser to decide what height to use, but it'll probably 
-			pick one based on the tallest font.
+			The height of the line box is determined by its content. If the line box only contains text, it'll be based on the font size. If
+			it contains non-text elements, it'll be based on the height of the elements. If it contains a mixture or text and non-text, or 
+			a number of different font sizes, then it's up to the browser to decide what height to use. It'll probably pick something slightly 
+			bigger than the biggest thing in the line box.
 		</p>
 
 		<figure class="example linebox">
 			<button onclick="addToLinebox()">Add an inline element</button>
 			<div class="container" id="linebox"></div>
 			<figcaption>
-				The shaded area between the grey lines represents the line box.
+				The shaded area between the grey lines represents the line box. Notice that the line box is very slightly bigger than its content.
 			</figcaption>
 		</figure>
 
@@ -3797,7 +3940,7 @@ heading.focus();
 
 		<p>
 			If you need to, you can set the height of the line box yourself, using the <code>line-height</code> property. If you set the 
-			<code>line-height</code> of a block element, it will set the minimum height of all line boxes inside that element.
+			<code>line-height</code> of a block element, it will set the <i>minimum</i> height of all line boxes inside that element.
 		</p>
 
 		<figure class="example line-height">
@@ -3835,11 +3978,11 @@ heading.focus();
 		</script>
 		
 		<p>
-			If you set it on an inline element, then that height will be used in the line box height calculation, along with all the 
+			If you set <code>line-height</code> on an inline element, then that height will be used in the line box height calculation, along with all the 
 			fonts and stuff. In the example below, you can see that changing the line-height for one of the elements doesn't change the 
 			height of any elements, but it changes the spacing between the lines. You can also see that the line-height of each line box 
-			is calculated independently, depending only on the elements in that particular line box. Because of this, getting even line 
-			spacing, while using different sized fonts, is surprisingly difficult in CSS.
+			is calculated independently, depending only on the elements in that particular line box. Because of this, getting the line spacing 
+			you really want can be surprisingly difficult in CSS.
 		</p>
 
 		<figure class="example inline">
@@ -3869,10 +4012,6 @@ heading.focus();
 			}
 		</script>
 			
-		<p>
-			You should use a unit-less value for <code>line-height</code>, so that it scales properly if the font size changes.
-		</p>
-
 		<h4>Inline size</h4>
 
 		<p>
@@ -4006,8 +4145,8 @@ heading.focus();
 
 		<p>
 			The outer value determines how the element itself is placed in the flow. The inner value determines how the element's children 
-			are laid out. So <code>display: block</code> is now <code>display: block flow</code>. <code>display: inline-flex</code> would be 
-			<code>display: inline flex</code>
+			are laid out. So <code>display: block</code> is now <code>display: block flow</code> and <code>display: inline-flex</code> would be 
+			<code>display: inline flex</code>.
 		</p>
 
 		<p>
@@ -4052,6 +4191,8 @@ heading.focus();
 			at five different viewport sizes.
 		</p>
 
+		<div class="needs-example">bootstrap</div>
+
 		<p>
 			But don't stress - modern CSS now gives us a bunch of different options for controlling layouts. These options are pure CSS 
 			(you don't need to add extra HTML), and they are completely responsive.
@@ -4066,14 +4207,16 @@ heading.focus();
 			remember that the web is a dynamic medium, and that CSS is specifically designed to support that dynamicism.
 		</p>
 
-		<h3><code>display: flex</code></h3>
+		<h3>Flexbox</h3>
 
 		<p>
 			<code>display: flex</code> creates a flexible, one-dimensional layout. Setting <code>display: flex</code> on an element 
 			creates a flexbox inside that element. A flexbox is kind of like a line box, but with super powers.
 		</p>
 
-		<h4><code>flex-direction</code></h4>
+		<div class="needs-example">superpowers</div>
+
+		<h4>Changing direction</h4>
 
 		<p>
 			You can control the direction that your flexbox runs using the <code>flex-direction</code> property. There are four possible 
@@ -4102,7 +4245,7 @@ heading.focus();
 			began.
 		</p>
 
-		<h4><code>flex-wrap</code></h4>
+		<h4>Wrapping</h4>
 
 		<p>
 			By default, the browser will try to fit all your items into a single flex box. (We'll go into how it does this in a bit).
@@ -4170,7 +4313,7 @@ heading.focus();
 			}
 		</script>
 
-		<h4><code>align-content</code></h4>
+		<h4>Spacing between lines</h4>
 
 		<p>
 			Unlike line boxes, flexbox height is easy to calculate. If all your flex items are in a single line, then the height of the flexbox 
@@ -4294,7 +4437,7 @@ heading.focus();
 					<td>space-around</td>
 					<td>
 						Lines are spaced evenly in the container. The space between the container and the first line, and the container and 
-						the last line, is half of the space between adjacent lines.
+						the last line, is <i>half</i> of the space between adjacent lines.
 					</td>
 					<td>
 						<div class="example" style="align-content: space-around">
@@ -4314,7 +4457,7 @@ heading.focus();
 					<td>space-evenly</td>
 					<td>
 						Lines are spaced evenly in the container. The space between the container and the first line, and the container and
-						the last line, is the same as the space between adjacent lines.
+						the last line, is the <i>same</i> as the space between adjacent lines.
 					</td>
 					<td>
 						<div class="example" style="align-content: space-evenly">
@@ -4429,7 +4572,7 @@ heading.focus();
 			for up-to-date browser compatiblity data.
 		</p>
 
-		<h4><code>align-self</code> & <code>align-items</code></h4>
+		<h4>Alignment</h4>
 
 		<p>
 			Just like we can use <code>vertical-align</code> to place an item relative to a line box, we can use <code>align-self</code> to
@@ -4526,12 +4669,18 @@ heading.focus();
 			}
 		</script>
 
-		<h4><code>justify-content</code></h4>
+		<p>
+			While it might seem like <code>align-content</code> and <code>align-items</code> do the same thing, there is an important difference. 
+			<code>align-content</code> adjusts the spacing between the flexboxes (like line-height for line boxes). <code>align-items</code> (and 
+			<code>align-self</code>) controls the placement of the items <i>within</i> the flexbox (like <code>vertical-align</code>, except 
+			that it will actually do that centre-alignment for you).
+		</p>
+
+		<h4>Justification</h4>
 
 		<p>
-			We can also control how the flex items are laid out in the inline direction, just like we controlled how the flexboxes were laid 
-			out in the block direction. We can do this via the <code>justify-content</code> property. <code>justify-content</code> takes 
-			the same values as <code>align-content</code>, and has similar browser support.
+			We can also control how the flex items are laid out in the inline direction. We can do this via the <code>justify-content</code> property. 
+			<code>justify-content</code> takes the same values as <code>align-content</code>, and has similar browser support.
 		</p>
 
 		<div class="example justify-content">
@@ -4577,7 +4726,7 @@ heading.focus();
 			<code>vertical-align</code>? I guess? I can't help you with "content" and "items", except to say that "x-items" can be overridden 
 			by "x-self", because it refers to the items individually. "x-content" refers to the items as a whole, so a single one can't be set
 			differently. <code>flex</code> lacks a <code>justify-items/justify-self</code>, because it only operates in one dimension. 
-			If you find yourself needing to do that, then you should think about using <code>grid</code> code.
+			If you find yourself needing to do that, then you should think about using <code>grid</code>.
 		</p>
 
 		<p>
@@ -4602,24 +4751,40 @@ heading.focus();
 		<p class="needs-example">diagram of main vs cross axis</p>
 
 		<p>
-			Luckily, this one isn't <i>too</i> complicated. If you've set a height on your element, then that's the height it will be.
-			Otherwise, the height will be whatever it needs to be to fit the content, given the width. Just remember, if you've not 
-			set <code>align-items</code>, or <code>align-self</code>, then those properties will default to a value of <code>stretch</code>,
-			and fill the entire height of the container.
-		</p>
-
-		<div class="example flex vertical-sizing" style="min-height: 250px">
-			<div class="element" style="height: 200px;">
-				This element has a height of 200px;
+			Luckily, this one isn't <i>too</i> complicated. </p>
+		<ul>
+			<li>
+				If you've set a height, and an alignment (<code>align-items</code> or <code>align-self</code>), then your item 
+				will have the given height and alignment.
+			</li>
+			<li>
+				If you've set a height, but not an alignment, your item will have the given height, and be aligned to the start of the container.
+			</li>
+			<li>
+				If you've set an alignment, but not a height, your item will have the given alignment, and be as tall as it needs to be to 
+				fit its contents.
+			</li>
+			<li>
+				If you haven't set an alignment <i>or</i> a height, your item will default to an alignment of <code>stretch</code> and fill 
+				the entire height of the container.
+			</li>
+		</ul>
+		
+		<div class="example flex vertical-sizing" style="min-height: 400px; margin-top: 20px;">
+			<div class="element" style="height: 200px; align-self: flex-end">
+				<code>height: 200px; align-self: flex-end</code>
 			</div>
 			<div class="element" style="align-self: center">
-				This element has small content and <code>align-self: center</code>
+				<code>height: 200px</code>
 			</div>
 			<div class="element" style="align-self: center">
-				This element has lots and lots and lots and lots and lots and lots of content and <code>align-self: center</code>
+				<code>align-self: center</code> with lots and lots and lots and lots and lots and lots of content.
+			</div>
+			<div class="element" style="align-self: center">
+				<code>align-self: center</code> and a small bit of content
 			</div>
 			<div class="element">
-				This element has small content and <code>align-self</code> unset
+				no height, no alignment
 			</div>
 		</div>
 
@@ -4658,8 +4823,10 @@ heading.focus();
 		</div>
 
 		<style>
-			.example.borked-ratio div, .example.fixed-ration div {
-				width: 200px;
+			.example.borked-ratio div, .example.fixed-ratio div, .example.borked-ratio img, .example.fixed-ratio img {
+				width: 15%;
+				margin: 0;
+				border: 0;
 			}
 			.example.borked-ratio div:not(:first-child), .example.fixed-ratio div:not(:first-child) {
 				margin-left: 20px;
@@ -4667,7 +4834,7 @@ heading.focus();
 		</style>
 
 		<p>
-			This is easily corrected by adding <code>align-self</code>.
+			This is easily corrected by adding <code>align-self: flex-start</code>.
 		</p>
 
 		<div class="example flex fixed-ratio">
@@ -4704,391 +4871,430 @@ heading.focus();
 			it balances out? Assuming we're still working on a horizontal row, this is going to be the width of the elements.
 		</p>
 
-		<p>
-			It starts out simple though. If you set a width on your element, it will be that width.
-		</p>
+		<div class="in-draft">
+			<p>
+				The width of a flex item depends on 
+			</p>
+			<ul>
+				<li>Its contents</li>
+				<li>Its flex-basis property</li>
+				<li>Whether it's allowed to grow or shrink</li>
+				<li>The size of its flex container</li>
+				<li>How much other stuff is in the container</li>
+			</ul>
 
-		<div class="example set-width">
-			<label for="set-width">width</label>
-			<input type="number" id="set-width" onchange="updateSetWidth()">px
-			<div class="container flex">
+			<p>
+				For the sake of simplicity, let's start with a flexbox with a single item in it. The flexbox is much bigger than the item.
+			</p>
+
+			<div class="example flex fitting">
+				<div class="element">A element with some content in it</div>
+			</div>
+			<style>
+				.example.fitting {
+					min-width: 35em;
+					max-width: 400px;
+				}
+				.example.fitting .element {
+					width: unset;
+					height: unset;
+				}
+			</style>
+
+			<p>
+				The element will stretch out as big as it can get, without wasting any space. If the element only inline elements (or text), it 
+				will be wide enough that everything can fit in a single line box. This is called the <code>max-content</code> width. 
+				(And <code>max-content</code> is an allowed value, anywhere that you can set a <code>width</code> or <code>height</code>).
+			</p>
+
+			<p>
+				Let's add some more elements. 
+			</p>
+
+			<div class="example flex fitting">
+				<div class="element">A element with some content in it</div>
+				<div class="element">Another element</div>
+				<div class="element">Another element with a fair bit more content in it</div>
+			</div>
+
+			<p>
+				Now, there's not enough room for all the elements at their max-content width, so they've all shrunk a bit. The elements will all shrink
+				at the same rate. In our case, if all the elements were at their max-content width, they would take up about 2000px. The container is 
+				only about 650px wide though. So each element will shrink by 650 / (2000 - 650) = 40%. (I fudged the numbers a litte, so don't go 
+				looking too hard in the dev tools, but hopefully you get the idea.)
+			</p>
+
+			<p>
+				If we don't want the element to stretch out to its max-content width, we can set a size manually, via the <code>flex-basis</code>
+				property. The <code>flex-basis</code> property will refer to the width of an element in a row, or a the height of an element in 
+				a column. If we have a single item, in a large container, with a <code>flex-basis</code>, then it will take the size of the 
+				<code>flex-basis</code> property.
+			</p>
+
+			<div class="example flex fitting">
+				<div class="element" style="flex-basis: 400px">flex-basis: 400px</div>
+			</div>
+
+			<p>
+				If we have multiple items with <code>flex-basis</code>, and they don't all fit, they'll all shrink at the same rate, just 
+				like before.
+			</p>
+
+			<div class="example flex fitting">
+				<div class="element" style="flex-basis: 400px">flex-basis: 400px</div>
+				<div class="element" style="flex-basis: 200px">flex-basis: 200px</div>
+				<div class="element" style="flex-basis: 300px">flex-basis: 300px</div>
+			</div>
+
+			<p>
+				One thing to note - if you set a <code>width</code>, rather than a <code>flex-basis</code>, then the <code>flex-basis</code> will 
+				be the same as the <code>width</code>. If you set a <code>width</code> <i>and</i> a <code>flex-basis</code>, then the 
+				<code>width</code> will be ignored. <code>flex-basis</code> is also what's used by the <code>flex</code> shorthand property we're 
+				going to look at shortly. As such, I'd recommend using <code>flex-basis</code> over <code>width</code>, but it's not going to 
+				make a big difference.
+			</p>
+
+			<p>
+				Oh, and if you're using columns instead of rows, replace "width" with "height" everywhere above!
+			</p>
+
+			<h4>Controlling shrinkage</h4>
+
+			<p>
+				Ok, so, by default flex-items are going to try to be their <code>flex-basis</code> width. If they don't have a <code>flex-basis</code>,
+				they will try to be their <code>max-content</code> width. If all of the flex items can't fit at their preferred width, they will 
+				shrink at the same rate. 
+			</p>
+
+			<p>
+				But what happens if there's nowhere near enough room and they have to shrink <code>a lot</code>. Well, it turns out that shrinking is not 
+				a complete free-for-all. There are some rules.
+			</p>
+
+			<div class="example flex fitting">
+				<div class="element">A element with some content in it</div>
+				<div class="element">Antidisestablishmentarianism</div>
+				<div class="element">Another element with a fair bit more content in it</div>
+				<div class="element">Hi</div>
+			</div>
+
+			<p>
+				No element will shrink below its <code>min-content</code> width. The <code>min-content</code> width is the smallest possible width that 
+				the element can be, while still fitting its content. If your element just contains text, then it will be the size of the longest word.
+				If your element contains other elements, it will be the size of the largest child element.
+			</p>
+
+			<p>
+				You can also set a <code>min-width</code> on your element.
+			</p>
+
+			<div class="example flex fitting">
+				<div class="element" style="flex-basis: 400px">flex-basis: 400px</div>
+				<div class="element" style="flex-basis: 200px">flex-basis: 200px</div>
+				<div class="element" style="min-width: 340px">min-width: 340px</div>
+				<div class="element" style="flex-basis: 300px">flex-basis: 300px</div>
+			</div>
+
+			<p>
+				No element will shrink below its <code>min-width</code> (or <code>min-height</code>, in a column). If the <code>min-width</code> is 
+				smaller than the min-content width, then the element won't reach its min-width - it'll stop shrinking at its min-content width.
+			</p>
+
+			<p>
+				If the elements are still too big after shrinking as much as they can, they'll overflow the container.
+			</p>
+
+			<div class="example flex flex-overflow">
+				<div class="element"></div>
+				<div class="element"></div>
+				<div class="element"></div>
+			</div>
+	
+			<style>
+				.example.flex-overflow {
+					width: 400px;
+					padding: 5px;
+				}
+				.example.flex-overflow .element {
+					min-width: 150px;
+					height: 100px;
+				}
+			</style>
+
+			<p>
+				You can also control the rate at which elements shrink, relative to each other, or stop elements shrinking altogether, using the 
+				<code>flex-shrink</code> property. The default value of <code>flex-basis</code> is 1. This means "shrink the same amount as all 
+				the other elements".
+			</p>
+
+			<p>
+				If you don't want your element to shrink at all, you can set <code>flex-basis: 0</code>.
+			</p>
+
+			<style>
+				.resize {
+					resize: horizontal;
+					overflow: hidden;
+				}
+
+				.shrink-0 .element {
+					height: auto;
+				}
+			</style>
+
+			<figure class="example">
+				<div class="container flex resize">
+					<div class="element" style="width: 250px; flex-shrink: 0">
+						<div>width: 150px</div>
+						<div>flex-shrink: 0</div>
+					</div>
+					<div class="element" style="width: 250px;">
+						<div>width: 150px</div>
+						<div>flex-shrink: 1</div>
+					</div>
+					<div class="element" style="width: 250px;">
+						<div>width: 150px</div>
+						<div>flex-shrink: 1</div>
+					</div>
+				</div>
+				<figcaption>
+					You can resize the container with the handle at the bottom-right corner. It's practically invisible in Chrome, 
+					but trust me, it's there. These boxes will get cut off, rather than overflowing, if the container is too small.
+					This is necessary to make the resize work properly, and has nothing to do with flex.
+				</figcaption>
+			</figure>
+
+			<p>
+				And you can change the rate that elements shrink, relative to each other. An element with <code>flex-shrink: 2</code> will shrink 
+				twice as fast as one with <code>flex-shrink: 1</code>. So if the element with <code>flex-shrink: 1</code> shrinks 10%, the one 
+				with <code>flex-shrink: 2</code> will shrink 20%.
+			</p>
+
+			<figure class="example">
+				<div class="container flex resize">
+					<div class="element" style="width: 250px;">
+						<div>width: 150px</div>
+						<div>flex-shrink: 1</div>
+					</div>
+					<div class="element" style="width: 250px; flex-shrink: 2">
+						<div>width: 150px</div>
+						<div>flex-shrink: 2</div>
+					</div>
+					<div class="element" style="width: 250px; flex-shrink: 0.5">
+						<div>width: 150px</div>
+						<div>flex-shrink: 0.5</div>
+					</div>
+				</div>
+				<figcaption>
+					<code>flex-shrink</code> can take any positive number.
+				</figcaption>
+			</figure>
+
+			<p>
+				Finally, if you have <code>flex-wrap: wrap</code>, the elements won't shrink at all. If they don't all fit, they'll just wrap 
+				to another line.
+			</p>
+
+			<figure class="example flex-overflow-wrap">
+				<div class="container flex resize">
+					<div class="element"></div>
+					<div class="element"></div>
+					<div class="element"></div>
+					<div class="element"></div>	
+				</div>
+				<figcaption>
+					This container has <code>flex-wrap: wrap</code>. If you resize it so it's smaller than the elements, the elements 
+					will wrap rather than shrinking.
+				</figcaption>
+			</figure>
+	
+			<style>
+				.example.flex-overflow-wrap .container {
+					flex-wrap: wrap;
+				}
+				.example.flex-overflow-wrap .element {
+					min-width: 150px;
+					height: 100px;
+				}
+			</style>
+		</div>
+
+		<div class="in-draft">
+			<h4>Growing your elements</h4>
+
+			<p>
+				You can also make your elements grow to fill the available space, via the <code>flex-grow</code> property.
+				<code>flex-grow</code> works like <code>flex-shrink</code>, but in reverse. Like <code>flex-shrink</code>, it 
+				controls the rate at which the elements grow, so an element's final size will depend on its starting size, the size 
+				of the container, and what else is in the container.
+			</p>
+
+			<p>
+				By default, <code>flex-grow</code> has a value of 0, meaning the element won't grow at all. Setting the value to 
+				any positive number will cause the element to grow. You can also set a <code>max-width</code>, to cap the size 
+				the element will grow to.
+			</p>
+
+			<p>The flex-grow algorithm can be a little tricky to grasp, so let's step through an example.</p>
+
+			<p>
+				We'll start with some markup.
+			</p>
+	
+			<pre><code class="html">
+	&lt;div class="container"&gt;
+		&lt;div class="element"&gt;&lt;/div&gt;
+		&lt;div class="element"&gt;&lt;/div&gt;
+		&lt;div class="element"&gt;&lt;/div&gt;
+	&lt;/div&gt;
+			</code></pre>
+	
+			<p>And some styling.</p>
+	
+			<pre><code class="css">
+	.container {
+		display: flex;
+		width: 400px;
+	}
+	
+	.container .element {
+		flex-basis: 100px;
+		height: 100px;
+	}
+	
+	.container .element:nth-child(1) {
+		flex-grow: 1;
+	}
+	.container .element:nth-child(2) {
+		flex-grow: 2;
+	}
+	.container .element:nth-child(3) {
+		flex-grow: 3;
+	}
+			</code></pre>
+	
+			<p>
+				First, the we're is going to place all of the elements in the flexbox, using their flex-basis values.
+			</p>
+	
+			<style>
+				.flex-grow-steps {
+					width: 400px;
+					margin: auto;
+					padding: 0;
+				}
+			</style>
+	
+			<div class="example flex flex-grow-steps step-1">
+				<div class="element"></div>
+				<div class="element"></div>
+				<div class="element"></div>	
+			</div>
+	
+			<p>
+				Then we're going to calculate how much space is left over in the container (the shaded region below).
+			</p>
+	
+			<div class="example flex flex-grow-steps step-2">
+				<div class="element"></div>
+				<div class="element"></div>
+				<div class="element"></div>	
+				<div class="leftover"></div>
+			</div>
+	
+			<style>
+				.leftover {
+					--colour: hsla(250, 50%, 50%, .6);
+					flex-grow: 1;
+					border: 2px solid var(--colour);
+					background: repeating-linear-gradient(135deg, transparent, transparent 8px, var(--colour), var(--colour) 10px);
+				}
+			</style>
+
+			<p>
+				The container has a width of 400px, and we have three elements, 100px wide each.
+			</p>
+			<div>400px - (3 * 100px) = 100px</div>
+			<p>
+				So we've got 100px of free space. We'll remember that for later.
+			</p>
+
+			<p>
+				Next we need to work out how many flex-grow "units" we have. The first element has 1, the second has 2, and the third has 3.
+			</p>
+			<div>1 + 2 + 3 = 6</div>
+			<p>We've got a total of 6 flex-grow units.</p>
+
+			<p>
+				Then we divide the free space by the number of flex-grow units to calculate the amount of space per flex-grow.
+			</p>
+			<div>100px / 6 = 16px (more or less)</div>
+
+			<p>
+				Finally, we distribute the remaining space between the elements, based on how many flex-grow units they need. The first 
+				element has <code>flex-grow: 1</code>, so it gets 1 * 16px = 16px. The second has <code>flex-grow: 2</code>, so it gets 
+				2 * 16px = 32px. And the third has <code>flex-grow: 3</code>, so it gets 3 * 16px = 48px.
+			</p>
+
+			<p>Which results in a layout like this.</p>
+
+			<div class="example flex flex-grow-steps step-3">
+				<div class="element"></div>
+				<div class="element"></div>
+				<div class="element"></div>	
+			</div>
+
+			<style>
+				.flex-grow-steps.step-3 .element:nth-child(1) {
+					flex-grow: 1;
+				}
+				.flex-grow-steps.step-3 .element:nth-child(2) {
+					flex-grow: 2;
+				}
+				.flex-grow-steps.step-3 .element:nth-child(3) {
+					flex-grow: 3;
+				}
+			</style>
+
+			<p>The first element is 116px wide, the second is 132px and the third is 148px.</p>
+
+			<p>
+				Now, in the real world, things are usually a little more complicated than this, as we have to take content, and 
+				max-widths and stuff into account. Hopefully though, this is enough to give you an idea of how it works. I recommend 
+				playing around with this stuff in the dev tools, and checking out Firefox's flex inspector, for some help visualising 
+				what your flex container is doing.
+			</p>
+
+			<p>
+				Unlike <code>flex-shrink</code>, <code>flex-grow</code> will work with with <code>flex-wrap: wrap</code>. Elements 
+				will grow to take up all the available space in each line. The grow-rate for each line is determined independently
+				though, so different lines might grow at different rates.
+			</p>
+
+			<div class="example flex multi-line-grow">
 				<div class="element"></div>
 				<div class="element"></div>
 				<div class="element"></div>
 				<div class="element"></div>
+				<div class="element"></div>
 			</div>
-		</div>
 
-		<style>
-			.set-width .container {
-				justify-content: space-evenly;
-			}
-		</style>
+			<style>
+				.example.multi-line-grow {
+					flex-wrap: wrap;
+					width: 400px;
+				}
+				.example.multi-line-grow .element {
+					flex-grow: 1;
+				}
+			</style>
+	
+	</div>
 
-		<script>
-			const setWidthInput = document.getElementById('set-width');
-			setWidthInput.value = '200';
-			const setWidthElements = document.querySelectorAll('.example.set-width .element');
-			function updateSetWidth() {
-				const width = `${setWidthInput.value}px`;
-				setWidthElements.forEach(element => element.style.width = width);
-			}
-			updateSetWidth();
-		</script>
+		<h4>Doing it all at once</h4>
 
 		<p>
-			If you don't set a width, each element will be the biggest possible size that just fits all its content. So, if you have an element 
-			that only contains text, all of the text will appear on a single line. This width is referred to as the <code>max-content</code>
-			width. You can actually use <code>max-content</code> as a value for <code>width</code> on any element to make it behave in this way. It won't 
-			work in IE, or some versions of Edge though. Check out the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/width">
-			MDN docs on width</a> for more details.
-		</p>
-
-		<figure class="example max-content">
-			<div class="container flex">
-				<div class="element" contenteditable="true">small content</div>
-				<div class="element" contenteditable="true">lots and lots and lots of content</div>
-				<div class="element" contenteditable="true"></div>
-				<div class="element" contenteditable="true">a bit of content</div>	
-			</div>
-			<figcaption>
-				You can type in the elements to add or remove content.
-			</figcaption>
-		</figure>
-
-		<style>
-			.max-content .element {
-				width: auto;
-				height: auto;
-			}
-		</style>
-
-		<p>
-			If you don't have <code>flex-wrap: wrap</code>, and there's not enough space for all your elements, then they will shrink to 
-			fit the available space. All the elements will shrink by the same amount, with a few exceptions.
-		</p>
-		<ul>
-			<li>If an element has a <code>min-width</code> set, it won't shrink smaller than the <code>min-width</code></li>
-			<li>
-				No element will shrink smaller than its <code>min-content</code> width. The <code>min-content</code> width refers to the 
-				smallest width that will allow the element to fit its content. If the element only contains text, then the <code>min-content</code>
-				width will be the width of the longest word. If it contains other elements, then the <code>min-content</code> width will be 
-				the larger of the largest element and the longest word. You can use <code>min-content</code> as a width value, just like 
-				<code>max-content</code>
-			</li>
-		</ul>
-
-		<figure class="example shrink-widths">
-			<div class="container flex resize">
-				<div class="element" style="width: 200px">width: 200px</div>
-				<div class="element" style="min-width: 200px">min-width: 100px;</div>
-				<div class="element" contenteditable="true">Type here to change the content</div>	
-			</div>
-			<figcaption>
-				You can resize the container above, using the handle on the bottom right corner. It's a bit finicky in Chrome.
-			</figcaption>
-		</figure>
-
-		<style>
-			.resize {
-				overflow: hidden;
-				resize: horizontal;
-				border: 2px dashed currentColor;
-				border-radius: 6px;
-			}
-			.example.shrink-widths .element {
-				height: auto;
-				width: auto;
-			}
-		</style>
-
-		<p>
-			In the previous example, you might have noticed that if you made the container too small, the bits that didn't fit got cut off.
-			This isn't actually the default behaviour - I had to set <code>overflow: hidden</code> so that I could make the container 
-			resizable (via <code>resize: horizontal</code>). The real default behaviour is for the content to overflow (and usually look rubbish).
-		</p>
-
-		<div class="example flex flex-overflow">
-			<div class="element"></div>
-			<div class="element"></div>
-			<div class="element"></div>
-		</div>
-
-		<style>
-			.example.flex-overflow {
-				width: 400px;
-				padding: 5px;
-			}
-			.example.flex-overflow .element {
-				min-width: 150px;
-				height: 100px;
-			}
-		</style>
-
-		<p>
-			If, on the other hand, you <i>do</i> have <code>flex-wrap: wrap</code>, your items will wrap rather than shrinking.
-		</p>
-
-		<div class="example flex resize flex-overflow-wrap">
-			<div class="element"></div>
-			<div class="element"></div>
-			<div class="element"></div>
-			<div class="element"></div>
-		</div>
-
-		<style>
-			.example.flex-overflow-wrap {
-				flex-wrap: wrap;
-			}
-			.example.flex-overflow-wrap .element {
-				min-width: 150px;
-				height: 100px;
-			}
-		</style>
-
-		<h4><code>flex-basis</code></h4>
-
-		<p>
-			Flex elements also support the <code>flex-basis</code> property. <code>flex-basis</code> is the size of the element along the main axis.
-			If we're working in a row, it's the width. If we're working in a column, it's the height. If <code>flex-basis</code> isn't set, it 
-			will fallback to the width/height value. If it is set, it will override the width/height value. Other than that, it works just like 
-			the <code>width</code> and <code>height</code> properties. I would recomment preferring <code>flex-basis</code> over <code>width</code>
-			or <code>height</code>, because that's what's used in the <code>flex</code> shortcut that we're going to see shortly, but in most 
-			cases it isn't really going to make a difference.
-		</p>
-
-		<h4><code>flex-shrink</code></h4>
-
-		<p>
-			By default, if your elements are going to shrink, they'll all shrink by the same amount. You can change that if you want though!
-		</p>
-		<ul>
-			<li>If you don't want an element to shrink at all, you can set <code>flex-shrink: 0</code></li>
-			<li>By default, elements have <code>flex-shrink: 1</code></li>
-			<li>
-				If you want elements to shrink at a different rate, you can set <code>flex-shrink</code> to another number.
-				An element with <code>flex-shrink: 2</code> will shrink twice as fast as the default. An element with 
-				<code>flex-shrink: .5</code> will shrink half as fast. You can set <code>flex-shrink</code> to any 
-				non-negative number.
-			</li>
-		</ul>
-
-		<div class="example flex resize flex-shrink">
-			<div class="element">
-				<label for="flex-shrink-0">flex-shrink:</label>
-				<input id="flex-shrink-0" type="number" min="0" step="1" value="0">
-			</div>
-			<div class="element">
-				<label for="flex-shrink-1">flex-shrink:</label>
-				<input id="flex-shrink-1" type="number" min="0" step="1" value="1">
-			</div>
-			<div class="element">
-				<label for="flex-shrink-2">flex-shrink:</label>
-				<input id="flex-shrink-2" type="number" min="0" step="1" value="2">
-			</div>
-		</div>
-
-		<style>
-			.example.flex-shrink {
-				margin-top: 20px;
-				width: 100%;
-			}
-			.example.flex-shrink .element {
-				width: 400px;
-				height: auto;
-			}
-			.example.flex-shrink .element:first-child {
-				flex-shrink: 0;
-			}
-			.example.flex-shrink .element:nth-child(2) {
-				flex-shrink: 1;
-			}
-			.example.flex-shrink .element:nth-child(3) {
-				flex-shrink: 2;
-			}
-		</style>
-
-		<script>
-			document.querySelectorAll('.example.flex-shrink .element input').forEach((input) => {
-				input.value = getComputedStyle(input.parentElement).flexShrink;
-				input.addEventListener('change', function () {
-					this.parentElement.style.flexShrink = this.value;
-				})
-			});
-		</script>
-
-		<p>(Try making the container smaller than the elements, and then changing the <code>flex-shrink</code> values.)</p>
-
-		<p>
-			Remember, <code>flex-shrink</code> controls <i>the rate at which an element shrinks</i>, not its final size. The final 
-			size is going to depend on the starting size, the shrink-rate, and the min-content size. (If you don't want your elements to 
-			shrink all the way down to their min-content size, you can set a <code>min-width</code>.)
-		</p>
-
-		<h4><code>flex-grow</code></h4>
-
-		<p>
-			You can also make elements grow to take up the available space. If you've got <code>flex-wrap: wrap</code>, elements will 
-			grow to fill up all lines. They won't necessarily grow by the same amount in each line though - it will depend on the 
-			amount of free space in each line. To allow an element to grow, set <code>flex-grow</code> to a non-negative number.
-		</p>
-
-		<div class="example flex multi-line-grow">
-			<div class="element"></div>
-			<div class="element"></div>
-			<div class="element"></div>
-			<div class="element"></div>
-			<div class="element"></div>
-		</div>
-
-		<style>
-			.example.multi-line-grow {
-				flex-wrap: wrap;
-				width: 400px;
-			}
-			.example.multi-line-grow .element {
-				flex-grow: 1;
-			}
-		</style>
-
-		<p>
-			<code>flex-grow</code> works like <code>flex-shrink</code> (but in the opposite direction). It controls the <i>rate at 
-			which the element grows</i>. You can use <code>max-width</code> to stop an element growing beyond a certain size.
-			The <code>flex-grow</code> algorithm is a little complicated to understand, so let's step through an example.
-		</p>
-
-		<p>
-			We'll start with some markup.
-		</p>
-
-		<pre><code class="html">
-&lt;div class="container"&gt;
-	&lt;div class="element"&gt;&lt;/div&gt;
-	&lt;div class="element"&gt;&lt;/div&gt;
-	&lt;div class="element"&gt;&lt;/div&gt;
-&lt;/div&gt;
-		</code></pre>
-
-		<p>And some styling.</p>
-
-		<pre><code class="css">
-.container {
-	display: flex;
-	width: 400px;
-}
-
-.container .element {
-	flex-basis: 100px;
-	height: 100px;
-}
-
-.container .element:nth-child(1) {
-	flex-grow: 1;
-}
-.container .element:nth-child(2) {
-	flex-grow: 2;
-}
-.container .element:nth-child(3) {
-	flex-grow: 3;
-}
-		</code></pre>
-
-		<p>
-			First, the we're is going to place all of the elements in the flexbox, using their flex-basis values.
-		</p>
-
-		<style>
-			.flex-grow-steps {
-				width: 400px;
-				margin: auto;
-				padding: 0;
-			}
-		</style>
-
-		<div class="example flex flex-grow-steps step-1">
-			<div class="element"></div>
-			<div class="element"></div>
-			<div class="element"></div>	
-		</div>
-
-		<p>
-			Then we're going to calculate how much space is left over in the container (the shaded region below).
-		</p>
-
-		<div class="example flex flex-grow-steps step-2">
-			<div class="element"></div>
-			<div class="element"></div>
-			<div class="element"></div>	
-			<div class="leftover"></div>
-		</div>
-
-		<style>
-			.leftover {
-				--colour: hsla(250, 50%, 50%, .6);
-				flex-grow: 1;
-				border: 2px solid var(--colour);
-				background: repeating-linear-gradient(135deg, transparent, transparent 8px, var(--colour), var(--colour) 10px);
-			}
-		</style>
-
-		<p>
-			The container has a width of 400px, and we have three elements, 100px wide each.
-		</p>
-		<div>400px - (3 * 100px) = 100px</div>
-		<p>
-			So we've got 100px of free space. We'll remember that for later.
-		</p>
-
-		<p>
-			Next we need to work out how many flex-grow "units" we have. The first element has 1, the second has 2, and the third has 3.
-		</p>
-		<div>1 + 2 + 3 = 6</div>
-		<p>We've got a total of 6 flex-grow units.</p>
-
-		<p>
-			Then we divide the free space by the number of flex-grow units to calculate the amount of space per flex-grow.
-		</p>
-		<div>100px / 6 = 16px (more or less)</div>
-
-		<p>
-			Finally, we distribute the remaining space between the elements, based on how many flex-grow units they need. The first 
-			element has <code>flex-grow: 1</code>, so it gets 1 * 16px = 16px. The second has <code>flex-grow: 2</code>, so it gets 
-			2 * 16px = 32px. And the third has <code>flex-grow: 3</code>, so it gets 3 * 16px = 48px.
-		</p>
-
-		<p>Which results in a layout like this.</p>
-
-		<div class="example flex flex-grow-steps step-3">
-			<div class="element"></div>
-			<div class="element"></div>
-			<div class="element"></div>	
-		</div>
-
-		<style>
-			.flex-grow-steps.step-3 .element:nth-child(1) {
-				flex-grow: 1;
-			}
-			.flex-grow-steps.step-3 .element:nth-child(2) {
-				flex-grow: 2;
-			}
-			.flex-grow-steps.step-3 .element:nth-child(3) {
-				flex-grow: 3;
-			}
-		</style>
-
-		<p>The first element is 116px wide, the second is 132px and the third is 148px.</p>
-
-		<p>
-			Unfortunately, this is a rather simple example, as all the elements started at the same size, and none had a maximum width set.
-			In the real world, it can be a little trickier to work out what the effect of <code>flex-grow</code> will be <i>precisely</i>.
-			I recommend just playing around with it in the dev tools, until you get something you like. And don't forget to test at different 
-			viewport sizes!
-		</p>
-
-		<h4><code>flex</code></h4>
-
-		<p>
-			It's common to want to set all of <code>flex-grow</code>, <code>flex-shrink</code>, and <code>flex-basis</code> on an element.
+			It's reasonably common to want to set all of <code>flex-grow</code>, <code>flex-shrink</code>, and <code>flex-basis</code> on an element.
 			Good news: there's a shortcut for that! <code>flex: grow shrink basis</code>. The default value is <code>0 1 0</code>, and both 
 			of the second two values are optional. (You can set just <code>flex-grow</code> and <code>flex-basis</code>, but you need to use 
 			a unit on the <code>flex-basis</code> value, else it will be interpreted as <code>flex-shrink</code>!)
@@ -5100,7 +5306,7 @@ heading.focus();
 			using the handle on the bottom right.
 		</p>
 
-		<div class="example flex-grow in-draft">
+		<div class="example flex-grow">
 			<div class="controls">
 				<input type="radio" id="flex-grow-wrap" name="flex-grow-wrap" onchange="updateFlexGrowWrap(true)" checked>
 				<label for="flex-grow-wrap">flex-wrap: wrap</label>
@@ -5129,21 +5335,29 @@ heading.focus();
 					<input id="flex-3" type="text">
 					<div contenteditable="true">add content</div>
 				</div>
-				<div class="element">
-					<label for="flex-4">flex:</label>
-					<input id="flex-4" type="text">
-					<div contenteditable="true">add content</div>
-				</div>
 			</div>
 		</div>
 
 		<style>
+			.example.flex-grow .controls {
+				display: grid;
+				grid-template-columns: min-content max-content min-content max-content;
+				align-items: center;
+				grid-gap: 10px;
+			}
+			.example.flex-grow .controls label {
+				justify-self: flex-start;
+				margin-right: 20px;
+			}
 			.example.flex-grow .container {
 				width: 100%;
 			}
 			.example.flex-grow .element {
 				flex: 0 1 200px;
 				height: auto;
+			}
+			.example.flex-grow .element input {
+				width: 6em;
 			}
 		</style>
 
@@ -5160,26 +5374,28 @@ heading.focus();
 					this.parentElement.style.flexGrow = this.value;
 				});
 			});
+
+			document.getElementById('flex-grow-wrap').checked = true;
 		</script>
 
-		<h4 class="in-draft"><code>Rearranging elements</code></h4>
+		<h>Rearranging elements</h4>
 
-		<p class="in-draft">
-			The final bit of magic that flex can do is change the order that elements appear in. As we already mentioned, you can set 
+		<p>
+			The final bit of magic that flex can do is to change the order that elements appear in. As we already mentioned, you can set 
 			<code>flex-direction</code> to <code>row-reverse</code> or <code>column-reverse</code> to invert the order of the line.
 			You can also set <code>flex-wrap</code> to <code>wrap-reverse</code> to reverse the wrapping order. (So in a
 			<code>flex-direction: row</code> situation, <code>flex-wrap: wrap-reverse</code> would cause the second row to appear 
 			<i>above</i> the first one.)
 		</p>
 
-		<p class="in-draft">
+		<p>
 			You can also control the placement of individual elements, by setting the <code>order</code>. Elements will appear in 
 			order corresponding to their <code>order</code> value. <code>order</code> can be any integer value, and the default 
 			is <code>0</code>. So an element with <code>order: -1</code>, will appear first in its line. An element with 
 			<code>order: 1</code> will appear last (assuming no other <code>order</code>s have been set).
 		</p>
 
-		<div class="example reordering in-draft">
+		<div class="example reordering">
 			<label for="order-flex-direction">flex-direction</label>
 			<select name="flex-direction" id="order-flex-direction">
 				<option value="row">row</option>
@@ -5195,7 +5411,7 @@ heading.focus();
 				<option value="wrap-reverse">wrap-reverse</option>
 			</select>
 
-			<div class="container flex">
+			<div class="container flex" style="margin-top: 20px">
 				<div class="element">
 					<span>Element 1</span>
 					<label for="order-element-1">order:</label>
@@ -5216,26 +5432,6 @@ heading.focus();
 					<label for="order-element-4">order:</label>
 					<input type="number" step="1" id="order-element-4">
 				</div>
-				<div class="element">
-					<span>Element 5</span>
-					<label for="order-element-5">order:</label>
-					<input type="number" step="1" id="order-element-5">
-				</div>
-				<div class="element">
-					<span>Element 6</span>
-					<label for="order-element-6">order:</label>
-					<input type="number" step="1" id="order-element-6">
-				</div>
-				<div class="element">
-					<span>Element 7</span>
-					<label for="order-element-7">order:</label>
-					<input type="number" step="1" id="order-element-7">
-				</div>
-				<div class="element">
-					<span>Element 8</span>
-					<label for="order-element-8">order:</label>
-					<input type="number" step="1" id="order-element-8">
-				</div>
 			</div>
 		</div>
 
@@ -5243,6 +5439,15 @@ heading.focus();
 			.example.reordering .container {
 				max-height: 400px;
 			}	
+
+			.example.reordering .element {
+				width: auto;
+				height: auto;
+			}
+
+			.example.reordering .element input {
+				width: 4em;
+			}
 		</style>
 
 		<script>
@@ -5268,59 +5473,60 @@ heading.focus();
 			});
 		</script>
 
-		<p class="in-draft">
+		<p>
 			One word of warning though - when you change the display order like this, the document order remains the same. A screen reader 
 			will read the elements in document order, and the tab order will follow the document order. This can lead to a confusing 
-			experience for users. As such, I suggest your treat this order-changing properties with extreme caution.
+			experience for users. As such, I suggest your treat these order-changing properties with extreme caution.
 		</p>
 
-		<p class="in-draft">
+		<p>
 			Finally, the question I'm sure is burning everyone's lips: how well supported is <code>display: flex</code>? The answer is 
 			"very well". All the flex-related properties are 100% supported by all modern browsers, and IE.
 		</p>
 
-		<figure class="in-draft">
+		<figure class="example">
 			<img src="images/flexbox-support.png" alt="can i use support table for flexbox, showing support in all major browsers">
 			<figcaption>Source: <a href="https://caniuse.com/#feat=flexbox">Can I Use</a></figcaption>
 		</figure>
 
-		<p class="in-draft">
+		<p>
 			However, there are a couple of known bugs in IE that aren't likely to be fixed.
 		</p>
-		<ul class="in-draft">
-			<li>If the content of your flex container is overflowing unexpectedly, try setting <code>max-width: 100%</code></li>
+		<ul>
+			<li>
+				If the content of your flex container is overflowing unexpectedly, try setting <code>max-width: 100%</code> on
+				the container.
+			</li>
 			<li>
 				The <code>flex-basis</code> value in the <code>flex</code> shorthand requires a unit, even when it's 0. So you'll 
 				need to do something like <code>flex: 1 0 0%</code>
 			</li>
 		</ul>
-		<p class="in-draft">
+		<p>
 			For a full list of known bugs, refer to the Known Issues tab on the <a href="https://caniuse.com/#feat=flexbox">Flexbox page on 
 			Can I Use</a>.
 		</p>
 
-		<p class="in-draft">
+		<p>
 			If you're looking for any more help with flex, then you should check out the definitive guide: 
 			CSS Tricks' <a href="https://css-tricks.com/snippets/css/a-guide-to-flexbox/">Complete Guide to Flexbox</a>.
 		</p>
 
-		<h3 class="in-draft"><code>display: grid</code></h3>
+		<h3>Grid</h3>
 
-		<p class="in-draft">
+		<p>
 			Grid is perhaps the most useful CSS layout available. It allows us to create dynamic, responsive, two-dimensional layouts.
 			This is not to say that we don't need flexbox anymore though! It's often simpler to setup a flex layout than a grid, and there are 
 			some things you can do in flexbox that you just can't manage in grid. Both are useful, and have their place. However, grid does 
 			simplify some of the things we used to rely on flexbox for.
 		</p>
 
-		<p class="in-draft">
-			Like flexbox, the <code>display: grid</code> property is applied to the container elements, and affects the layout of the children 
-			of the container. Unlike flexbox though we can visualise how the grid is going to behave without any actual elements in it.
-		</p>
-
-		<p class="in-draft">
-			For this next section, I highly recommend using Firefox, as the Firefox dev tools includes a grid inspector which I find 
-			invaluable when working with grid.
+		<p>
+			Like flexbox, the <code>display: grid</code> property is applied to the container element, and affects the layout of the children 
+			of the container. Unlike flexbox, the grid exists independent of the elements within it. The grid cells defined in CSS exist 
+			whether they contain any content or not (although they can't be styled, beyond setting their size). You can see this by using 
+			the grid inspector in Firefox. (I highly recommend using Firefox for all your grid-related development needs. The grid inspector 
+			is absolutely invaluable.)
 		</p>
 
 		<div class="example grid dev-tools">
@@ -5335,8 +5541,8 @@ heading.focus();
 			}
 		</style>
 
-		<p class="in-draft">To use the grid inspector in Firefox</p>
-		<ol class="in-draft">
+		<p>To use the grid inspector in Firefox</p>
+		<ol>
 			<li>Right-click on the example above and select Inspect Element</li>
 			<li>
 				Click on the grid tag beside the element in the Inspector.
@@ -5346,81 +5552,66 @@ heading.focus();
 
 		<div class="needs-example">what it looks like with the grid inspector turned on</div>
 
-		<p class="in-draft">
+		<p>
 			Our example here defines a 2x2 grid, using three CSS properties.
 		</p>
 
-		<pre class="in-draft"><code class="css">
+		<pre><code class="css">
 			display: grid;
 			grid-template-columns: 1fr 1fr;
 			grid-template-rows: 1fr 1fr;
 		</code></pre>
 
-		<p class="in-draft">
+		<p>
 			<code>display: grid</code> makes our container a grid. <code>grid-template-columns</code> takes a list of widths. It will create 
 			a column of the given width for each width in the list. In our case, we've got two columns, each 1fr wide.
-			<code>grid-template-rows</code> takes a list of heights and creates a row of the given height for each height in the list. So 
+			<code>grid-template-rows</code> takes a list of heights and creates a row with the given height for each height in the list. So 
 			we've got two rows, each 1fr high. And, altogether, we've got a 2x2 grid, where each cell is 1fr x 1fr.
 		</p>
 
-		<p class="in-draft">
-			At this point, you might be wondering what an <code>fr</code> is. This is a good question. <code>fr</code> stands for "fraction 
-			of the available space", and it works just like <code>flex-grow</code> does in a flexbox. So, to calculate the widths of the 
-			columns in the above example, the browser is going to work out how much space is availale to start with - 100% of the width of 
-			the grid element. Then it's going to add up how many <code>fr</code>s there are altogether - 1fr + 1fr = 2fr. Then, divide the 
-			amount of space by the number of <code>fr</code>s to calculate how much space each <code>fr</code> gets - 100% / 2 = 50%. Then
-			assign that much space to each <code>fr</code>. In our example, each column is 50% of the width of the container. 
+		<p>
+			At this point, you might be wondering what an <code>fr</code> is. This is a good question. <code>fr</code> stands for "fraction
+			of the available space". It works a lot like <code>flex-grow</code> in flexbox. To calculate the widths of the columns above,
+			the browser will
 		</p>
+		<ol>
+			<li>Work out how much space there is altogether. Let's call it 100%.</li>
+			<li>Count how many frs there are - 1fr + 1fr = 2frs - easy!</li>
+			<li>Divide the total space between the number of frs - 100% / 2frs = 50%/fr</li>
+		</ol>
 
-		<p class="in-draft">
+		<p>So, in our example, each column is going to be 50% of the width of the container.</p>
+
+		<p>
 			This example is a little simplistic though. We could also have different sized columns - say 
 			<code>grid-template-columns: 4fr 1fr</code>. In this case, there are 5frs altogether, so each fr receives 20% of the space
 			(100% / 5 = 20%). The first column is 4frs wide, so it receives 80% (20% x 4 = 80%). The second column is 1fr, so it just gets 20%.
 		</p>
 
-		<div class="needs-example">grid to check out in grid inspector</div>
+		<div class="needs-example">image from grid inspector</div>
 
-		<p class="in-draft">
+		<p>
 			We can also mix units, like <code>grid-template-columns: 100px 1fr</code>. In this case, the first column will always be 100px 
 			wide, no matter the size of the container. The second column will take up the remaining space.
 		</p>
 
 		<div class="needs-example">grid inspector</div>
 
-		<p class="in-draft">
-			And we can do more complicated stuff, like combinations of different units and multiple fr units, like
-			<code>grid-template-columns: 200px 1fr 2em 3fr</code>. So how wide is each column here? Let's say the container is 500px 
-			wide and 1em is 12px.
-		</p>
-
-		<ol class="in-draft">
-			<li>Calculate how much space is used by the fixed width elements: 200px + 2em = 200px + 2 * 12px = 224px</li>
-			<li>Calculate how much space is remaining: 500px - 224px = 276px</li>
-			<li>Add up all the frs: 1fr + 3fr = 4fr</li>
-			<li>Calculate how much space per fr = 276px / 4fr = 69px/fr</li>
-			<li>Multiple frs by space per fr to get sizes: 1fr * 69px/fr = 69px; 3fr * 69px/fr = 207px</li>
-		</ol>
-
-		<p class="in-draft">This gives us final column sizes of 200px, 69px, 24p, 207px.</p>
-
-		<p class="in-draft">
-			Don't worry - you'll never really need to do this maths yourself! If you want to see how big your columns are, just stick them in 
-			the dev tools and play around.
-		</p>
-
-		<p class="in-draft">
-			So, why do we use frs instead of just sticking with percentages? Well, the maths is easier, especially if you're mixing units, and 
-			you can't get it wrong and end up with columns adding up to more than 100%. It also makes it super easy to add and remove columns 
+		<p>
+			So, why do we use frs instead of just sticking with percentages? Basically, the maths is easier. You don't need to use <code>calc()</code>
+			to mix percentages and fixed units. You can't get the maths wrong and end up with more than 100%. And it makes it super easy to add and remove columns 
 			without needing to recalculate everything, which also works well in responsive designs, where you might have different numbers of 
 			columns on different size screens. There are also a couple of other advantages we'll get to later.
 		</p>
 
-		<p class="in-draft">
+		<h4>Adding elemets</h4>
+
+		<p>
 			Ok, so this is all well and good, but a grid with nothing in it is pretty boring. So let's see what happens when we add some 
 			elements.
 		</p>
 
-		<div class="example grid placing-elements in-draft">
+		<div class="example grid placing-elements">
 			<div class="element">1</div>
 			<div class="element">2</div>
 			<div class="element">3</div>
@@ -5437,25 +5628,49 @@ heading.focus();
 				width: 100px;
 				height: 100px;
 			}
+
+			.grid .element {
+				font-size: 2em;
+				font-weight: bold;
+				align-self: center;
+				justify-self: center;
+				text-align : center;
+			}
 		</style>
 
-		<p class="in-draft">
+		<p>
 			You can see the elements get placed along the first row, until that row fills up. Then we start filling up the next row.
 			And so on until we run out of elements. If we prefer to fill up the columns first, we can do that by setting 
 			<code>grid-auto-flow: column</code>.
 		</p>
 
-		<div class="example in-draft">
-			<input type="radio" name="grid-auto-flow" id="auto-flow-row" value="row">
-			<label for="auto-flow-row">grid-auto-flow: row</label>
-			<input type="radio" name="grid-auto-flow" id="auto-flow-column" value="column">
-			<label for="auto-flow-column">grid-auto-flow: column</label>
-			<div class=" placing-elements container grid">
+		<div class="example">
+			<div class="controls">
+				<input type="radio" name="grid-auto-flow" id="auto-flow-row" value="row">
+				<label for="auto-flow-row">grid-auto-flow: row</label>
+				<input type="radio" name="grid-auto-flow" id="auto-flow-column" value="column">
+				<label for="auto-flow-column">grid-auto-flow: column</label>	
+			</div>
+			<div class=" placing-elements container grid" style="margin-top: 10px">
 				<div class="element">1</div>
 				<div class="element">2</div>
 				<div class="element">3</div>	
 			</div>
 		</div>
+
+		<style>
+			.controls {
+				display: flex;
+				align-items: center;
+			}
+			.controls input {
+				margin-right: 5px
+			}
+			.controls label {
+				margin-right: 10px;
+			}
+		</style>
+
 
 		<script>
 			const container = document.querySelector('.placing-elements.container');
@@ -5467,123 +5682,87 @@ heading.focus();
 			document.getElementById('auto-flow-row').checked = true;
 		</script>
 
-		<p class="in-draft">
-			Also by default, each element is placed in the upper left corner of the cell (in a left-to-right, top-to-bottom language - more 
-			generally, each element is placed at the point where you would start reading in the current language). We can change this, using 
-			the same kind of properties we used in flexbox - <code>align-items</code>, <code>align-self</code>, <code>justify-items</code>,
-			<code>justify-self</code>. 
+		<p>
+			Each element is placed at the start of the cell. In a ltr, top to bottom language, this is going to be the top left. 
+			In a right-left language, it would be the top right. And so on.
 		</p>
 
-		<div class="needs-example">how the fuck does align/justify-content work in grid? it only works with auto tracks...</div>
-		<div class="needs-example">what does auto mean in grid</div>
-
-		<p class="in-draft">
-			Just like with flexbox, <code>*-items</code> properties are placed on the container element, and control placement for all items 
-			in the grid. <code>*-self</code> properties are placed on the items themselves, and only change the placement of a specific item.
-			<code>*-self</code> properties override <code>*-items</code> properties.
+		<p>
+			We can change the vertical positioning of an element within its cell using <code>align-items</code> or <code>align-self</code>.
+			<code>align-items</code> is applied to the container, and changes the position of all elements in the grid. 
+			<code>align-self</code> is applied to the item, and just changes the position of that item. <code>align-self</code> will 
+			override <code>align-items</code>.
 		</p>
 
-		<p class="in-draft">
-			As with flexbox, we can choose between the values <code>start</code>, <code>center</code>, <code>end</code>, and <code>stretch</code>.
-			(Note that <code>stretch</code> has the same effect as <code>start</code> when applied to an element with an explicit width or height, 
-			like the elements in the example below.)
-		</p>
-
-		<div class="example align-justify in-draft">
-			<label for="align-items">align-items</label>
-			<select name="align-items" id="align-items">
-				<option value="start">start</option>
-				<option value="center">center</option>
-				<option value="end">end</option>
-				<option value="stretch">stretch</option>				
-			</select>
-			<label for="justify-items">justify-items</label>
-			<select name="justify-items" id="justify-items">
-				<option value="start">start</option>
-				<option value="center">center</option>
-				<option value="end">end</option>
-				<option value="stretch">stretch</option>				
-			</select>
-			<div class="container placing-elements grid">
+		<figure class="example">
+			<div class="container grid alignment">
 				<div class="element">
-					1
-					<label for="align-self-1">align-self</label>
-					<select name="align-self-1" id="align-self-1">
-						<option value="start">start</option>
-						<option value="center">center</option>
-						<option value="end">end</option>
-						<option value="stretch">stretch</option>				
-					</select>
-					<label for="justify-self-1">justify-self</label>
-					<select name="justify-self-1" id="justify-self-1">
-						<option value="start">start</option>
-						<option value="center">center</option>
-						<option value="end">end</option>
-						<option value="stretch">stretch</option>				
-					</select>		
+					<code>align-self: unset</code>
 				</div>
-				<div class="element">		
-					2	
-					<label for="align-self-2">align-self</label>
-					<select name="align-self-2" id="align-self-2">
-						<option value="start">start</option>
-						<option value="center">center</option>
-						<option value="end">end</option>
-						<option value="stretch">stretch</option>				
-					</select>
-					<label for="justify-self-2">justify-self</label>
-					<select name="justify-self-2" id="justify-self-2">
-						<option value="start">start</option>
-						<option value="center">center</option>
-						<option value="end">end</option>
-						<option value="stretch">stretch</option>				
-					</select>
-					</div>
-				<div class="element">
-					3
-					<label for="align-self-3">align-self</label>
-					<select name="align-self-3" id="align-self-3">
-						<option value="start">start</option>
-						<option value="center">center</option>
-						<option value="end">end</option>
-						<option value="stretch">stretch</option>				
-					</select>
-					<label for="justify-self">justify-self</label>
-					<select name="justify-self" id="justify-self">
-						<option value="start">start</option>
-						<option value="center">center</option>
-						<option value="end">end</option>
-						<option value="stretch">stretch</option>				
-					</select>		
+				<div class="element" style="align-self: flex-end">
+					<code>align-self: flex-end</code>
+				</div>
+				<div class="element" style="align-self: center">
+					<code>align-self: center</code>
 				</div>
 			</div>
-		</div>
+			<figcaption>
+				The grid container has <code>align-items: flex-start</code>
+			</figcaption>
+		</figure>
 
 		<style>
-			.align-justify .placing-elements .element {
-				width: 150px;
-				height: 150px;	
+			.grid.alignment {
+				grid-template-columns: 1fr 1fr;
+				grid-template-rows: 200px 200px;
+				align-items: flex-start;
+			}
+			.grid.alignment .element {
+				align-self: unset;
 			}
 		</style>
 
-		<script>
-			const alignJustifyContainer = document.querySelector('.align-justify .container');
-			document.querySelectorAll('.align-justify select[id$=items]').forEach((select) => {
-				select.selectedIndex = 0;
+		<p>
+			We can change the horizontal positioning of an element within its cell using <code>justify-items</code> or <code>justify-self</code>.
+			<code>justify-items</code> is applied to the container, and changes the position of all elements in the grid. 
+			<code>justify-self</code> is applied to the item, and just changes the position of that item. <code>justify-self</code> will 
+			override <code>justify-items</code>.
+		</p>
 
-				select.addEventListener('change', function () {
-					alignJustifyContainer.style[this.id] = this.value;
-				});
-			});
+		<figure class="example">
+			<div class="container grid justification">
+				<div class="element">
+					<code>justify-self: unset</code>
+				</div>
+				<div class="element" style="justify-self: flex-end">
+					<code>justify-self: flex-end</code>
+				</div>
+				<div class="element" style="justify-self: center">
+					<code>justify-self: center</code>
+				</div>
+			</div>
+			<figcaption>
+				The grid container has <code>justify-items: flex-start</code>
+			</figcaption>
+		</figure>
 
-			document.querySelectorAll('.align-justify .element select').forEach((select) => {
-				select.selectedIndex = 0;
-				select.addEventListener('change', function () {
-					const property = `${this.id.split('-')[0]}-self`;
-					this.parentElement.style[property] = this.value;
-				})
-			});
-		</script>
+		<style>
+			.grid.justification {
+				grid-template-columns: 1fr 1fr;
+				grid-template-rows: 200px 200px;
+				align-items: flex-start;
+			}
+			.grid.justification .element {
+				align-self: unset;
+			}
+		</style>
+
+		can also create cells that depend on the size of the elements within them
+
+<div class="needs-example">how the fuck does align/justify-content work in grid? it only works with auto tracks...</div>
+<div class="needs-example">what does auto mean in grid</div>
+
+		and we can do the opposite - size the items relative to the cells
 
 		<p class="in-draft">
 			While this is pretty handy, often we actually want the elements to resize relative to the size of the grid cells.
