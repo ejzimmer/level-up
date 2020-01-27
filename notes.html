@@ -1406,14 +1406,9 @@ function updateCardType(cardNumber) {
 				Does it have more than four or five variables? (Remember humans can only keep up with four or fives things at once).
 				Does your function have more than four or five public methods?
 			</li>
-			<li class="needs-example">Are you covering multiple levels of abstraction?</li>
 			<li>
 				Is your code deeply nested? As we discussed earlier, more than one or two levels of nesting is a good sign that you should 
 				consider factoring out some functionality into another function, with a nice, descriptive name.
-			</li>
-			<li>
-				Does your function have a flag parameter? A flag parameter that is used to change the behaviour of a function. <div class="needs-example">
-					flag parameter</div>. A function with a flag parameter does two things.
 			</li>
 		</ul>
 
@@ -1428,9 +1423,9 @@ function updateCardType(cardNumber) {
 		</p>
 		
 		<pre><code>
-			function createUser(firstName, lastName, emailAddress, phoneNumber, githubUser, twitterHandle) {
-				...
-			}
+function createUser(firstName, lastName, emailAddress, phoneNumber, githubUser, twitterHandle) {
+	...
+}
 		</code></pre>
 
 		<p>
@@ -1439,9 +1434,9 @@ function updateCardType(cardNumber) {
 		</p>
 
 		<pre><code>
-			function createUser(name, contactDetails) {
-				...
-			}
+function createUser(name, contactDetails) {
+	...
+}
 		</code></pre>
 
 		<h4>Composition over inheritance</h4>
@@ -1479,17 +1474,17 @@ function updateCardType(cardNumber) {
 		</p>
 
 		<pre><code>
-			it('sets the valid flag when the phone number is changed to an invalid value', () => {
-				const INVALID_PHONE_NUMBER = '12345';
+it('sets the valid flag when the phone number is changed to an invalid value', () => {
+	const INVALID_PHONE_NUMBER = '12345';
 
-				spyOn(component, 'validatePhoneNumber').and.returnValue(false);
-				spyOn(component, 'setFormValidity');
+	spyOn(component, 'validatePhoneNumber').and.returnValue(false);
+	spyOn(component, 'setFormValidity');
 
-				component.onChange(INVALID_PHONE_NUMBER);
+	component.onChange(INVALID_PHONE_NUMBER);
 
-				expect(component.validatePhoneNumber).toHaveBeenCalled();
-				expect(component.setFormValidity).toHaveBeenCalledWith(false);
-			});
+	expect(component.validatePhoneNumber).toHaveBeenCalled();
+	expect(component.setFormValidity).toHaveBeenCalledWith(false);
+});
 		</code></pre>
 
 		<p>
@@ -1517,13 +1512,13 @@ function updateCardType(cardNumber) {
 		<p>A better test for this functionality would be</p>
 
 		<pre><code>
-			it('sets the valid flag when the phone number is changed to an invalid value', () => {
-				const INVALID_PHONE_NUMBER = '12345';
+it('sets the valid flag when the phone number is changed to an invalid value', () => {
+	const INVALID_PHONE_NUMBER = '12345';
 
-				component.onChange(INVALID_PHONE_NUMBER);
+	component.onChange(INVALID_PHONE_NUMBER);
 
-				expect(component.form.valid).toBe(false);
-			});
+	expect(component.form.valid).toBe(false);
+});
 		</code></pre>
 
 		<p>
@@ -1577,29 +1572,6 @@ function updateCardType(cardNumber) {
 			ES6 (the 2015 version of JavaScript) introduced two new ways to declare variables, bringing the total to three: <code>let</code>,
 			<code>const</code>, and <code>var</code>. Each declaration type has different properties.
 		</p>
-
-		<style>
-			table.variables {
-				border-collapse: collapse;
-				margin: auto;
-			}
-			table.variables th, table.variables td {
-				padding: 1em;
-			}
-			table.variables tr:not(:first-child) td:not(:first-child) {
-				border: 1px solid currentColor;
-				text-align: center;
-			}
-			table.variables tr:first-child th {
-				border-bottom: 2px solid currentColor;
-				padding-bottom: .25em;
-			}
-			table.variables tr:not(:first-child) th {
-				border-right: 2px solid currentColor;
-				padding-right: 0.5em;
-				text-align: right;
-			}
-		</style>
 
 		<table class="variables">
 			<tr>
@@ -1877,7 +1849,7 @@ for (let i = 0; i < animals.length; i++) {
 
 		<p>But, using <code>map</code>, we can just do</p>
 		<pre><code>
-			const elements = animals.map(animal => createDiv(animal));
+const elements = animals.map(animal => createDiv(animal));
 		</code></pre>
 
 		<p>
@@ -1957,10 +1929,10 @@ function removeAccountById(accounts, id) {
 
 		<pre><code>
 const activeAccounts = [];
-for (let i = 0, i < accounts.length; i++) {
+for (let i = 0; i < accounts.length; i++) {
 	const account = accounts[i];
 	if (account.status === ACTIVE) {
-		activeAccounts.push(postcode);
+		activeAccounts.push(account);
 	}
 }
 		</code></pre>
@@ -2271,14 +2243,14 @@ async function setPrices(items) {
 		</p>
 
 		<pre><code>
-			for (const item of items) {
-				try {
-					await placeOrder(item);
-				} catch (e) {
-					console.log('Couldn\'t place all orders. Giving up.');
-					break;
-				}
-			}
+for (const item of items) {
+	try {
+		await placeOrder(item);
+	} catch (e) {
+		console.log('Couldn\'t place all orders. Giving up.');
+		break;
+	}
+}
 		</code></pre>
 
 		<p>
@@ -3054,7 +3026,7 @@ const person = new Person('Uhura'); // Uncaught TypeError: Person is not a const
 			</p>
 			
 			<pre><code>
-&lt;label&gt;Please send me spam&lt;label&gt;
+&lt;label&gt;Please send me spam&lt;/label&gt;
 &lt;input type="checkbox" aria-label="please send me spam"&gt;
 			</code></pre>
 
@@ -3068,7 +3040,7 @@ const person = new Person('Uhura'); // Uncaught TypeError: Person is not a const
 			</p>
 
 			<pre><code>
-&lt;label for="spam"&gt;Please send me spam&lt;label&gt;
+&lt;label for="spam"&gt;Please send me spam&lt;/label&gt;
 &lt;input id="spam" type="checkbox"&gt;
 			</code></pre>
 
@@ -3201,9 +3173,9 @@ const person = new Person('Uhura'); // Uncaught TypeError: Person is not a const
 		<pre><code>
 &lt;label&gt;
 	&lt;input type="checkbox"&gt; Yes! Please send me spam!
-&lt;label&gt;
+&lt;/label&gt;
 
-&lt;label for="favourite-book"&gt;What is your favourite book?&lt;label&gt;
+&lt;label for="favourite-book"&gt;What is your favourite book?&lt;/label&gt;
 &lt;input type="text" id="favourite-book"&gt;
 		</code></pre>
 
@@ -3447,7 +3419,7 @@ const person = new Person('Uhura'); // Uncaught TypeError: Person is not a const
 		</p>
 
 		<pre><code>
-&lt;div id="tacos-label"&gt;Tacos&lt;div&gt;
+&lt;div id="tacos-label"&gt;Tacos&lt;/div&gt;
 &lt;ul role="radiogroup" aria-labelledby="tacos-label"&gt;
 	&lt;input type="radio" name="tacos" id="soft-shell"&gt;
 	&lt;label for="soft-shell"&gt;Soft shell&lt;/label&gt;
@@ -4020,10 +3992,12 @@ heading.focus();
 
 			<fieldset>
 				<legend><code>box-sizing</code></legend>
-				<input type="radio" id="border-box" name="box-sizing" checked>
-				<label for="border-box"><code>border-box</code></label>
-				<input type="radio" id="content-box" name="box-sizing">
-				<label for="content-box"><code>content-box</code></label>	
+				<div class="controls" style="margin: 0">
+					<input type="radio" id="border-box" name="box-sizing" checked>
+					<label for="border-box"><code>border-box</code></label>
+					<input type="radio" id="content-box" name="box-sizing">
+					<label for="content-box"><code>content-box</code></label>		
+				</div>
 			</fieldset>
 
 			<div class="element"></div>
@@ -4240,7 +4214,7 @@ heading.focus();
 				const div = document.createElement('div');
 				div.style.display = display;
 				div.classList.add('element');
-				blockInlineContainer.appendChild(div);
+				blockInlineContainer.append(div);
 			}
 		</script>
 
@@ -4267,8 +4241,10 @@ heading.focus();
 		<figure class="example">
 			<fieldset style="margin-bottom: 20px;">
 				<legend>Element width</legend>
-				<input type="radio" name="block-width" id="block-width-auto" onchange="selectWidth('auto')" checked><label for="block-width-auto">auto</label>
-				<input type="radio" name="block-width" id="block-width-100px" onchange="selectWidth('200px')"><label for="block-width-auto">200px</label>
+				<div class="controls" style="margin: 0">
+					<input type="radio" name="block-width" id="block-width-auto" onchange="selectWidth('auto')" checked><label for="block-width-auto">auto</label>
+					<input type="radio" name="block-width" id="block-width-100px" onchange="selectWidth('200px')"><label for="block-width-auto">200px</label>	
+				</div>
 			</fieldset>
 			<div class="element" id="block-auto" contenteditable="true" style="width: 100%">
 				some example content
@@ -4430,7 +4406,7 @@ heading.focus();
 			function addToLinebox() {
 				const element = document.createElement('span');
 				element.classList.add('element');
-				lineboxContainer.appendChild(element);
+				lineboxContainer.append(element);
 			}
 		</script>
 
@@ -4580,12 +4556,14 @@ heading.focus();
 		</p>
 
 		<div class="example vertical-align">
-			<label for="vertical-align">vertical-align</label>
-			<select id="vertical-align" onchange="updateVerticalAlign()">
-				<option value="top">top</option>
-				<option value="middle">middle</option>
-				<option value="bottom">bottom</option>
-			</select>
+			<div class="controls">
+				<label for="vertical-align">vertical-align</label>
+				<select id="vertical-align" onchange="updateVerticalAlign()">
+					<option value="top">top</option>
+					<option value="middle">middle</option>
+					<option value="bottom">bottom</option>
+				</select>	
+			</div>
 			<div class="container">
 				<span class="large-text">large text</span>
 				<span class="small-text">small text</span>
@@ -5140,13 +5118,15 @@ heading.focus();
 		</p>
 
 		<div class="example align-items">
-			<label for="align-items">align-items</label>
-			<select id="align-items" onchange="changeAlignItems()">
-				<option value="stretch">stretch</option>
-				<option value="flex-start">flex-start</option>
-				<option value="flex-end">flex-end</option>
-				<option value="center">center</option>
-			</select>
+			<div class="controls">
+				<label for="align-items">align-items</label>
+				<select id="align-items" onchange="changeAlignItems()">
+					<option value="stretch">stretch</option>
+					<option value="flex-start">flex-start</option>
+					<option value="flex-end">flex-end</option>
+					<option value="center">center</option>
+				</select>	
+			</div>
 			<div class="container flex">
 				<div class="element"></div>
 				<div class="element"></div>
@@ -5196,15 +5176,17 @@ heading.focus();
 		</p>
 
 		<div class="example justify-content">
-			<label for="justify-content">justify-content</label>
-			<select id="justify-content" onchange="changeJustifyContent()">
-				<option value="flex-start">flex-start</option>
-				<option value="flex-end">flex-end</option>
-				<option value="center">center</option>
-				<option value="space-between">space-between</option>
-				<option value="space-around">space-around</option>
-				<option value="space-evenly">space-evenly</option>
-			</select>
+			<div class="controls">
+				<label for="justify-content">justify-content</label>
+				<select id="justify-content" onchange="changeJustifyContent()">
+					<option value="flex-start">flex-start</option>
+					<option value="flex-end">flex-end</option>
+					<option value="center">center</option>
+					<option value="space-between">space-between</option>
+					<option value="space-around">space-around</option>
+					<option value="space-evenly">space-evenly</option>
+				</select>	
+			</div>
 			<div class="container flex">
 				<div class="element"></div>
 				<div class="element"></div>
@@ -6096,7 +6078,7 @@ grid-template-rows: 1fr 1fr;
 		</p>
 
 		<figure class="example multi-fr">
-			<div class="container">
+			<div class="container fake-grid-inspector">
 				<div class="cell"></div>
 				<div class="cell"></div>
 				<div class="cell"></div>
@@ -6104,35 +6086,48 @@ grid-template-rows: 1fr 1fr;
 			</div>
 		</figure>
 		<style>
-			.multi-fr .container {
+			.fake-grid-inspector {
 				--grid-purple: #9400ff;
 				display: grid;
-				grid-template-columns: 4fr 1fr;
 				border: 1px solid var(--grid-purple);
 				height: 300px;
 				border-radius: 0;
 			}
-			.multi-fr .cell {
+			.multi-fr .container {
+				grid-template-columns: 4fr 1fr;
+			}
+
+			.fake-grid-inspector .cell {
 				width: 100%;
 				height: 100%;
 				border: 0 dashed var(--grid-purple);
 			}
-			.multi-fr .cell:nth-child(2n - 1) {
+			.fake-grid-inspector .cell:nth-child(2n - 1) {
 				border-right-width: 1px;
 			}
-			.multi-fr .cell:nth-last-child(n - 2) {
+			.fake-grid-inspector .cell:nth-last-child(n - 2) {
 				border-bottom-width: 1px;
 			}
  		</style>
-
-		<div class="needs-example">image from grid inspector</div>
 
 		<p>
 			We can also mix units, like <code>grid-template-columns: 100px 1fr</code>. In this case, the first column will always be 100px 
 			wide, no matter the size of the container. The second column will take up the remaining space.
 		</p>
 
-		<div class="needs-example">grid inspector</div>
+		<figure class="example mixed-fr">
+			<div class="container fake-grid-inspector">
+				<div class="cell"></div>
+				<div class="cell"></div>
+				<div class="cell"></div>
+				<div class="cell"></div>
+			</div>
+		</figure>
+		<style>
+			.mixed-fr .container {
+				grid-template-columns: 100px 1fr;
+			}
+		</style>
 
 		<p>
 			So, why do we use frs instead of just sticking with percentages? Basically, the maths is easier. You don't need to use <code>calc()</code>
@@ -6173,7 +6168,8 @@ grid-template-rows: 1fr 1fr;
 				justify-self: center;
 				text-align : center;
 			}
-		</style>
+		</style
+		>
 
 		<p>
 			You can see the elements get placed along the first row, until that row fills up. Then we start filling up the next row.
@@ -6510,14 +6506,23 @@ grid-template-rows: 1fr 1fr;
 			The numbers used to specify the start and endpoint actually refer to the lines <i>between</i> the cells. So 
 			<code>grid-column: 1 / 2</code> will result in an element that goes from the first line (at the edge of the grid), to the 
 			second line. It will only take up one column. You need to calculate your endpoint as your start point + the number of 
-			cells you want to cover. (You can turn on the line numbers in the grid inspector using the options in the Layout tab.)
+			cells you want to cover.
 		</p>
 
-		<div class="needs-example">grid inspector showing line numbers, and how to turn it on</div>
+		<p>You can turn on line numbers in the grid inspector, under the Layout tab.</p>
+
+		<img src="images/line-numbers.png" alt="you can turn on line numbers in the grid inspector, under the Layout tab">
 
 		<p>
 			The grid lines are also numbered in the reverse direction, using negative numbers. So we can refer to the last 
-			grid lines as -1, the second last as -2 and so on. This means that we can position an element in the last two rows 
+			grid lines as -1, the second last as -2 and so on. You can see both the positive and negative numbers in the 
+			grid inspector.
+		</p>
+
+		<img src="images/showing-line-numbers.png" alt="grid inspector shows positive and negative numbers">
+			
+		<p>
+			This means that we can position an element in the last two rows 
 			and last two columns of a grid, no matter how many cells there are!
 		</p>
 
@@ -6729,6 +6734,10 @@ grid-template-rows: 1fr 1fr;
 			.template-areas .element {
 				width: 100%;
 				height: 100%;
+				font-size: 60px;
+				display: flex;
+				align-items: center;
+			  justify-content: center;
 			}
 
 			.template-areas .a {
@@ -6756,15 +6765,20 @@ grid-template-rows: 1fr 1fr;
 			the option is in the Layout tab.
 		</p>
 
-		<div class="needs-example">turning on the grid areas</div>
+		<img src="images/grid-areas.png" alt="you can turn on the grid area labels in the grid inspector">
 
 		<p>
-			Now, this is a pretty verbose way to describe the layout we've created above - it would have been a lot simpler just 
-			to use <code>grid-column: span 2</code> on the <code>.a</code> element. However, it can be a good way 
-			to describe more complicated layouts, or layouts where the different parts have meaning.
+			<code>grid-areas</code> can be a handy way to make your CSS a little more semantic.
 		</p>
 
-		<div class="needs-example">something that makes sense to use grid-template-areas for</div>
+		<pre><code class="css">
+grid-template-areas: 'heading heading heading'
+										 'nav     content content'
+										 '.       content content'
+										 'footer  footer  footer'
+		</code></pre>
+
+		<p>A '.' denotes an empty cell.</p>
 
 		<p>
 			While all these properties provide a very powerful way of rearranging your grid, you should bear in mind the same caveats 
@@ -6785,11 +6799,12 @@ grid-template-rows: 1fr 1fr;
 			If we add more elements than we have defined in our grid, the browser will just add another row to the grid 
 			and continue adding elements there. (If you're using <code>grid-auto-flow: column</code>, then it will add a 
 			new column instead.) Additional rows or columns that are added like this are called the implicit grid. 
-			(As opposed to the explicit grid, which is rows/columns that you set up... well... explicitly.) <span class="needs-example">
-				In Firefox grid inspector, the implicit grid is distinguished through the use of dotted lines. (Solid lines indicate 
-				the edges of the explicit grid, dashed lines indicate the cells of the explicit grid.)
-			</span>
+			(As opposed to the explicit grid, which is rows/columns that you set up... well... explicitly.) 
 		</p>
+
+		<p>The grid inspector depicts implicit grid cells with a dotted, rather than dashed line.</p>
+
+		<img src="images/implicit-grid.png" alt="The grid inspector shows explicit grid cells with a dasehd line, implicit cells with a dotted line">
 
 		<p>
 			Let's start with the most extreme example. We've defined a grid container, but not specified any rows or columns.
@@ -7112,9 +7127,11 @@ grid-template-rows: 1fr 1fr;
 		</p>
 
 		<p>
-			<span class="needs-example">The reason for this becomes apparent if we look at the <code>auto-fill</code> example 
-			with the grid inspector</span>.
+			The reason for this becomes apparent if we look at the <code>auto-fill</code> example 
+			with the grid inspector.
 		</p>
+
+		<img src="images/auto-fill.png" alt="the gap at the end of the row is filled with empty cells">
 
 		<p>
 			Remember, <code>auto-fill</code> keeps creating columns, even if there's nothing to go in them. Once the container is 

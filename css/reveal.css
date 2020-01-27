@@ -1289,3 +1289,7 @@ body {
 
 .zoomed .reveal .roll span:after {
   visibility: hidden; }
+
+pre {
+  width: 100%;
+}

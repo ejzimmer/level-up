@@ -43,70 +43,6 @@ aside h4, aside h3 {
 	display: none;
 }
 
-table.docs {
-	border-collapse: collapse;
-	margin-bottom: 1em;
-}
-table.docs td, table.docs th {
-	width: 25%;
-}
-table.docs tr:not(:last-child) th {
-	border-right: 2px solid currentColor;
-	padding-right: .5em;
-	padding-top: .5em;
-	text-align: right;
-}
-table.docs tr:last-child th {
-	border-top: 2px solid currentColor;
-}
-table.docs .doc:nth-child(2) {
-	position: relative;
-	left: 8px;
-	top: -2px;
-}
-
-table.docs-key {
-	font-size: .8em;
-	border: 1px solid currentColor;
-	padding: .75em;
-}
-table.docs-key thead th {
-	text-align: left;
-	font-weight: bold;
-	text-decoration: underline;
-}
-table.docs-key th {
-	font-weight: normal;
-	font-style: italic;
-	text-align: right;
-	margin-right: 1em;
-}
-table.docs-key td {
-	margin: 1em;
-	padding: .25em;
-}
-
-.doc {
-	width: 20px;
-	height: 20px;
-	margin: auto;
-}
-.doc.external {
-	background-color: hsl(200, 50%, 50%);
-	border-radius: 50%;
-}
-.doc.readme {
-  border: 12.5px solid transparent;
-  border-bottom-color: hsl(250, 50%, 50%);
-  transform: translateY(-30%);
-}
-.doc.comments {
-	background-color: hsl(150, 50%, 50%);
-}
-.doc.code {
-	background-color: hsl(350, 50%, 50%);
-	border-radius: 0 50%;
-}
 
 li pre {
 	margin-left: -2em;
@@ -124,6 +60,7 @@ aside {
 	border-radius: 10px;
 	padding: 0 var(--margin-size);
 	margin: var(--margin-size);
+	max-width: 100%;
 }
 
 .example {

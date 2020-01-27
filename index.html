@@ -22,6 +22,21 @@
 			document.getElementsByTagName( 'head' )[0].appendChild( link );
 		</script>
 
+		<style>
+			section h2 {
+				align-self: min-content;
+			}
+
+			section.top {
+				align-content: flex-start;
+				grid-gap: 40px;
+			}
+
+			section.horizontal {
+				grid-auto-flow: column;
+			}
+		</style>
+
 	</head>
 	<body>
 		<div class="reveal">
@@ -45,47 +60,1300 @@
 					</div>
 				</section>
 
-				<section>
-					<div>@ErinJZimmer</div>
-					<a href="https://ez.codes">ez.codes</a>
-
-					<div>level-up.ez.codes</div>						
+				<section class="top">
+					<h2>where to find</h2>
+					<div>Me, on Twitter: @ErinJZimmer</div>
+					<a href="https://level-up.ez.codes">This workshop: level-up.ez.codes</a>
 				</section>
 
 				<section class="inverse">
 					<div>DISCLAIMER</div>
 				</section>
 
-				<section>
-					how it's going to work
-				</section>
-
-				<section>
+				<section class="top">
 					<h2>Topics</h2>
 
-					<h3>JavaScript</h3>
-					<ul>
+					<ul style="margin-left: 10vw">
 						<li>Clean code</li>
 						<li>Modern JavaScript</li>
+						<li>HTML & accessibility</li>
+						<li>CSS</li>
 					</ul>
-
-					<h3>HTML</h3>
-					<ul>
-						<li>semantic HTML & accessibility</li>
-					</ul>
-					
-					<h3>CSS</h3>
-					<ul>
-						<li>How CSS works</li>
-						<li>CSS layouts</li>
-					</ul>
-
-				</section>	
-
-				<section class="inverse">
-					<h2>Clean code</h2>
 				</section>
 
+				<section class="inverse">
+					<div>Clean code</div>
+				</section>
+
+				<section>
+					<blockquote>
+						Any fool can write code that a computer can understand. Good programmers write code that humans can understand. 
+					</blockquote>
+					<div style="text-align: right">-Martin Fowler</div>
+				</section>
+
+				<section class="top">
+					<p style="font-family: Kalam; font-size: 3em;">
+						Clean code
+					</p>
+					<ul style="margin-left: 10vw">
+						<li>makes its intent clear</li>
+						<li>doesn't do unexpected things</li>
+						<li>is broken up logically</li>
+					</ul>			
+				</section>
+
+				<section>
+					<blockquote>
+						understanding the original programmer's intent [is] the most difficult problem
+					</blockquote>
+					<div style="text-align: right">-<em>Code Complete</em></div>
+				</section>
+
+				<section>
+					<style>
+						.docs-key tr th {
+							text-align: left;
+						}
+					</style>
+					<table class="docs-key" style="border: 0">
+						<tr class="fragment" data-fragment-index="1"><th>External documentation</th><td><div class="doc external"></div></td></tr>
+						<tr class="fragment" data-fragment-index="2"><th>README</th><td><div class="doc readme"></div></td></tr>
+						<tr class="fragment" data-fragment-index="3"><th>Code comments</th><td><div class="doc comments"></div></td></tr>
+						<tr class="fragment" data-fragment-index="4"><th>Code itself</th><td><div class="doc code"></div></td></tr>
+					</table>
+
+					<table class="docs fragment" data-fragment-index="5" style="max-width: 425px">
+						<tr>
+							<th>discoverability</th>
+							<td>
+								<div class="doc external fragment" data-fragment-index="7" aria-label="external docs"></div>
+							</td>
+							<td>
+								<div class="doc readme fragment" data-fragment-index="8" aria-label="readme"></div>
+							</td>
+							<td>
+								<div class="doc comments fragment" data-fragment-index="9" aria-label="code comments"></div>
+								<div class="doc code fragment" data-fragment-index="10" aria-label="code itself"></div>
+							</td>
+						</tr>
+						<tr>
+							<th>searchability</th>
+							<td></td>
+							<td>
+								<div class="doc external fragment" data-fragment-index="7" aria-label="external docs"></div>
+								<div class="doc readme fragment" data-fragment-index="8" aria-label="readme"></div>
+							</td>
+							<td>
+								<div class="doc comments fragment" data-fragment-index="9" aria-label="code comments"></div>
+								<div class="doc code fragment" data-fragment-index="10" aria-label="code itself"></div>	
+							</td>
+						</tr>
+						<tr>
+							<th>relevance</th>
+							<td><div class="doc external fragment" data-fragment-index="7" aria-label="external docs"></div></td>
+							<td>
+								<div class="doc readme fragment" data-fragment-index="8" aria-label="readme"></div>
+								<div class="doc comments fragment" data-fragment-index="9" aria-label="code comments"></div>
+							</td>
+							<td>
+								<div class="doc code fragment" data-fragment-index="10" aria-label="code itself"></div>
+							</td>
+						</tr>
+						<tr>
+							<td></td><th>low</th><th>medium</th><th>high</th>
+						</tr>
+					</table>
+				</section>
+
+				<section>
+<pre><code class="css">
+/* ensure focus ring doesn't get cut off by overflow: hidden */
+.menu .item {
+	outline-offset: -2px; 
+}
+</code></pre>						
+				</section>
+
+				<section class="inverse">
+					<div style="padding: 0">Use names that are descriptive, concise and unambiguous</div>
+				</section>
+
+				<section>
+					<ul style="margin: auto; font-size: 1.5em">
+						<li class="fragment">Don't use abbreviations</li>
+						<li class="fragment">Don't add junk</li class="fragment">
+						<li class="fragment">Avoid generic names</li>
+						<li class="fragment">Keep things consistent</li class="fragment">
+					</ul>
+				</section>
+
+
+				<section>
+					<pre class="fragment"><code class="js">const today = dayjs();
+const startDateObject = dayjs(billingCycle.startDate);
+const endDateObject = dayjs(billingCycle.endDate);</code></pre>
+
+					<pre class="fragment"><code class="js">const isValidDates = startDateObject.isValid() && endDateObject.isValid();</code></pre>
+
+					<pre class="fragment"><code class="js">const kWhSold = 42;</code></pre>
+
+					<pre class="fragment"><code class="js">const mockAmount = 10;</code></pre>
+				</section>
+
+				<section class="inverse">
+					<div>Don't be surprising</div>
+				</section>
+
+				<section>
+					<ul style="margin: auto; font-size: 1.5em">
+						<li class="fragment">Functions should do what they say</li>
+						<li class="fragment">Don't reuse variables</li>
+						<li class="fragment">Follow established patterns</li>
+					</ul>
+				</section>
+
+				<section>
+					<pre><code>
+getStoredBankDetails() {
+	if (this.activePaymentOption === PaymentOptions.BANK) {
+		this.options.push(this.storedPayments.bankAccount);
+	}
+}
+</code></pre>
+				</section>
+
+				<section>
+					<pre><code>
+hasAccountChanged(newAccount) {
+	const currentAccount = this.activeAccount;
+	const hasChanged = (
+		currentAccount.accountName !== newAccount.accountName ||
+		currentAccount.accountNumber !== newAccount.accountNumber ||
+		currentAccount.bsb !== newAccount.bsb
+	);
+	this.isDirectDebitChanged = hasChanged;
+	return this.isDirectDebitChanged;
+}				
+</code></pre>
+				</section>
+
+				<section>
+					<pre><code>
+function element(type) {
+	return document.createElement(type);
+}
+
+var element = element('div');		
+</code></pre>			
+				</section>
+
+				<section>
+					<pre><code>
+function login() {
+	...
+}
+
+function signOut() {
+	...
+}
+					</code></pre>
+				</section>
+				<section>
+
+					<pre><code>
+function login() {
+	...
+}
+
+function logOut() {
+	...
+}						
+					</code></pre>
+				</section>
+
+				<section class="inverse">
+					<div>Increase your signal-to-noise ratio</div>
+				</section>
+
+				<section>
+					<pre><code>
+let isParentNode;
+if (hasChildren(node)) {
+	isParentNode = true;
+} else {
+	isParentNode = false;
+}
+					</code></pre>
+					<pre class="fragment"><code class="js">const isParentNode = hasChildren(node)</code></pre>
+				</section>
+
+				<section>
+					<ul style="margin: auto; font-size: 1.5em"><li>
+						Extract away noise
+					</li>
+						</ul style="margin: auto; font-size: 1.5em">
+				</section>
+
+				<section>
+					<ul style="margin: auto; font-size: 1.5em"><li>
+						Less nesting is best nesting
+					</li>
+						</ul style="margin: auto; font-size: 1.5em">
+				</section>
+
+				<section>
+					<ul style="margin: auto; font-size: 1.5em"><li>
+						Use idioms
+					</li>
+						</ul style="margin: auto; font-size: 1.5em">
+				</section>
+
+				<section>
+					<div style="font-size: 3em">Pleuvoir des cordes</div>
+					<div style="font-size: 2em; font-style: italic">Raining cats and dogs</div>
+				</section>
+
+				<section>
+					<ul style="margin: auto">
+						<li class="fragment"><code style="font-size: .8em">const name = user.getName() || 'hey you';</code></li>
+						<li class="fragment"><code style="font-size: .8em">const name = user && user.name && user.name.firstName;</code style="font-size: .8em"></li>
+						<li class="fragment"><code style="font-size: .8em">function hasName() { return !!this.name }</code style="font-size: .8em"></li>
+						<li class="fragment"><code style="font-size: .8em">const age = +document.getElementById('age').value;</code style="font-size: .8em"></li>
+						<li class="fragment"><code style="font-size: .8em">const copy = JSON.parse(JSON.stringify(objectToCopy))</code style="font-size: .8em"></li>
+					</ul>
+				</section>
+
+				<section class="inverse">
+					<div>Don't repeat yourself</div>
+				</section>
+
+				<section>
+					<pre><code class="js">
+import { cardValidator } from 'card-validator';
+
+function getCardType(cardNumber) {
+	return cardValidator.number(cardNumber).card.niceType;
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code class="js">
+import { types } from 'credit-card-type';
+import { cardValidator } from 'card-validator';
+
+function getCardTypeForDisplay(cardNumber) {
+	const card = cardValidator.number(cardNumber).card;
+	return card.type === types.AMERICAN_EXPRESS ? 'AMEX' : card.niceType;
+}		
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code class="js">
+import { types } from 'credit-card-type';
+import { cardValiator } from 'card-validator';
+
+const allowedTypes = [types.AMERICAN_EXPRESS, types.MASTERCARD, types.VISA];
+function updateCardType(cardNumber) {
+	const card = cardValidator.number(cardNumber).card;
+
+	if (!allowedTypes.includes(card.type)) {
+		throw new Error('Card type not allowed');
+	}
+
+	return card.type === types.AMERICAN_EXPRESS ? 'AMEX' : card.niceType;
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code class="js">import { types } from 'credit-card-type';
+import { cardValidator } from 'card-validator';
+
+export function getCardType(cardNumber) {
+	const card = cardValidator.number(cardNumber).card;
+	
+	const cardType = {
+		type: card.type,
+		niceType: card.niceType
+	};
+
+	if (card.type === types.AMERICAN_EXPRESS) {
+		cardType.niceType = 'AMEX';
+	}
+
+	return cardType;
+}</code></pre>
+				</section>
+
+				<section>
+					<pre><code>import { getCardType } from '../card-utils';
+
+function getCardTypeForDisplay(cardNumber) {
+	return getCardType(cardNumber).niceType;
+}</code></pre>
+
+					<pre><code>import { getCardType } from '../card-utils';
+
+const allowedTypes = [types.AMERICAN_EXPRESS, types.MASTERCARD, types.VISA];
+function updateCardType(cardNumber) {
+	const cardType = getCardType(cardNumber);
+
+	if (!allowedTypes.includes(cardType.type)) {
+		throw new Error('Card type not allowed');
+	}
+
+	return cardType.prettyType;
+}</code></pre>
+				</section>
+
+				<section class="inverse">
+					<div>Code with humans in mind</div>
+				</section>
+
+				<section>
+					<ul style="font-size: 1.5em; margin: auto">
+						<li>Do One Thing</li>
+					</ul>
+				</section>
+
+				<section>
+					<pre><code class="js">let arrDeletedItems = array.splice(start[, deleteCount[, item1[, item2[, ...]]]])</code></pre>
+					<pre class="fragment" data-fragment-index="1"><code class="js">const updatedArray = array.removeItems(start, deleteCount)</code></pre>
+					<pre class="fragment" data-fragment-index="1"><code class="js">const updatedArray = array.addItems(start, itemsToAdd)</code></pre>
+				</section>
+
+				<section>
+					<ul style="margin: auto; font-size: 1.5em; list-style-type: '\2728';">
+						<li>Is it hard to name?</li>
+						<li>Is it long?</li>
+						<li>Is it deeply nested?</li>
+					</ul>
+				</section>
+
+				<section>
+					<ul style="margin: auto; font-size: 1.5em">
+					<li>Parameters</li>
+					</ul>
+				</section>
+
+				<section>
+					<pre><code>
+function createUser(firstName, 
+										lastName, 
+										emailAddress, 
+										phoneNumber, 
+										githubUser, 
+										twitterHandle) {
+	...
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code>
+function createUser(name, contactDetails) {
+	...
+}
+					</code></pre>
+				</section>
+
+				<section class="inverse">
+					<div style="padding: 0 20px">Favour composition over inheritance</div>
+				</section>
+				
+				<section class="inverse">
+					<div>Refactoring code & testing</div>
+				</section>
+
+				<section>
+					<pre><code>it('sets the valid flag when the phone number is changed to an invalid value', () => {
+	const INVALID_PHONE_NUMBER = '12345';
+
+	spyOn(component, 'validatePhoneNumber').and.returnValue(false);
+	spyOn(component, 'setFormValidity');
+
+	component.onChange(INVALID_PHONE_NUMBER);
+
+	expect(component.validatePhoneNumber).toHaveBeenCalled();
+	expect(component.setFormValidity).toHaveBeenCalledWith(false);
+});</code></pre>
+				</section>
+
+				<section>					<pre><code>it('sets the valid flag when the phone number is changed to an invalid value', () => {
+	const INVALID_PHONE_NUMBER = '12345';
+
+	component.onChange(INVALID_PHONE_NUMBER);
+
+	expect(component.form.valid).toBe(false);
+});</code></pre>
+						
+				</section>
+
+				<section>
+					<ul style="margin: auto; font-size: 1.5em">
+					<li>Test Driven Development</li>
+					</ul>
+				</section>
+
+				<section class="inverse">
+					<div>Modern JavaScript</div>
+				</section>
+
+				<section>
+					<ul style="margin: auto; font-size: 1.5em">
+					<li>Declaring variables: var, let & const</li>
+					</ul>
+				</section>
+
+				<section>
+					<table class="variables">
+						<tr>
+							<td></td><th>Mutable</th><th>Scoping</th>
+						</tr>
+						<tr>
+							<th><code>var</code></th><td>✔️</td><td>function</td>
+						</tr>
+						<tr>
+							<th><code>let</code></th><td>✔️</td><td>block</td>
+						</tr>
+						<tr>
+							<th><code>const</code></th><td>❌</td><td>block</td>
+						</tr>
+					</table>			
+				</section>
+
+				<section>
+					<h2>Mutability</h2>
+					<pre><code class="js">
+var favouriteNumber = 4;
+favouriteNumber = 6; // perfectly OK.
+
+let count = 0;
+count++; // also completely alright.
+					</code></pre>
+
+					<pre class="fragment"><code class="js">
+const quest = "seek the Holy Grail";
+quest = "run away"; // TypeError: invalid assignment to const 'quest'
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code class="js">
+const lancelot = {
+	favouriteColour: 'blue'
+};
+const galahad = {
+	favouriteColour: 'blue'
+}
+
+galahad = lancelot; // TypeError: invalid assignment to const 'galahad'
+galahad.favouriteColour = 'yellow'; // Quite alright
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Scoping</h2>
+					<pre class="fragment"><code class="js">
+for (var i = 0; i < 10; i++) {
+	try {
+		processItem(items[i]);
+	} catch (e) {
+		break;
+	}
+}
+console.log(`Successfully processed ${i} items`);
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code>
+var hour = (new Date()).getHours();
+if (hour < 13) {
+	var greeting = 'Good morning!';
+} else {
+	var greeting = 'Good afternoon!';
+}
+console.log(greeting);
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code>
+for (let i = 0; i < 10; i++) {
+	try {
+		processItem(items[i]);
+	} catch (e) {
+		break;
+	}
+}
+console.log(`Successfully processed ${i} items`); // Uncaught ReferenceError: i is not defined							
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code class="js">
+let i;
+for (i = 0; i < 10; i++) {
+	try {
+		processItem(items[i]);
+	} catch (e) {
+		break;
+	}
+}
+console.log(`Successfully processed ${i} items`); 
+</code></pre>
+				</section>
+
+				<section>
+					<pre><code>
+const hours = (new Date()).getHours();
+const isMorning = hours < 13;
+const greeting = isMorning ? 'Good morning!' : 'Good afternoon!';
+</code></pre>
+				</section>
+
+				<section class="inverse">
+					<div style="background-image: linear-gradient(fuchsia, white)">DON'T USE var</div>
+				</section>
+
+				<section>
+					<ul style="margin: auto; font-size: 1.5em">
+					<li>Array Functions</li>
+					</ul>
+				</section>
+
+				<section>
+					<ul style="margin: auto; font-size: 1.5em">
+						<li>Declarative is better</li>
+					</ul>	
+				</section>
+
+				<section>examples</section>
+
+				<section class="top">
+					<h2>Async array functions</h2>
+					<pre><code class="js">
+async function setPrices(items) {
+	for (let i = 0; i < items.length; i++) {
+		const item = items[i];
+		const price = await getPrice(item.id);
+		item.price = price;
+	}
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code class="js">
+function setPrices(items) {
+	items.forEach(async (item) => {
+		const price = await getPrice(item.id);
+		item.price = price;
+	});
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code class="js">
+async function setPrices(items) {
+	const promises = items.map((item) => {
+		const price = await getPrice(item.id);
+		item.price = price;
+	});
+
+	await Promise.all(promises);
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code class="js">
+for (const item of items) {
+	try {
+		await placeOrder(item);
+	} catch (e) {
+		console.log('Couldn\'t place all orders. Giving up.');
+		break;
+	}
+}						
+					</code></pre>
+				</section>
+
+				<section class="inverse">
+					<div>Other fun stuff</div>
+				</section>
+
+				<section>
+					<h2>Object property shorthand</h2>
+					<pre><code class="js">
+const name = 'Leia Organa';
+
+// old JavaScript
+const request = { name: name };
+
+// with shorthand 
+const request = { name };
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code class="js">
+// a bit confusing
+const request = { method: 'GET', name, birthDate, accountNumber: accountId, accountType };
+
+// better 
+const request = {
+	method: 'GET',
+	name,
+	birthDate,
+	accountNumber: accountId,
+	accountType
+};
+					</code></pre>
+				</section>
+
+				<section class="top">
+					<h2>Object destructuring</h2>
+					<pre><code class="js">
+const account = {
+	name: 'Ellen Ripley',
+	type: 'PHONE',
+	number: '34352';
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code class="js">
+const zelda = {
+	name: 'Princess Zelda',
+	contactDetails: {
+		type: 'TWITTER'
+		value: '@zelda'
+	}
+};
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code class="js">
+function makeRequest(config) {
+	const method = config.method;
+	const url = config.url;
+
+	const request = { method, url };
+
+	if (method === 'POST') {
+		request.body = config.body;
+	}
+}
+					</code></pre>
+				</section>
+
+				<section class="top">
+					<h2>Array destructuring</h2>
+					<pre><code class="js">
+const account = {
+	name: 'Ellen Ripley',
+	type: 'PHONE',
+	number: '34352';
+}
+
+const properties = Object.entries(account);
+console.log(properties); 
+// [['name', 'Ellen Ripley'], ['type', 'PHONE'], ['number', '34352']];								
+					</code></pre>
+				</section>
+
+				<section class="top">
+					<h2>Rest parameters</h2>
+					<pre><code class="js">
+Math.min(4, 63, -2, 0, -79);
+
+const numbers = [4, 63, -2, 0, -79];
+</code></pre>
+				</section>
+
+				<section class="top">
+					<pre><code class="js">
+function sum(...numbers) {
+	numbers.reduce((total, number) => total + number, 0);
+}
+
+console.log(sum(4, 9, 17, 23)); // 53						
+					</code></pre>
+				</section>
+
+				<section class="top">
+					<h2>Spread operator</h2>
+					<pre><code>
+const cats = ['Burmese', 'Siamese', 'Ragdoll'];
+const dogs = ['Labrador', 'Husky', 'Kelpie'];
+					</code></pre>
+				</section>
+
+				<section class="top">
+					<pre><code class="js">
+						const person = {
+							name: 'Amy Wong',
+							birthday: '2978-12-03'
+						};
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Copying with destructuring</h2>
+					<pre><code class="js">
+						// Array destructuring
+const birbs = ['Canary', 'Rosella', 'Galah'];
+const copyOfBirbs = [...birbs];
+
+birbs.push('Cockatoo');
+console.log(birbs); // ['Canary', 'Rosella', 'Galah', 'Cockatoo']
+console.log(copyOfBirbs); // ['Canary', 'Rosella', 'Galah']
+
+// Object destructuring
+const postageDetails = {
+	height: 47,
+	width: 23,
+	cost: {
+		amount: 10,
+		currency: 'AUD'
+	}
+};
+const copyOfPostageDetails = {...postageDetails};
+
+postageDetails.width = 58;
+postageDetails.cost.amount = 22;
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Default parameter values</h2>
+					<pre><code class="js">
+function sayHello(name) {
+	console.log('Hello', name);
+}						
+					</code></pre>
+				</section>
+
+				<section class="inverse">
+					<div>Arrow functions & this</div>
+				</section>
+
+				<section>
+					<pre><code class="js">
+const evenNumbersNormalFunction = numbers.filter(function (number) {
+	return number % 2 === 0;
+});
+
+const evenNumbersArrowFunction = numbers.filter(number => number % 2 === 0); 						
+					</code></pre>
+				</section>
+
+				<section>
+					<ul style="margin: auto; font-size: 1.5em">
+						<li><code style="font-size: 60px">this</code> refers to the calling object</li>
+					</ul>
+				</section>
+
+				<section>
+					<pre><code>
+const uhura = {
+	givenName: 'Nyota',
+	familyName: 'Uhura',
+	sayHello: function () {
+		console.log('hello', this.givenName, this.familyName);
+	}
+};
+
+const scully = {
+	givenName: 'Dana',
+	familyName: 'Scully',
+	sayHello: uhura.sayHello
+};
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Why?</h2>
+					<pre><code>
+const button = document.getElementById('special-button');
+button.addEventListener('click', function () {
+	console.log(this); // button
+});
+		 
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Global this</h2>
+					<pre><code class="js">
+window.name = 'Global demo';
+const person = {
+	name: 'Sarah Connor',
+	sayHello: function () {
+		console.log('Hello', this.name);
+	}
+}
+
+const sayHello = person.sayHello;
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Call/apply</h2>
+					<pre><code class="js">
+const anotherPerson = {
+	name: 'Katniss Everdeen'
+};
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Bind</h2>
+				</section>
+
+				<section>
+					<h2>Constructors</h2>
+				</section>
+
+				<section>
+					<ul style="margin: auto; font-size: 1.5em">
+						<li>Arrow functions don't bind <code style="font-size: 60px">this</code></li>
+					</ul>
+				</section>
+
+				<section>
+					<pre><code>
+uhura.sayHello = () => console.log(`hello ${this.givenName}`);
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code>
+class Person {
+	constructor(name) {
+		this.name = name;
+		this.sayHello = () => console.log('Hello', this.name);
+	}
+}
+
+const sevenOfNine = new Person('Seven of Nine');
+</code></pre>
+				</section>
+
+				<section class="inverse">
+					<div>HTML & Accessibility</div>
+				</section>
+
+				<section class="top">
+					<h2>Semantic HTML</h2>
+					<ul>
+						<li>Adds meaning to your code</li>
+						<li>Gives your users a consistent experience</li>
+						<li>Works with all devices</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>What about ARIA?</h2>
+					<pre class="fragment"><code class="html">
+<label>Please send me spam</label>
+<input type="checkbox" aria-label="please send me spam">
+					</code></pre>
+					<pre class="fragment"><code class="html">
+<label for="spam">Please send me spam</label>
+<input id="spam" type="checkbox">										
+					</code></pre>
+				</section>
+
+				<section class="top">
+					<h2>Compared to semantic HTML, ARIA</h2>
+					<ul>
+						<li>Is harder to use</li>
+						<li>Adds value for fewer users</li>
+					</ul>
+				</section>
+
+				<section class="inverse">
+					<div>HTML landmarks & descriptions</div>
+				</section>
+
+				<section class="top">
+					<h2>Landmark elements</h2>
+					<ul>
+						<li><code>&lt;header&gt;</code></li>
+						<li><code>&lt;h1&gt;,&lt;h2&gt;,&lt;h3&gt;,&lt;h4&gt;</code></li>
+						<li><code>&lt;nav&gt;</code></li>
+						<li><code>&lt;main&gt;</code></li>
+						<li><code>&lt;footer&gt;</code></li>
+						<li><code>&lt;aside&gt;</code></li>
+					</ul>
+				</section>
+
+				<section>
+					<img src="images/no-css.png" alt="">
+				</section>
+
+				<section>
+					<h2>Titles</h2>
+					<img src="images/twitter-titles.png" alt="">
+				</section>
+
+				<section class="top">
+					<h2>Describing inputs</h2>
+					<pre><code class="html">
+<label>
+	<input type="checkbox"> Yes! Please send me spam!
+</label>
+
+<label for="favourite-book">What is your favourite book?</label>
+<input type="text" id="favourite-book">
+					</code></pre>
+				</section>
+
+				<section class="top">
+					<style>
+						#md-label-example {
+							position: relative;
+							padding: 20px 0;
+							margin-top: 10px;
+							width: min-content;
+							margin: auto;
+						}
+						#md-label-example label {
+							left: 5px;
+							top: 40px;
+							position: absolute;
+							font-size: 18px;
+							transition: all .5s;
+							font-weight: bold;
+						}
+						#md-label-example input:focus + label, #md-label-example input:valid + label {
+							top: 0px;
+							left: 0;
+							font-size: 16px;
+						}
+					</style>
+		
+					<div id="md-label-example">
+						<input id="md-name" required>
+						<label for="md-name">Name</label>
+					</div>		
+
+					<style>
+						#power-button {
+							--diameter: 40px;
+							width: var(--diameter);
+							height: var(--diameter);
+							border: 4px solid;
+							border-radius: 50%;
+							position: relative;
+							border-color: grey;
+							margin-left: .7em;
+							transition: all .5s;
+						}
+		
+						#power-button::before {
+							--background: #333;
+							content: '';
+							height: 20px;
+							border: 2px solid;
+							border-color: inherit;
+							position: absolute;
+							transform: translate(-50%);
+							left: 50%;
+							top: -25%;
+							box-shadow: 
+								3px 3px var(--background),
+								-3px 3px var(--background),
+								3px -3px var(--background),
+								-3px -3px var(--background);
+						}
+		
+						#styled-checkbox {
+							opacity: 0;
+							position: fixed;
+						}
+						#styled-checkbox + label {
+							display: flex;
+							background-color: #333;
+							color: #ddd;
+							align-items: center;
+							font-size: 30px;
+							font-family: sans-serif;
+							padding: 20px;
+							cursor: pointer;
+							border: 1px solid #aaa;
+							border-radius: 8px;
+							width: max-content;
+							margin: auto;
+							box-shadow: 
+								inset 1px 1px 2px 1px #ccc,
+								inset -1px -1px #888,
+								1px 1px 3px 1px hsla(0, 0%, 20%, .3);
+							transition: all .5s;
+						}
+		
+						#styled-checkbox:checked + label {
+							box-shadow: none;
+						}
+		
+						#styled-checkbox:checked + label #power-button {
+							border-color: greenyellow;
+							filter: drop-shadow(0 0 10px rgba(64, 245, 47, 0.377));
+						}
+					</style>
+					<input type="checkbox" id="styled-checkbox">
+					<label for="styled-checkbox">Power <div id="power-button"></div></label>
+		
+				</section>
+
+				<section>
+					<h2>Describing images</h2>
+				</section>
+
+				<section>
+					<h2>Illustrative images</h2>
+					<div class="fragment" style="display: grid; grid-template-columns: auto auto; align-items: center">
+						<p>As seen in the image, giraffes must bend down awkwardly to drink.</p>
+						<img src="images/giraffe-drinking.jpg" alt="">
+						<p>Horses, on the other hand, don't have that problem</p>
+						<img src="images/horse-drinking.jpg" alt="horse drinking from beer glass by picking the glass up in its teeth">			
+					</div>
+				</section>
+
+				<section>
+					<h2>Descriptive images</h2>
+					<p>And that's all I have to say on that topic.</p>
+					<img style="width: 30vw; margin: auto; border: 0" src="images/divider.svg" alt="">
+					<p>But on this kind of related topic, I have a bunch more things to say.</p>		
+				</section>
+
+				<section>
+					<h2>Icons</h2>
+					<div style="display: grid;">
+						<img style="margin: auto; max-width: 50%;" src="images/save-icon.png" alt=""></section>
+				</section>
+
+				<section>
+					<img src="images/icons-with-labels.png" style="margin: auto" alt="">
+				</section>
+
+				<section>
+					<style>
+						.example.game-vs-bank {
+							display: grid;
+							grid-template-columns: 17fr 6fr;
+							align-items: center;
+							grid-gap: 10px;
+						}
+			
+						.example.game-vs-bank img {
+							border: 0;
+							padding: 0;
+						}
+			
+						.example.game-vs-bank figcaption {
+							grid-column: 1 / -1;
+						}
+					</style>
+					<div class="example game-vs-bank">
+						<img src="images/angrybirds.jpg" alt="Angry birds game, using icon-based controls">
+						<img src="images/ing.png" alt="ING bank menu, showing icons with text labels">			
+					</div>
+				</section>
+
+				<section class="top">
+					<h2>A use case for ARIA</h2>
+					<div>Tacos!</div>
+					<div class="controls" style="margin: auto; display: flex; align-items: center">
+						<input type="radio" name="tacos" id="soft-shell">
+						<label for="soft-shell" style="margin-right: 20px">Soft shell</label>
+						<input type="radio" name="tacos" id="hard-shell">
+						<label for="hard-shell" style="margin-right: 20px">Hard shell</label>
+						<input type="radio" name="tacos" id="why-not-both">
+						<label for="why-not-both" style="margin-right: 20px">Why not both?</label>
+					</div>		
+				</section>
+
+				<section>
+					<pre><code class="html">
+<div id="tacos-label">Tacos</div>
+<ul role="radiogroup" aria-labelledby="tacos-label">
+	<input type="radio" name="tacos" id="soft-shell">
+	<label for="soft-shell">Soft shell</label>
+	<input type="radio" name="tacos" id="hard-shell">
+	<label for="hard-shell">Hard shell</label>
+	<input type="radio" name="tacos" id="why-not-both">
+	<label for="why-not-both">Why not both?</label>
+</ul>
+					</code></pre>
+				</section>
+
+				<section class="inverse">
+					<div>Navigation</div>
+				</section>
+
+				<section>
+					<ul style="margin: auto; font-size: 2em">
+					<li>Don't assume your users are using a mouse!</li>
+					</ul>
+				</section>
+
+				<section>
+					<img src="images/worldwide-usage-stats.png" alt="">
+				</section>
+
+				<section>
+					<img src="images/australian-usage-stats.png" alt="">
+				</section>
+
+				<section>
+					<img src="images/Accessible gaming controller.jpg" style="margin: auto" alt="">
+				</section>
+
+				<section class="inverse">
+					<div>Considerations for keyboard users</div>
+				</section>
+
+				<section class="top">
+					<h2>Showing focus</h2>
+					<img src="images/focus-indicators.png" alt="" style="margin: auto">
+				</section>
+
+				<section class="top">
+					<style>
+						#focus-example {
+							transition: border-width .2s, border-color .2s;
+						}
+						#focus-example:focus {
+							border: 2px solid currentColor;
+						}	
+					</style>
+					<input type="text" id="focus-example">
+					<style>
+						#focus-indicator-demo {
+							display: flex;
+						}
+						#focus-indicator-demo a {
+							font-size: 36px;
+							margin-right: 1em;
+						}
+						#focus-indicator-demo a:nth-child(2) {
+							color: hsl(12, 80%, 40%);
+						}
+						#focus-indicator-demo a:nth-child(3) {
+							background-image: linear-gradient(yellow, fuchsia);
+							-webkit-background-clip: text;
+							-webkit-text-fill-color: transparent;
+						}
+						#focus-indicator-demo a:focus {
+							outline: 2px dashed currentColor;
+							outline-offset: 3px;
+						}
+					</style>
+
+					<div id="focus-indicator-demo" aria-describedby="demonstration of focus styles using a 1px dashed currentColor outline">
+						<a href="https://css-tricks.com/">CSS Tricks</a>
+						<a href="https://css-tricks.com/">CSS Tricks</a>
+						<a href="https://css-tricks.com/">CSS Tricks</a>
+					</div>
+
+					<pre class="fragment"><code class="css">
+/* New focus style will replace the default style in Chrome and Safari */
+.link:focus {
+	outline: 1px dashed currentColor;
+	outline-offset: 2px;
+}
+/* You need to remove the Firefox focus indicator manually */
+.link:-moz-focusring {
+	outline: none;
+}
+				
+					</code></pre>
+
+				</section>
+
+				<section>
+					<ul style="margin: auto">
+						<li>Users should be able to navigate between interactive elements using <kbd>tab</kbd></li>
+						<li>You need to move focus back to the top of the page in SPAs</li>
+					</ul>
+				</section>
+
+				<section>
+					<a href="https://auspost.com.au/mypost/track/#/details/ZHY6767083010320">Auspost tracking</a>
+				</section>
+
+				<section>
+					<pre class="fragment"><code class="html">
+<h1 tabindex="-1">Notifications</h1>	
+					</code></pre>
+					<pre class="fragment"><code class="js">
+// On route change
+const heading = document.querySelector('h1');
+heading.focus();
+					</code></pre>
+				</section>
+
+				<section>
+					<h2><a href="http://localhost:8080/notes.html#open-modal" target="_blank">Special considerations for modals</a></h2>
+				</section>
+
+				<section class="inverse">
+					<div style="padding: 0 30px">Considerations for touchscreen users</div>
+				</section>
+
+				<section>
+					<ul style="font-size: 2.5em; margin: auto">
+						<li>There is no hover!</li>
+					</ul>
+				</section>
+
+				<section>
+					<div>Hover is rubbish for people</div>
+					<ul>
+						<li class="fragment">with motor difficulties</li>
+						<li class="fragment">using a device with a small screen</li>
+						<li class="fragment">using a device with an awkward mouse input (like a trackpoint)</li>
+						<li class="fragment">using a perfectly standard mouse, while sitting on a couch</li>
+						<li class="fragment">using a standard trackpad, but on a train, or a bus, or a plane</li>
+					</ul>
+				</section>
+
+				<section class="top">
+					<h2>Other considerations for touchscreen users</h2>
+					<ul>
+						<li class="fragment">Don't assume someone is on a touchscreen based on their screen size</li>
+						<li class="fragment">Fingers are not as precise as cursors</li>
+					</ul>
+				</section>
+
+				<section class="inverse">
+					<div>Semantic HTML & standards</div>
+				</section>
+
+				<section>
+					<ul>
+						<li><a href="news.ycombinator.com">Hacker News</a></li>
+						<li><button onclick="alert('You clicked me!')">Click me!</button></li>
+						<li>form submission</li>
+					</ul>
+				</section>
+
+				<section>
+					<ul>
+						<li class="fragment">Choose elements based on functionality</li>
+						<li class="fragment">Accessibility helps everyone</li>
+					</ul>
+				</section>
 			</div>
 		</div>
 
