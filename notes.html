@@ -18,30 +18,6 @@
 
 
 	<style>
-		.needs-example {
-			background: blue;
-			color: white;
-		}
-
-		.in-draft {
-			background: #74f7f0e3;
-			color: #666;
-		}
-
-		.needs-review {
-			background:hsla(170, 60%, 70%, .5);
-		}
-
-		.example .element {
-			border: 4px solid black;
-			border-radius: 8px;
-			background-color: hsl(350, 60%, 70%);
-			transition: all 1s;
-		}
-		.example .element.highlight {
-			background-color: hsl(170, 60%, 70%);
-		}
-
 		.flex {
 			display: flex;
 		}
@@ -930,8 +906,8 @@ export class SpecialOfferComponent {
 		</p>
 
 		<pre><code>
-			view.title = null;
-			view.errorText = null;
+view.title = null;
+view.errorText = null;
 		</code></pre>
 
 		<p>
@@ -1186,36 +1162,36 @@ const arrayCopy2 = [...arrayToCopy];
 			</li>
 		</ul>
 
-		<h3 class="needs-review">Don't repeat yourself</h3>
+		<h3>Don't repeat yourself</h3>
 
-		<p class="needs-review">
+		<p>
 			Perhaps the most effective way you can reduce noise in your code, though, is by DRYing it out. If you've not heard of DRY before, it stands 
 			for "Don't Repeat Yourself". At its most fundamental, this means that you shouldn't implement the same logic twice in your code. Instead, factor 
 			the repeated logic out into a function, class, or module.
 		</p>
 
-		<p class="needs-review">
+		<p>
 			There are several reasons why you want to avoid repeated logic in your code.
 		</p>
 
-		<ul class="needs-review">
+		<ul>
 			<li>More code means more things that can go wrong</li>
 			<li>Having logic implemented in multiple places means it's more work to update it when things change</li>
 			<li>Similarly, it's more work to fix bugs, as they will need to be fixed multiple times</li>
 			<li>
-				There is a high risk that your implementations will get out of sync. This is particularly problematic as there is 
+				There is a high risk that your implementations will get out of sync. This is particularly problematic, as there is 
 				no way for future devs to know which implementation is correct, or why they're different.
 			</li>
 		</ul>
 
-		<p class="needs-review">
+		<p>
 			For example, imagine we're dealing with credit card payments. We want to be able to display credit cards that a user has 
 			previously stored with us. We want to show the type of the card, but we don't store that, so we need to calculate it from 
 			the card number each time. This logic turns out to be slightly complicated, so let's use the <code>card-validator</code>
 			NPM package. The code looks something like this.
 		</p>
 
-		<pre class="needs-review"><code>
+		<pre><code>
 import { cardValidator } from 'card-validator';
 
 function getCardType(cardNumber) {
@@ -1223,14 +1199,14 @@ function getCardType(cardNumber) {
 }
 		</code></pre>
 
-		<p class="needs-review">
+		<p>
 			The <code>card-validator</code> library returns a <code>niceType</code> of "American Express" for American Express 
 			cards. However, our designers would prefer that we displayed American Express cards as "AMEX". (Based on a true story.)
 			We can add a little conversion into our function. (The <code>credit-card-type</code> package provides the type strings used 
 			by <code>card-validator</code>.)
 		</p>
 
-		<pre class="needs-review"><code>
+		<pre><code>
 import { types } from 'credit-card-type';
 import { cardValidator } from 'card-validator';
 
@@ -1240,14 +1216,14 @@ function getCardTypeForDisplay(cardNumber) {
 }
 		</code></pre>
 
-		<p class="needs-review">
+		<p>
 			Great. But we also have a form where the user enters their credit card details. On this form, we want to 
 			display the card type, as the user types the number. And we also want to display "AMEX" instead of "American Express".
 			(The <code>card-validator</code> library can determine the card type based on a partial number as the user types.)
 			We also want to display an error if the user enters a card type that we don't support.
 		</p>
 
-		<pre class="needs-review"><code>
+		<pre><code>
 import { types } from 'credit-card-type';
 import { cardValiator } from 'card-validator';
 
@@ -1263,18 +1239,18 @@ function updateCardType(cardNumber) {
 }
 		</code></pre>
 
-		<p class="needs-review">
+		<p>
 			Ok. Now what happens if the designers decide to change "AMEX" to "Amex"? We have to change it in two places. Two might not seem like many, 
 			but there could easily be way more than two places that we display credit card types. And what if we forget one of them? I mean, it's not 
 			a huge deal - our labels will just be a little different. Eventually someone will notice and fix it. But how will they know how to fix it?
 			Are the labels supposed to have different values? If not, then which label is the correct one?
 		</p>
 
-		<p class="needs-review">
+		<p>
 			It's much better to keep this kind of information in a single, centralised location.
 		</p>
 
-		<pre class="needs-review"><code>
+		<pre><code>
 import { types } from 'credit-card-type';
 import { cardValidator } from 'card-validator';
 
@@ -1294,11 +1270,11 @@ export function getCardType(cardNumber) {
 }
 		</code></pre>
 
-		<p class="needs-review">
+		<p>
 			We can then use this new function everywhere that we need to display card types.
 		</p>
 
-		<pre class="needs-review"><code>
+		<pre><code>
 import { getCardType } from '../card-utils';
 
 function getCardTypeForDisplay(cardNumber) {
@@ -1306,7 +1282,7 @@ function getCardTypeForDisplay(cardNumber) {
 }
 		</code></pre>
 
-		<pre class="needs-review"><code>
+		<pre><code>
 import { getCardType } from '../card-utils';
 
 const allowedTypes = [types.AMERICAN_EXPRESS, types.MASTERCARD, types.VISA];
@@ -1321,19 +1297,19 @@ function updateCardType(cardNumber) {
 }
 		</code></pre>
 
-		<p class="needs-review">
+		<p>
 			Yes, this logic is a bit longer to implement. However, it's much shorter to <i>use</i>. And, it hides the 
 			details of the library used to fetch the name. We could easily swap out the library if something newer and 
 			shinier came along, without needing to change it in multiple places.
 		</p>
 
-		<p class="needs-review">
+		<p>
 			This is the kind of trade-off you need to think about when DRYing out your code. Is the increase in implementation 
 			effort going to be offset by the ease of use? Is hiding implementation details going to make life easier for 
 			someone in the future. Often, the answer will be yes, but that's not always going to be the case.
 		</p>
 
-		<p class="needs-review">
+		<p>
 			Dan Abramov describes <a href="https://overreacted.io/goodbye-clean-code/">a time when he DRYed out some code and 
 			it didn't go so well</a> on his blog. It's important to remember that when DRYing code, we really want to remove 
 			repeated <i>logic</i>, not just code that looks similar. And it's far more important to have code that is easy 
@@ -1438,32 +1414,6 @@ function createUser(name, contactDetails) {
 	...
 }
 		</code></pre>
-
-		<h4>Composition over inheritance</h4>
-
-		<p>
-			Something that kind of comes naturally with this kind of coding is that we favour composition over inheritance. This means that 
-			we build our app our of smaller pieces, that are in turn built of smaller pieces, and so on down the line. We share functionality 
-			around our app by sharing the smaller pieces (or chunks, as we've been calling them).
-		</p>
-
-		<div class="needs-example">objects sharing functionality via composition</div>
-
-		<p>
-			This is generally preferable to the object-oriented concept of sharing functionality via inheritance.
-		</p>
-
-		<div class="needs-example">objects sharing functionality via inheritance</div>
-
-		<p>
-			Sharing via composition is more flexible, as object don't need to be within the same class hierarchy to share. It also produces 
-			code that is easier to understand. Objects built via composition each contain everything they need to function, at a given level 
-			of abstraction. Objects built via inheritance can have their implementation details at any level of abstraction spread across 
-			multiple classes, with properties and methods available in the child class as if by magic.
-		</p>
-
-		<div class="needs-example">OO thing with implementation all over the place, using magic variables</div>
-		<div class="needs-example">better, compositional implementation</div>
 
 		<h3>Refactoring code & testing</h3>
 
@@ -3394,14 +3344,14 @@ const person = new Person('Uhura'); // Uncaught TypeError: Person is not a const
 			WebAIM page on Alternative Text</a>.
 		</p>
 
-		<h4 class="needs-review">Tricky labels</h4>
+		<h4>Tricky labels</h4>
 
-		<p class="needs-review">
+		<p>
 			Finally, sometimes there's just no good way to convey information non-visually. For example, HTML doesn't provide us with 
 			an obvious way to associate a label with a group of radio buttons.
 		</p>
 		
-		<figure class="example">
+		<figure>
 			<div>Tacos!</div>
 			<div class="controls" style="margin: auto">
 				<input type="radio" name="tacos" id="soft-shell">
@@ -3413,7 +3363,7 @@ const person = new Person('Uhura'); // Uncaught TypeError: Person is not a const
 			</div>
 		</figure>
 
-		<p class="needs-review">
+		<p>
 			This is the kind of thing we need ARIA for! We can use an ARIA role, and the <code>aria-labelledby</code> property to 
 			provide a couple of extra hints to our radio buttons, just for screen readers.
 		</p>
@@ -3430,7 +3380,7 @@ const person = new Person('Uhura'); // Uncaught TypeError: Person is not a const
 &lt;/ul&gt;
 		</code></pre>
 
-		<p class="needs-review">
+		<p>
 			For more information about <code>aria-labelledby</code>, and a tonne of use cases and examples, check out
 			<a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_aria-labelledby_attribute">
 			MDN's page on aria-labelledby</a>.
@@ -4107,29 +4057,33 @@ heading.focus();
 				transform: rotate(1.25turn);
 			}
 
-			.normal-flow figcaption {
+			.normal-flow figcaption, .flex-axes figcaption {
 				display: grid;
 			  grid-template-columns: repeat(4, 1fr);
   			background: transparent;
   			padding: 0;
 			}
-			.normal-flow [type="radio"] {
+			.flex-axes figcaption {
+			  grid-template-columns: repeat(2, 1fr);
+			}
+			.normal-flow [type="radio"], .flex-axes [type="radio"] {
 				width: 0;
 			  height: 0;
 				opacity: 0;
   			position: fixed;
 			}
-			.normal-flow label {
+			.normal-flow label, .flex-axes label {
 				border-top: 2px solid var(--main-colour);
 				padding: 10px 20px;
 			  color: var(--main-colour);
   			font-style: normal;
 				cursor: pointer;
 			}
-			.normal-flow label:not(:last-of-type) {
+			.normal-flow label:not(:last-of-type), .flex-axes label:not(:last-of-type) {
 				border-right: 2px solid var(--main-colour);
 			}
-			.normal-flow input:checked + label, .normal-flow label:hover {
+			.normal-flow input:checked + label, .normal-flow label:hover,
+			.flex-axes input:checked + label, .flex-axes label:hover {
 				background: var(--main-colour);
 			  color: white;
 			}
@@ -4643,7 +4597,7 @@ heading.focus();
 
 	</section>
 	
-	<section class="needs-review">
+	<section>
 		<h2 id="css-layouts">CSS layouts</h2>
 
 		<p>
@@ -4803,18 +4757,34 @@ heading.focus();
 			}
 		</script>
 
-		<h4>Spacing between lines</h4>
+		<h4>Line height & line spacing</h4>
 
 		<p>
-			Unlike line boxes, flexbox height is easy to calculate. If all your flex items are in a single line, then the height of the flexbox 
-			is the height of the flex container (the element that has <code>display: flex</code> on it). If your items are wrapped over several 
-			lines, then you can control the height of the lines using the <code>align-content</code> property.
+			For the purposes of this discussion, let's assume we're working with a row. We'll be 
+			calculating the height of a row, and the spacing between rows. If we were working with 
+			a column, then we could use the same rules to calculate the width of the column and the 
+			spacing between columns. 
 		</p>
 
 		<p>
-			By default, the lines will be evenly spaced across the entire container.
+			Things start out relatively simple - by default, each row will get the same fraction of 
+			the height of the flex container. If all your items fit in one row, that row will be 
+			100% of the height of the container. If you need two rows, then each row will be 50% of 
+			the height of the container. And so on, and so forth.
 		</p>
 
+		<p>
+			There are two ways to change this. Firstly, if an item is too tall for its row, then its 
+			row will grow taller, and the other rows will shrink. An item could be too tall because 
+			it has a height set on it, or because it has a lot of content.
+		</p>
+
+		<p>
+			The second way is to change the <code>align-content</code> property of the flex-container.
+			By default, <code>align-content</code> is <code>stretch</code>, meaning each row will 
+			stretch to fill up the available space.
+		</p>
+			
 		<figure class="example flex default-align-content">
 			<div class="element"></div>
 			<div class="element"></div>
@@ -4836,17 +4806,23 @@ heading.focus();
 				width: 350px;
 				height: 450px;
 			}
+			.flex.default-align-content .element {
+				width: 100px;
+				height: auto;
+			}
+
 			.flex .element {
 				width: 100px;
 				height: 100px;
 			}
 		</style>
-
+			
 		<p>
-			You've got a few options to change this though. The <code>align-content</code>
-			property can take the following values.
+			If we change it to any other value, then the height 
+			of each row will be the height of the tallest element in that row. The rows will then be 
+			spaced according to the following table.
 		</p>
-
+			
 		<table class="align-content-values">
 			<thead>
 				<th>Value</th><th>Effect</th><th>Diagram</th>
@@ -4854,7 +4830,7 @@ heading.focus();
 			<tbody>
 				<tr>
 					<td>flex-start/start</td>
-					<td>Items will be placed towards the start of the container</td>
+					<td>Rows will be placed towards the start of the container</td>
 					<td>
 						<div class="example" style="align-content: start">
 							<div class="element"></div>
@@ -4871,7 +4847,7 @@ heading.focus();
 				</tr>
 				<tr>
 					<td>flex-end/end</td>
-					<td>Items will be placed towards the end of the container</td>
+					<td>Rows will be placed towards the end of the container</td>
 					<td>
 						<div class="example" style="align-content: end">
 							<div class="element"></div>
@@ -4888,7 +4864,7 @@ heading.focus();
 				</tr>
 				<tr>
 					<td>center</td>
-					<td>Items will be placed in the centre of the container</td>
+					<td>Rows will be placed in the centre of the container</td>
 					<td>
 						<div class="example" style="align-content: center">
 							<div class="element"></div>
@@ -4906,8 +4882,8 @@ heading.focus();
 				<tr>
 					<td>space-between</td>
 					<td>
-						The first line will be at the start of the container, the last line will be at the end of the container.
-						The remaining lines will be spaced evenly between them.
+						The first row will be at the start of the container, the last row will be at the end of the container.
+						The remaining rows will be spaced evenly between them.
 					</td>
 					<td>
 						<div class="example" style="align-content: space-between">
@@ -4926,8 +4902,8 @@ heading.focus();
 				<tr>
 					<td>space-around</td>
 					<td>
-						Lines are spaced evenly in the container. The space between the container and the first line, and the container and 
-						the last line, is <i>half</i> of the space between adjacent lines.
+						Rows are spaced evenly in the container. The space between the container and the first row, and the container and 
+						the last row, is <i>half</i> of the space between adjacent rows.
 					</td>
 					<td>
 						<div class="example" style="align-content: space-around">
@@ -4946,8 +4922,8 @@ heading.focus();
 				<tr>
 					<td>space-evenly</td>
 					<td>
-						Lines are spaced evenly in the container. The space between the container and the first line, and the container and
-						the last line, is the <i>same</i> as the space between adjacent lines.
+						Rows are spaced evenly in the container. The space between the container and the first row, and the container and
+						the last row, is the <i>same</i> as the space between adjacent rows.
 					</td>
 					<td>
 						<div class="example" style="align-content: space-evenly">
@@ -4966,10 +4942,10 @@ heading.focus();
 				<tr>
 					<td>stretch</td>
 					<td>
-						If none of the elements have a height specified, then all the lines will 
+						If none of the elements have a height specified, then all the rows will 
 						be of equal height, stretched to fill up the available space. If any elements 
 						have a height specified, then those elements will have their given height, and 
-						the remaining space will be spread out equally between all lines, including the 
+						the remaining space will be spread out equally between all rows, including the 
 						ones that already have some height. This can lead to some unpredictable 
 						behaviour (try adding heights to the example via dev tools).
 					</td>
@@ -5163,7 +5139,7 @@ heading.focus();
 
 		<p>
 			While it might seem like <code>align-content</code> and <code>align-items</code> do the same thing, there is an important difference. 
-			<code>align-content</code> adjusts the spacing between the flexboxes (like line-height for line boxes). <code>align-items</code> (and 
+			<code>align-content</code> adjusts the spacing <i>between</i> the flexboxes (like line-height for line boxes). <code>align-items</code> (and 
 			<code>align-self</code>) controls the placement of the items <i>within</i> the flexbox (like <code>vertical-align</code>, except 
 			that it will actually do that centre-alignment for you).
 		</p>
@@ -5228,7 +5204,7 @@ heading.focus();
 			Flexbox Froggy</a> - it's a cute game where you use <code>flex</code> properties to position frogs on lilypads. 
 		</p>
 
-		<h4>Flex sizing</h4>
+		<h4>Flex sizing - cross axis</h4>
 
 		<p>
 			So far, we've looked at positioning things with <code>flex</code>. However, the real magic of <code>flex</code> comes from how 
@@ -5242,7 +5218,53 @@ heading.focus();
 			talking about height. 
 		</p>
 
-		<p class="needs-example">diagram of main vs cross axis</p>
+		<figure class="example flex-axes" style="position: relative">
+			<img src="images/arrows.png">
+			<div class="axis-label" id="cross-axis">cross axis</div>
+			<div class="axis-label" id="main-axis">main axis</div>
+			<figcaption>
+				<input type="radio" name="flex-axes" id="axes-row" value="row">
+				<label for="axes-row">Row</label>
+				<input type="radio" name="flex-axes" id="axes-column" value="column">
+				<label for="axes-column">Column</label>
+			</figcaption>
+		</figure>
+
+		<style>
+			.flex-axes .axis-label {
+				--shadow: hsla(0, 0%, 100%, .9);
+				font-family: Kalam;
+				font-size: 45px;
+				position: absolute;
+				filter: drop-shadow(4px 4px 4px var(--shadow)) drop-shadow(-4px -4px 4px var(--shadow));
+				transition: all 2s;
+			}
+			#cross-axis, .flipped #main-axis {
+				left: 30%;
+				top: 10%;
+			}
+			#main-axis, .flipped #cross-axis {
+				left: 10%;
+				top: 45%;
+			}
+		</style>
+
+		<script>
+			const axesContainer = document.querySelector('.flex-axes');
+			const rowAxes = document.getElementById('axes-row');
+			const columnAxes = document.getElementById('axes-column');
+			rowAxes.checked = true;
+			rowAxes.addEventListener('change', function() {
+				if (this.checked) {
+					axesContainer.classList.remove('flipped');
+				} 
+			});
+			columnAxes.addEventListener('change', function() {
+				if (this.checked) {
+					axesContainer.classList.add('flipped');
+				} 
+			});
+		</script>
 
 		<p>
 			Luckily, this one isn't <i>too</i> complicated. </p>
@@ -5268,7 +5290,7 @@ heading.focus();
 			<div class="element" style="height: 200px; align-self: flex-end">
 				<code>height: 200px; align-self: flex-end</code>
 			</div>
-			<div class="element" style="align-self: center">
+			<div class="element" style="height: 200px">
 				<code>height: 200px</code>
 			</div>
 			<div class="element" style="align-self: center">
@@ -5360,6 +5382,8 @@ heading.focus();
 			}
 		</style>
 
+		<h4>Flex sizing - main axis</h4>
+
 		<p>
 			The size along the main axis is a lot more complicated to work out, but you also have more control over what happens. So I guess 
 			it balances out? Assuming we're still working on a horizontal row, this is going to be the width of the elements.
@@ -5369,11 +5393,11 @@ heading.focus();
 			The width of a flex item depends on 
 		</p>
 		<ul>
-			<li>Its contents</li>
-			<li>Its flex-basis property</li>
-			<li>Whether it's allowed to grow or shrink</li>
-			<li>The size of its flex container</li>
-			<li>How much other stuff is in the container</li>
+			<li>its contents</li>
+			<li>its flex-basis property</li>
+			<li>whether it's allowed to grow or shrink</li>
+			<li>the size of its flex container</li>
+			<li>how much other stuff is in the container</li>
 		</ul>
 
 		<p>
@@ -5420,12 +5444,12 @@ heading.focus();
 		<p>
 			If we don't want the element to stretch out to its max-content width, we can set a size manually, via the <code>flex-basis</code>
 			property. The <code>flex-basis</code> property will refer to the width of an element in a row, or a the height of an element in 
-			a column. If we have a single item, in a large container, with a <code>flex-basis</code>, then it will take the size of the 
-			<code>flex-basis</code> property.
+			a column. If we have a single item, in a large container, with a <code>flex-basis</code>, then its width will be its <code>flex-basis</code>
+			value.
 		</p>
 
 		<div class="example flex fitting">
-			<div class="element" style="flex-basis: 400px">flex-basis: 400px</div>
+			<div class="element" style="flex-basis: 400px" contenteditable="true">flex-basis: 400px</div>
 		</div>
 
 		<p>
@@ -5863,7 +5887,7 @@ heading.focus();
 			document.getElementById('flex-grow-wrap').checked = true;
 		</script>
 
-		<h>Rearranging elements</h4>
+		<h4>Rearranging elements</h4>
 
 		<p>
 			The final bit of magic that flex can do is to change the order that elements appear in. As we already mentioned, you can set 
@@ -5881,20 +5905,22 @@ heading.focus();
 		</p>
 
 		<div class="example reordering">
-			<label for="order-flex-direction">flex-direction</label>
-			<select name="flex-direction" id="order-flex-direction">
-				<option value="row">row</option>
-				<option value="row-reverse">row-reverse</option>
-				<option value="column">column</option>
-				<option value="column-reverse">column-reverse</option>
-			</select>
-
-			<label for="order-flex-wrap">flex-wrap</label>
-			<select name="flex-wrap" id="order-flex-wrap">
-				<option value="nowrap">nowrap</option>
-				<option value="wrap">wrap</option>
-				<option value="wrap-reverse">wrap-reverse</option>
-			</select>
+			<div class="controls">
+				<label for="order-flex-direction">flex-direction</label>
+				<select name="flex-direction" id="order-flex-direction">
+					<option value="row">row</option>
+					<option value="row-reverse">row-reverse</option>
+					<option value="column">column</option>
+					<option value="column-reverse">column-reverse</option>
+				</select>
+	
+				<label for="order-flex-wrap">flex-wrap</label>
+				<select name="flex-wrap" id="order-flex-wrap">
+					<option value="nowrap">nowrap</option>
+					<option value="wrap">wrap</option>
+					<option value="wrap-reverse">wrap-reverse</option>
+				</select>	
+			</div>
 
 			<div class="container flex" style="margin-top: 20px">
 				<div class="element">
@@ -5963,6 +5989,8 @@ heading.focus();
 			will read the elements in document order, and the tab order will follow the document order. This can lead to a confusing 
 			experience for users. As such, I suggest your treat these order-changing properties with extreme caution.
 		</p>
+
+		<h4>Can I use it?</h4>
 
 		<p>
 			Finally, the question I'm sure is burning everyone's lips: how well supported is <code>display: flex</code>? The answer is 
@@ -6058,6 +6086,8 @@ grid-template-rows: 1fr 1fr;
 			we've got two rows, each 1fr high. And, altogether, we've got a 2x2 grid, where each cell is 1fr x 1fr.
 		</p>
 
+		<h4>What the fr?</h4>
+
 		<p>
 			At this point, you might be wondering what an <code>fr</code> is. This is a good question. <code>fr</code> stands for "fraction
 			of the available space". It works a lot like <code>flex-grow</code> in flexbox. To calculate the widths of the columns above,
@@ -6065,8 +6095,8 @@ grid-template-rows: 1fr 1fr;
 		</p>
 		<ol>
 			<li>Work out how much space there is altogether. Let's call it 100%.</li>
-			<li>Count how many frs there are - 1fr + 1fr = 2frs - easy!</li>
-			<li>Divide the total space between the number of frs - 100% / 2frs = 50%/fr</li>
+			<li>Count how many frs there are: 1fr + 1fr = 2frs. Easy!</li>
+			<li>Divide the total space between the number of frs: 100% / 2frs = 50%/fr</li>
 		</ol>
 
 		<p>So, in our example, each column is going to be 50% of the width of the container.</p>
@@ -6164,12 +6194,9 @@ grid-template-rows: 1fr 1fr;
 			.placing-elements .element {
 				font-size: 2em;
 				font-weight: bold;
-				align-self: center;
-				justify-self: center;
 				text-align : center;
 			}
-		</style
-		>
+		</style>
 
 		<p>
 			You can see the elements get placed along the first row, until that row fills up. Then we start filling up the next row.
@@ -6196,7 +6223,7 @@ grid-template-rows: 1fr 1fr;
 				display: flex;
 				align-items: center;
 			}
-			.controls input {
+			.controls input, .controls select {
 				margin-right: 5px
 			}
 			.controls label {
@@ -6216,8 +6243,8 @@ grid-template-rows: 1fr 1fr;
 		</script>
 
 		<p>
-			Each element is placed at the start of the cell. In a ltr, top to bottom script, this is going to be the top left. 
-			In a right-left script, it would be the top right. And so on.
+			Each element is placed at the start of the cell. In a left-to-right, top-to-bottom script, this is going to be the top left. 
+			In a right-to-left script, it would be the top right. And so on.
 		</p>
 
 		<p>
@@ -6293,11 +6320,10 @@ grid-template-rows: 1fr 1fr;
 			}
 		</style>
 
-
 		<p>
-			While this is pretty handy, sometimes we'd prefer the elements to resize relative to the size of the grid cells.
-			We can do this by setting the width and height as percentages. The percentages will be treated as percentages of the
-			size of the cell, rather than the size of the parent element.
+			We can also set the <i>size</i> of the element, relative to its cell. If you set the width or height of a grid item as a 
+			percentage, it will be calculated as a percentage of the size of the <i>cell</i>, rather than the parent container 
+			(which is how it usually works).
 		</p>
 
 		<figure class="example relative-size">
@@ -6307,7 +6333,7 @@ grid-template-rows: 1fr 1fr;
 					<code> height: 100%;</code>
 				</div>
 				<div class="element" style="width: 80%; height: 80%">
-					<code>width: 80%;</code>
+					<code>width: 80%;</code><br>
 					<code>height: 80%;</code>
 				</div>
 				<div class="element" style="width: 40%; height: auto; height: auto">
@@ -6342,7 +6368,7 @@ grid-template-rows: 1fr 1fr;
 					<code> height: 100%;</code>
 				</div>
 				<div class="element" style="width: 80%; height: 80%">
-					<code>width: 80%;</code>
+					<code>width: 80%;</code><br>
 					<code>height: 80%;</code>
 				</div>
 				<div class="element" style="width: 40%; height: auto; height: auto">
@@ -6360,7 +6386,7 @@ grid-template-rows: 1fr 1fr;
 
 		<p>
 			We can also use percentage-based sizing to create layouts with a bit of breathing room. Just set the element sizes to around 
-			90%, and we get a nice, consistent layout, with a bit of spacing.
+			90%, centre-align and justify them, and we get a nice, consistent layout, with a bit of spacing.
 		</p>
 
 		<div class="example grid placing-elements percent-gap resize resize-both">
@@ -6373,6 +6399,10 @@ grid-template-rows: 1fr 1fr;
 		<style>
 			.resize.resize-both {
 				resize: both;
+			}
+			.percent-gap {
+				align-items: center;
+				justify-items: center;
 			}
 			.percent-gap .element {
 				width: 90%;
@@ -6394,7 +6424,7 @@ grid-template-rows: 1fr 1fr;
 			You can set <code>grid-gap</code> to be a specific measurement, like 10px, or 1em. Or you can use a percentage. The percentage will be 
 			calculated from the width of the entire grid for the column gaps, and the height of the entire grid for the row gaps. You'll get different 
 			spacing for your rows and columns if your grid isn't square. You can also set the row and column gaps differently deliberately by 
-			passing in two values: <code>grid-gap: 10px 20px</code>. The value is the gap between the rows. The second value is the gap between the columns.
+			passing in two values: <code>grid-gap: 10px 20px</code>. The first value is the gap between the rows. The second value is the gap between the columns.
 		</p>
 
 		<div class="example grid-gap">
@@ -6811,11 +6841,11 @@ grid-template-areas: 'heading heading heading'
 		</p>
 
 		<pre><code class="css">
-			.container {
-				display: grid;
-				width: 500px;
-				height: 500px;
-			}
+.container {
+	display: grid;
+	width: 500px;
+	height: 500px;
+}
 		</code></pre>
 
 		<figure class="example grid implicit">
@@ -6843,12 +6873,12 @@ grid-template-areas: 'heading heading heading'
 		</p>
 
 		<pre><code class="css">
-			.container {
-				display: grid;
-				width: 500px;
-				height: 500px;
-				grid-auto-rows: 100px;
-			}
+.container {
+	display: grid;
+	width: 500px;
+	height: 500px;
+	grid-auto-rows: 100px;
+}
 		</code></pre>
 
 		<figure class="example grid implicit" style="grid-auto-rows: 100px">
@@ -6859,18 +6889,18 @@ grid-template-areas: 'heading heading heading'
 		</figure>
 
 		<p>
-			Now our rows don't fill up all the available space! We can control the spacing our these auto-generated rows using 
-			the same <code>align-content</code> property we used in flexbox!
+			Now our rows don't fill up all the available space! We can control the spacing of these auto-generated rows using 
+			the same <code>align-content</code> property we used in flexbox.
 		</p>
 
 		<pre><code class="css">
-			.container {
-				display: grid;
-				width: 500px;
-				height: 500px;
-				grid-auto-rows: 100px;
-				align-content: flex-end;
-			}
+.container {
+	display: grid;
+	width: 500px;
+	height: 500px;
+	grid-auto-rows: 100px;
+	align-content: flex-end;
+}
 		</code></pre>
 
 		<figure class="example grid implicit" style="grid-auto-rows: 100px; align-content: flex-end">
@@ -6890,12 +6920,12 @@ grid-template-areas: 'heading heading heading'
 		</p>
 
 		<pre><code class="css">
-			.container {
-				display: grid;
-				grid-template-columns: 200px 1fr;
-				grid-template-rows: 50px 150px 60px
-				grid-auto-rows: 100px;
-			}
+.container {
+	display: grid;
+	grid-template-columns: 200px 1fr;
+	grid-template-rows: 50px 150px 60px;
+	grid-auto-rows: 100px;
+}
 		</code></pre>
 
 		<figure class="example grid implicit-mixed">
@@ -7000,7 +7030,7 @@ grid-template-areas: 'heading heading heading'
 
 		<p>
 			You're already familiar with one type of dynamic sizing - the <code>fr</code> unit. However, you can't use frs with <code>auto-fit</code>
-			and <code>auto-fill</code>! If you did, you'd essentially be telling the browser to place your items with an unknown number of columns of 
+			and <code>auto-fill</code>! If you did, you'd essentially be telling the browser to place your items in an unknown number of columns of 
 			an unknown width. Browsers are clever, but they're not that clever.
 		</p>
 
@@ -7063,7 +7093,7 @@ grid-template-areas: 'heading heading heading'
 		</p>
 
 		<pre><code class="css">
-			grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 		</code></pre>
 
 		<div class="example grid resize autofit-minmax-fr">
@@ -7099,17 +7129,22 @@ grid-template-areas: 'heading heading heading'
 		</p>
 
 		<pre><code class="css">
-			grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
 		</code></pre>
 
-		<div class="example grid resize autofill-minmax-fr">
-			<div class="element"></div>
-			<div class="element"></div>
-			<div class="element"></div>
-			<div class="element"></div>
-			<div class="element"></div>
-			<div class="element"></div>
-		</div>
+		<figure class="example">
+			<div class="example grid resize autofill-minmax-fr">
+				<div class="element"></div>
+				<div class="element"></div>
+				<div class="element"></div>
+				<div class="element"></div>
+				<div class="element"></div>
+				<div class="element"></div>
+			</div>
+			<figcaption>
+				Grid with <code>auto-fill</code>
+			</figcaption>
+		</figure>
 
 		<style>
 			.example.autofill-minmax-fr {
@@ -7161,9 +7196,28 @@ grid-template-areas: 'heading heading heading'
 			Depending on your needs, it might be possible to just build your grid as you would normally, and use autoprefixer to add the 
 			necessary prefixes.
 		</p>
-		
-		<div class="needs-example">autoprefixed grid code</div>
 
+		<figure class="example">
+			<pre><code>
+.links {
+	display: -ms-grid;
+	display: grid;
+	-ms-grid-columns: minmax(140px,220px) 1fr;
+	grid-template-columns: minmax(140px,220px) 1fr;
+}	
+
+.links > * {
+	-ms-grid-row-align: center;
+	align-self: center;
+}
+			</code></pre>
+			<figcaption>
+				Modern CSS updated to include IE-friendly CSS by autoprefixer. The code sets <code>align-self</code> on all the children, 
+				rather than using <code>align-items</code>, because IE doesn't support <code>align-items</code>. Autoprefixer will warn you 
+				about things like this.
+			</figcaption>
+		</figure>
+		
 		<p>		
 			For more information on using autoprefixer, have a look at the 
 			<a href="https://css-tricks.com/css-grid-in-ie-debunking-common-ie-grid-misconceptions/">
@@ -7172,7 +7226,7 @@ grid-template-areas: 'heading heading heading'
 		</p>
 
 		<p>
-			The other option is to use fallbacks. While IE's support of grid is a little laccking, it does support flexbox quite well. While 
+			The other option is to use fallbacks. While IE's support of grid is a little lacking, it does support flexbox quite well. While 
 			you're not going to be able to achieve quite the same schmick two-dimensional layouts with flexbox as you are with grid, you 
 			can often make a workable approximation. So, rather than depriving <i>all</i> your users of the fancy grid layout, you give the 
 			users on modern browers the grid layout, and you give the IE users the flexbox layout. This is called progressive enhancement. It's 
@@ -7186,15 +7240,15 @@ grid-template-areas: 'heading heading heading'
 		</p>
 
 		<pre><code class="css">
-			.container {
-				/* for IE */
-				display: flex;
-				flex-wrap: wrap;
-				
-				/* for everyone else */
-				display: grid;
-				grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-			}
+.container {
+	/* for IE */
+	display: flex;
+	flex-wrap: wrap;
+	
+	/* for everyone else */
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}
 		</code></pre>
 
 		<p>
@@ -7202,17 +7256,15 @@ grid-template-areas: 'heading heading heading'
 			the flex values, but they'll immediately be overriden by the grid values, which appear later in the stylesheet.
 		</p>
 
-		<div class="needs-example">what this looks like in IE and other browsers</div>
-
 		<p>
 			This works in many cases, but can cause issues when you need to set a property that is valid in both cases, but means something different.
 			For example, if we added 
 		</p>
 
 		<pre><code class="css">
-			.item {
-				width: 100%
-			}
+.item {
+	width: 100%
+}
 		</code></pre>
 
 		<p>
@@ -7222,11 +7274,11 @@ grid-template-areas: 'heading heading heading'
 		</p>
 
 		<pre><code class="css">
-			width: auto;
+width: auto;
 
-			@supports(display: grid) {
-				width: 100%;
-			}
+@supports(display: grid) {
+	width: 100%;
+}
 		</code></pre>
 
 		<p>
@@ -7341,8 +7393,6 @@ grid-template-areas: 'heading heading heading'
 			And, if all that's not enough, my Twitter DMs are open at <a href="https://twitter.com/ErinJZimmer">@ErinJZimmer</a>.
 			Feel free to drop me a line!
 		</p>
-
-		<div class="needs-example">links to code examples?</div>
 	</section>
 </body>
 </html>

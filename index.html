@@ -35,6 +35,19 @@
 			section.horizontal {
 				grid-auto-flow: column;
 			}
+
+			.controls {
+				color: var(--main-colour);
+				display: flex;
+				align-items: center;
+				padding: 30px;
+			}
+			.controls label {
+				margin-right: 20px;
+			}
+			.controls input, .controls select {
+				margin-right: 10px;
+			}
 		</style>
 
 	</head>
@@ -460,10 +473,6 @@ function createUser(name, contactDetails) {
 					</code></pre>
 				</section>
 
-				<section class="inverse">
-					<div style="padding: 0 20px">Favour composition over inheritance</div>
-				</section>
-				
 				<section class="inverse">
 					<div>Refactoring code & testing</div>
 				</section>
@@ -1116,7 +1125,7 @@ const sevenOfNine = new Person('Seven of Nine');
 				</section>
 
 				<section>
-					<h2>Describing images</h2>
+					<h2 style="margin: auto;">Describing images</h2>
 				</section>
 
 				<section>
@@ -1341,7 +1350,7 @@ heading.focus();
 				</section>
 
 				<section>
-					<ul>
+					<ul style="margin: auto">
 						<li><a href="news.ycombinator.com">Hacker News</a></li>
 						<li><button onclick="alert('You clicked me!')">Click me!</button></li>
 						<li>form submission</li>
@@ -1349,11 +1358,258 @@ heading.focus();
 				</section>
 
 				<section>
-					<ul>
+					<ul style="margin: auto">
 						<li class="fragment">Choose elements based on functionality</li>
 						<li class="fragment">Accessibility helps everyone</li>
 					</ul>
 				</section>
+
+				<section class="inverse">
+					<div>Understanding CSS</div>
+				</section>
+
+				<section>
+					<h2 style="margin: auto">The box model</h2>
+				</section>
+
+				<section>
+					<h2 style="margin: auto">Box sizing</h2>
+				</section>
+
+				<section>
+					<h2>CSS Resets</h2>
+					<a href="https://dev.to/hankchizljaw/a-modern-css-reset-6p3">Andy Bell's CSS reset</a>
+				</section>
+
+				<section>
+					<h2>Normal flow</h2>
+					<img style="margin: auto" src="images/normal-flow-en.png" alt="">
+				</section>
+
+				<section>
+					<img src="images/normal-flow-ar.png" alt="" style="margin: auto">
+				</section>
+
+				<section>
+					<img src="images/normal-flow-jp.png" alt="" style="margin: auto">
+				</section>
+
+				<section>
+					<div class="example add-block-inline">
+						<button onclick="addElement('inline-block')">Add inline element</button>
+						<button onclick="addElement('block')">Add block element</button>
+						<div id="block-inline-demo" style="margin-top: 30px; min-height: 400px"></div>
+					</div>
+			
+					<style>
+						#block-inline-demo {
+							text-align: left;
+						}
+						.add-block-inline .element {
+							width: 100px;
+							height: 100px;
+						}
+					</style>
+			
+					<script>
+						const blockInlineContainer = document.getElementById('block-inline-demo');
+						function addElement(display) {
+							const div = document.createElement('div');
+							div.style.display = display;
+							div.classList.add('element');
+							blockInlineContainer.append(div);
+						}
+					</script>			
+				</section>
+
+				<section>
+					<h2>Block layout</h2>
+					<figure class="example">
+						<fieldset style="margin-bottom: 20px;">
+							<legend>Element width</legend>
+							<div class="controls" style="margin: 0">
+								<input type="radio" name="block-width" id="block-width-auto" onchange="selectWidth('auto')" checked><label for="block-width-auto">auto</label>
+								<input type="radio" name="block-width" id="block-width-400px" onchange="selectWidth('400px')"><label for="block-width-auto">400px</label>	
+							</div>
+						</fieldset>
+						<div class="element" id="block-auto" contenteditable="true" style="text-align: left">
+							some example content
+						</div>
+					</figure>
+			
+					<script>
+						const blockWidthElement = document.getElementById('block-auto');
+						function selectWidth(width) {
+							blockWidthElement.style.width = width;
+						}
+					</script>
+				</section>
+
+				<section>
+					<h2>Margin collapse</h2>
+					<figure class="example margin-ghost">
+							<p>A paragraph immediately before an empty element.</p>
+							<p></p>
+							<p>A paragraph immediately after an empty element.</p>
+					</figure>
+				</section>
+
+				<section>
+					<h2>Inline Layout</h2>
+					<figure class="example linebox">
+						<button onclick="addToLinebox()">Add an inline element</button>
+						<div class="container" id="linebox"></div>
+					</figure>
+			
+					<style>
+						.example.linebox .container {
+							--linebox: hsla(254, 30%, 50%, .2);
+							--line-width: 2px;
+							--total-height: 105px;
+							padding: 20px;
+							min-height: 140px;
+							background-image: repeating-linear-gradient(grey, grey var(--line-width), 
+																													var(--linebox) var(--line-width), var(--linebox) calc(var(--total-height) - var(--line-width)), 
+																													grey calc(var(--total-height) - var(--line-width)), grey var(--total-height));
+							background-clip: content-box;
+							background-origin: content-box;
+							margin-top: 20px;
+							text-align: left;
+						}
+						.example.linebox .element, .example.line-height .element {
+							display: inline-block;
+							width: 100px;
+							height: 100px;
+						}
+					</style>
+			
+					<script>
+						const lineboxContainer = document.getElementById('linebox');
+						function addToLinebox() {
+							const element = document.createElement('span');
+							element.classList.add('element');
+							lineboxContainer.append(element);
+						}
+					</script>
+			
+				</section>
+
+				<section>
+					<h2>Line height on a block element</h2>
+					<figure class="example line-height" style="margin: auto">
+						<label for="line-height"><code>line-height</code> </label><input type="number" id="line-height" onchange="updateLineHeight()" value="1.2" step="0.1">
+						<div class="container">
+							<span class="element"></span>
+							<span class="element"></span>
+							<span class="element"></span>
+							<span class="element"></span>
+							<span class="element"></span>
+							<span class="element"></span>
+							<span class="element"></span>
+							<span class="element"></span>
+							<span class="element"></span>
+							<span class="element"></span>
+						</div>
+					</figure>
+			
+					<style>
+						.example.line-height {
+							width: 420px;
+						}
+						.example.line-height .container {
+							margin-top: 10px;
+						}
+					</style>
+			
+					<script>
+						const lineHeightContainer = document.querySelector('.example.line-height .container');
+						const lineHeightInput = document.getElementById('line-height');
+						lineHeightInput.value = 1.2;
+						function updateLineHeight() {
+							lineHeightContainer.style.lineHeight = lineHeightInput.value;
+						}
+					</script>
+			
+				</section>
+
+				<section>
+					<h2>Line height on an inline element</h2>
+					<figure class="example inline">
+						<div style="margin: auto; margin-top: 20px; width: 300px">
+							<span class="words">
+								<span style="font-size: 10px">some words in a small font</span>
+								<span style="font-size: 20px; color:hsl(12, 80%, 40%)">some words in a medium font</span>
+								<span style="font-size: 30px">some words in a large font</span>
+							</span>
+						</div>
+					</figure>
+			
+					<style>
+						.words {
+							border: 1px solid blue;
+						}
+					</style>
+			
+				</section>
+				
+				<section>
+					<h2>Inline sizing</h2>
+					<figure class="example inline-padding">
+						<div class="container">
+							normal text normal text <span id="inline-padding-demo">adjust my margin and padding!</span>
+							normal text normal text normal text
+						</div>
+					</figure>
+			
+					<style>
+			
+						.example.inline-padding .container {
+							max-width: 400px;
+							margin: auto;
+							margin-top: 10px
+						}
+			
+						#inline-padding-demo {
+							outline: 2px dashed currentColor;
+						}
+					</style>
+							</section>
+
+				<section>
+					<h2>Why vertical-align never does what you want</h2>
+					<div class="example vertical-align">
+						<div class="container">
+							<span class="large-text">large text</span>
+							<span class="small-text">small text</span>
+							<span class="large-text">large text</span>
+						</div>
+					</div>
+			
+					<style>
+						.example.vertical-align .large-text {
+							font-size: 40px;
+						}
+						.example.vertical-align .small-text {
+							font-size: 15px;
+						}
+					</style>
+			
+				</section>
+
+				<section>
+					<h2>new display values</h2>
+					<div><code>display: block flow</code></div>
+				</section>
+
+				<section>
+					<h3>Flexbox & Grid</h3>
+				</section>
+
+				<section>
+					<a href="https://level-up.ez.codes/">These slides: level-up.ez.codes</a>
+					<a href="https://level-up.ez.codes/notes.html">These slides: level-up.ez.codes/notes.html</a>
+				</section>
+
 			</div>
 		</div>
 

@@ -113,3 +113,6 @@ button {
   box-shadow: inset 1px 1px 2px hsla(136, 0%, 100%, .6), inset -1px -1px 2px hsla(136, 100%, 0%, .6);
 }
 
+.example .element.highlight {
+	background-color: hsl(170, 60%, 70%);
+}

@@ -172,3 +172,57 @@ const selectedDeviceCodes = checkboxes.reduce((codes, checkbox, index) => {
 	}
 	return codes;
 }, []);
+
+
+// find all the buttons on a page and check that they do something
+
+// get all the properties of an object that are not functions
+
+// get all the elements that currently appear on the page (!!element.offsetParent)
+
+// get all hrefs of all the links on the page
+
+// check if any of the links on the page point to a specific domain
+
+// check if any credit card in a list has a valid type
+
+// given a list of credit cards, find all the valid ones and create a list of radio buttons out of them
+
+// deactivate a list of something
+
+// rewrite
+function checkValues(values) {
+	return values.reduce((valid, value) => {
+		return valid && value !== true;
+	}, true)
+}
+
+// find the link with specific text
+
+// turn a list of locations with addresses into a list of addresses with locations
+
+// sidebar + main content that's respoonsive
+
+// footer at the bottom of the page
+
+// flip between column and row view
+
+// cloud of tags 
+
+// a list of images and links that are centre aligned
+
+// action buttons that stack
+
+// list of links with pipes between them
+
+// a twitter post
+
+// a list that overflows onto two rows, but centred
+
+// labels & inputs: labels above, labels beside
+
+// a two column grid that switches to one column on small screens
+
+// a grid of thumbnails that are squares
+
+// the layouts from this page https://resilientwebdesign.com/
